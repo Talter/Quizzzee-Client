@@ -1,0 +1,149 @@
+body {
+    background: rgba(144, 172, 244, 1);
+    position: relative;
+}
+
+.login-container {
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    padding: 10vh 20vw 5vh 20vw;
+    margin: 30vh 0 10vh 30vw;
+    width: 40vw;
+    height: 75vh;
+}
+
+.login-title {
+    font-size: 5vh;
+    font-weight: bold;
+}
+
+.login-form {
+    font-size: 3vh;
+    margin-top: 3vh;
+    margin-bottom: 6vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form input {
+    padding: 2vh 5vw;
+    margin-top: 2vh;
+    font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    margin-top: 5vh;
+    margin-bottom: 1vh;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.login-form input::placeholder {
+    text-align: center;
+    line-height: normal;
+}
+
+.login-form input:focus::placeholder {
+    visibility: hidden;
+}
+
+.login-confirm-btn,.create-acc-btn {
+    padding: 1.5vh;
+    font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    background-color: rgba(168, 220, 148, 1);
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #b6dfe3;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+.first-part {
+    margin-bottom: 6vh;
+}
+
+.create-acc-btn {
+    background-color: white;
+    color: rgb(125, 115, 115);
+    font-weight: bold;
+}
+
+.options {
+    margin-top: 1vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forget-password, .remember{
+    font-size: 1vw;
+    color: rgb(92, 232, 37);
+    text-decoration: none;
+    align-self: flex-start;
+}
+
+.remember-me {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.cloud {
+    position: absolute;
+    z-index: -1;
+    margin-top: 30vh;
+    width: 50vw;
+    height: 80vh;
+    margin-left: 24.8vw;
+    background: white;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 100px;
+}
+
+.cloud::after,
+.cloud::before{
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background: inherit;
+    border-radius: inherit;
+}
+
+.cloud::after {
+    width: 30vw;
+    height: 50vh;
+    bottom: 44vh;
+    right: 20vw;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 20vw;
+    height: 45vh;
+    left: 29.96vw;
+    bottom: 42vh;
+    border-radius: 50%;
+}
+
+.cloud-second {
+    position: absolute;
+    background-color: white;
+    z-index: -1;
+    width: 20vw;
+    height: 40vh;
+    bottom: 52vh;
+    right: 35vw;
+    border-radius: 50%;
+}
