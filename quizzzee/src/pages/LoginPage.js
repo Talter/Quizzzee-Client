@@ -6,7 +6,7 @@ function LoginPage() {
     return (
         <div className="login-page">
             <Header />
-            <div className="cloud">
+            <div className="cloud 0">
             </div>
             <div className="cloud-second"></div>
             <div className="login-container">

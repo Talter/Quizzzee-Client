@@ -1,6 +1,12 @@
-body {
+.login-page {
     background: rgba(144, 172, 244, 1);
     position: relative;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+    overflow: hidden;
 }
 
 .login-container {
@@ -143,7 +149,7 @@ body {
     z-index: -1;
     width: 20vw;
     height: 40vh;
-    bottom: 52vh;
+    bottom: 61vh;
     right: 35vw;
     border-radius: 50%;
 }
