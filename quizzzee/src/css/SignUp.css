@@ -1,4 +1,4 @@
-.login-page {
+.signUp-page {
     background: rgba(144, 172, 244, 1);
     position: relative;
     justify-content: center;
@@ -9,24 +9,25 @@
     overflow: hidden;
 }
 
-.login-container {
+.signUp-container {
     background-color: white;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     display: flex;
     padding: 10vh 20vw 5vh 20vw;
-    margin: 30vh 0 10vh 30vw;
+    margin: 30vh 0 20vh 30vw;
     width: 40vw;
     height: 75vh;
 }
 
-.login-title {
+.signUp-title {
     font-size: 5vh;
     font-weight: bold;
+    width: 10vw;
 }
 
-.login-form {
+.signUp-form {
     font-size: 3vh;
     margin-top: 3vh;
     margin-bottom: 6vh;
@@ -34,7 +35,7 @@
     flex-direction: column;
 }
 
-.login-form input {
+.signUp-form input {
     padding: 2vh 5vw;
     margin-top: 2vh;
     font-weight: bold;
@@ -49,17 +50,17 @@
     text-align: center;
 }
 
-.login-form input::placeholder {
+.signUp-form input::placeholder {
     text-align: center;
     line-height: normal;
 }
 
-.login-form input:focus::placeholder {
+.signUp-form input:focus::placeholder {
     visibility: hidden;
 }
 
-.login-confirm-btn,
-.create-acc-btn {
+.signUp-confirm-btn,
+.had-acc-btn {
     padding: 1.5vh;
     font-weight: bold;
     border: none;
@@ -72,7 +73,7 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.login-form button:hover {
+.signUp-form button:hover {
     background-color: #b6dfe3;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
 }
@@ -81,60 +82,10 @@
     margin-bottom: 6vh;
 }
 
-.create-acc-btn {
+.had-acc-btn {
     background-color: white;
     color: rgb(125, 115, 115);
     font-weight: bold;
-}
-
-.options {
-    margin-top: 1vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.forget-password,
-.remember-label {
-    font-size: 1vw;
-    color: rgb(92, 232, 37);
-    text-decoration: none;
-    align-self: flex-start;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-}
-
-.remember-checkbox {
-    display: none;
-}
-
-.checkbox-custom {
-    display: inline-block;
-    width: 1vw;
-    height: 2vh;
-    margin-right: 0.3vw;
-    border: 2px solid #92e825;
-    border-radius: 4px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-}
-
-.checkbox-custom.checked::after {
-    content: '';
-    position: absolute;
-    width: 0.5vw;
-    height: 1vh;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    background-color: #92e825;
 }
 
 .cloud {
@@ -142,7 +93,7 @@
     z-index: -1;
     margin-top: 30vh;
     width: 50vw;
-    height: 80vh;
+    height: 85vh;
     margin-left: 24.8vw;
     background: white;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
@@ -161,7 +112,7 @@
 .cloud::after {
     width: 30vw;
     height: 50vh;
-    bottom: 44vh;
+    bottom: 50vh;
     right: 20vw;
     border-radius: 50%;
 }
@@ -170,7 +121,7 @@
     width: 20vw;
     height: 45vh;
     left: 29.96vw;
-    bottom: 42vh;
+    bottom: 50vh;
     border-radius: 50%;
 }
 
@@ -180,7 +131,7 @@
     z-index: -1;
     width: 20vw;
     height: 40vh;
-    bottom: 61vh;
+    bottom: 73vh;
     right: 35vw;
     border-radius: 50%;
 }

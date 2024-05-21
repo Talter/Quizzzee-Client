@@ -1,13 +1,16 @@
-import React from "react"
-import Header from "../components/layout/Header.js"
+import React, { useState } from "react";
 import "../css/Login.css";
 
 function LoginPage() {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+
     return (
         <div className="login-page">
-            <Header />
-            <div className="cloud 0">
-            </div>
+            <div className="cloud"></div>
             <div className="cloud-second"></div>
             <div className="login-container">
                 <a className="login-title">Login</a>
@@ -21,7 +24,17 @@ function LoginPage() {
                             <div className="options">
                                 <a href="#" className="forget-password">Forget Password?</a>
                                 <div className="remember-me">
-                                    <label className="remember">Remember Me</label>
+                                    <input
+                                        type="checkbox"
+                                        id="remember"
+                                        className="remember-checkbox"
+                                        checked={isChecked}
+                                        onChange={handleCheckboxChange}
+                                    />
+                                    <label htmlFor="remember" className="remember-label">
+                                        <span className={`checkbox-custom ${isChecked ? 'checked' : ''}`}></span>
+                                        Remember Me
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -30,9 +43,9 @@ function LoginPage() {
                     <br />
                     <button className="create-acc-btn" type="submit">Need an account?</button>
                 </form>
-            </div >
+            </div>
         </div>
     );
 }
 
-export default LoginPage
+export default LoginPage;
