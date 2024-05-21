@@ -2,28 +2,39 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import Quizzy from "./pages/Quizzy";
+import Header from "./components/layout/header";
+import Footer from "./components/layout/footer";
 
 const Router = () => {
-  if(window.location.pathname === "/login"){
-    return(
+  console.log(window.location.pathname.startsWith("/quizzzy"))
+  if (window.location.pathname === "/login") {
+    return (
       <div className="">
-        <LoginPage/>
+        <div className="sticky top-0 z-10">
+          <Header />
+          </div>
+        <LoginPage />
       </div>
     );
   }
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
-        <Header />
-        <div className="flex-grow">
+      <div className="sticky top-0 z-10">
+          <Header />
+          </div>
+        <div className="relative">
+          <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/quizzzy/:id" element={<Quizzy />} />
           </Routes>
-        </div>
+          </div>
+          <div className={"absolute min-w-full bottom-0 " + window.location.pathname.startsWith("/quizzzy")?" bg-red-100 ":"bg-blue-100"}>
         <Footer />
+        </div>
+        </div>
       </div>
     </BrowserRouter>
   );
