@@ -88,7 +88,7 @@
     font-weight: bold;
 }
 
-.cloud {
+.cloud-2 {
     position: absolute;
     z-index: -1;
     margin-top: 30vh;
@@ -100,8 +100,8 @@
     border-radius: 100px;
 }
 
-.cloud::after,
-.cloud::before {
+.cloud-2::after,
+.cloud-2::before {
     content: "";
     position: absolute;
     display: inline-block;
@@ -109,7 +109,7 @@
     border-radius: inherit;
 }
 
-.cloud::after {
+.cloud-2::after {
     width: 30vw;
     height: 50vh;
     bottom: 50vh;
@@ -117,7 +117,7 @@
     border-radius: 50%;
 }
 
-.cloud::before {
+.cloud-2::before {
     width: 20vw;
     height: 45vh;
     left: 29.96vw;
@@ -125,7 +125,7 @@
     border-radius: 50%;
 }
 
-.cloud-second {
+.cloud-2-second {
     position: absolute;
     background-color: white;
     z-index: -1;

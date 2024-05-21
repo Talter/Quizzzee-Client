@@ -4,9 +4,9 @@ import "../css/SignUp.css";
 function SignUp() {
     return (
         <div className="signUp-page">
-            <div className="cloud 0">
+            <div className="cloud-2">
             </div>
-            <div className="cloud-second"></div>
+            <div className="cloud-2-second"></div>
             <div className="signUp-container">
                 <a className="signUp-title">Sign Up</a>
                 <form className="signUp-form">

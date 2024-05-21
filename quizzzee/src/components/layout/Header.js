@@ -88,7 +88,7 @@ function Header() {
         </div>
       </div>
       <div className="col-span-3 grid grid-cols-2 justicy-center items-center text-center ps-12 pe-16 font-bold">
-        <div>Sign Up</div>
+        <a href="/signup" className="hover:cursor-pointer transition transform hover:scale-105 hover:rotate-180">Sign Up</a>
         <a
           href="/login"
           className="bg-subColor mx-4 py-2 rounded-full hover:bg-subColorLight active:bg-subColorBold text-white"
