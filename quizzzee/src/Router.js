@@ -42,10 +42,8 @@ const Router = () => {
           </div>
           <div
             className={
-              "absolute min-w-full bottom-0 " +
               window.location.pathname.startsWith("/quizzzy")
-                ? " bg-red-100 "
-                : "bg-blue-100"
+                && " bg-[#F6F6F6] "
             }
           >
             <Footer />
