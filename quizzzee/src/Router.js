@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
-import LoginPage from "./pages/LoginPage";
-import SignUp from "./pages/SignUp";
-import Quizzy from "./pages/Quizzy";
-import Header from "./components/layout/header";
-import Footer from "./components/layout/footer";
+import MainPage from "./pages/user/MainPage";
+import LoginPage from "./pages/user/LoginPage";
+import SignUp from "./pages/user/SignUp";
+import Quizzy from "./pages/user/Quizzy";
+import Header from "./components/layout/headerLayout";
+import Footer from "./components/layout/footerLayout";
 
 const Router = () => {
   console.log(window.location.pathname.startsWith("/quizzzy"));

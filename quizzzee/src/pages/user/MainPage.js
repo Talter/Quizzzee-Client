@@ -1,7 +1,7 @@
 import React from "react";
-import mainPageImage from "../images/system/mainPage.png";
-import Background1 from "../images/system/mainPageBg1.png";
-import Background2 from "../images/system/mainPageBg2.png";
+import mainPageImage from "../../images/system/mainPage.png";
+import Background1 from "../../images/system/mainPageBg1.png";
+import Background2 from "../../images/system/mainPageBg2.png";
 import { Carousel } from "antd";
 
 const contentStyle = {
@@ -15,7 +15,7 @@ const contentStyle = {
 
 const Content = () => {
   return(
-    <div className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105">
+    <a className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105" href="/quizzzy/1">
       <div className="min-h-36 text-xl text-white text-center flex items-center justify-center">
         Quizzzy name
       </div>
@@ -24,7 +24,7 @@ const Content = () => {
         <div>Author: ABC</div>
         <div className="mt-12 text-gray-400">Last update: ABC</div>
       </div>
-    </div>
+    </a>
   )
 }
 function MainPage() {

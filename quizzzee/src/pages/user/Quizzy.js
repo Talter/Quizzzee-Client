@@ -10,10 +10,10 @@ import {
   StepForwardOutlined,
   SwapOutlined,
 } from "@ant-design/icons";
-import Content from "../components/quizzy/content";
-import Tag from "../components/quizzy/tag";
-import Related from "../components/quizzy/related";
-import QuestionSetOverview from "../components/quizzy/questionSetOverview";
+import Content from "../../components/quizzy/content";
+import Tag from "../../components/quizzy/tag";
+import Related from "../../components/quizzy/related";
+import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
 
 function Quizzy() {
   const { id } = useParams();
