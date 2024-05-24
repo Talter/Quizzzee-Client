@@ -1,12 +1,14 @@
 import React from "react"
 import "../css/SignUp.css";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 function SignUp() {
     return (
         <div className="signUp-page">
-            <div className="cloud-2">
-            </div>
-            <div className="cloud-2-second"></div>
+            <div className="cloud-signUp"></div>
+            <div className="cloud-signUp-1"></div>
+            <div className="cloud-signUp-2"></div>
+            <div className="cloud-signUp-3"></div>
             <div className="signUp-container">
                 <a className="signUp-title">Sign Up</a>
                 <form className="signUp-form">
@@ -23,7 +25,9 @@ function SignUp() {
                     </div>
                     <button className="signUp-confirm-btn" type="submit">Sign Up</button>
                     <br />
-                    <button className="had-acc-btn" type="submit">Aleady had an account?</button>
+                    <Link className="had-acc-btn" to="/login">
+                        <button type="submit">Aleady had an account?</button>
+                    </Link>
                 </form>
             </div >
         </div>

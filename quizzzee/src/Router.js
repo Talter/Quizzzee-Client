@@ -6,12 +6,14 @@ import SignUp from "./pages/SignUp";
 import Quizzy from "./pages/Quizzy";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
+import AdminLogin from "./pages/AdminLogin";
 
 const Router = () => {
   console.log(window.location.pathname.startsWith("/quizzzy"));
   if (
     window.location.pathname === "/login" ||
-    window.location.pathname === "/signup"
+    window.location.pathname === "/signup" ||
+    window.location.pathname === "/login/admin"
   ) {
     return (
       <BrowserRouter>
@@ -20,6 +22,7 @@ const Router = () => {
             <Header />
           </div>
           <Routes>
+            <Route path="/login/admin" element={<AdminLogin />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUp />} />
           </Routes>
@@ -43,7 +46,7 @@ const Router = () => {
           <div
             className={
               "absolute min-w-full bottom-0 " +
-              window.location.pathname.startsWith("/quizzzy")
+                window.location.pathname.startsWith("/quizzzy")
                 ? " bg-red-100 "
                 : "bg-blue-100"
             }

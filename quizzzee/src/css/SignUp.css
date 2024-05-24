@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     max-width: 100%;
-    min-height: 100%;
+    min-height: 90vh;
     z-index: 0;
     overflow: hidden;
 }
@@ -15,36 +15,35 @@
     justify-content: center;
     flex-direction: column;
     display: flex;
-    padding: 10vh 20vw 5vh 20vw;
-    margin: 30vh 0 20vh 30vw;
-    width: 40vw;
-    height: 75vh;
+    padding: 10vh 10vw 05vh 10vw;
+    margin: 23vh 0 10vh 42vw;
+    width: 20vw;
+    height: 50vh;
 }
 
 .signUp-title {
-    font-size: 5vh;
+    font-size: 4vh;
     font-weight: bold;
-    width: 10vw;
 }
 
 .signUp-form {
     font-size: 3vh;
-    margin-top: 3vh;
-    margin-bottom: 6vh;
+    margin-top: 2vh;
+    margin-bottom: 4vh;
     display: flex;
     flex-direction: column;
 }
 
 .signUp-form input {
-    padding: 2vh 5vw;
-    margin-top: 2vh;
+    padding: 1vh 3vw;
+    margin-top: 1vh;
     font-weight: bold;
     border: none;
     border-radius: 100px;
     color: rgb(0, 0, 0);
     cursor: pointer;
-    margin-top: 5vh;
-    margin-bottom: 1vh;
+    margin-top: 2vh;
+    margin-bottom: 0.5vh;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
@@ -53,14 +52,15 @@
 .signUp-form input::placeholder {
     text-align: center;
     line-height: normal;
+    font-size: 1rem;
 }
 
 .signUp-form input:focus::placeholder {
     visibility: hidden;
 }
 
-.signUp-confirm-btn,
-.had-acc-btn {
+.signUp-confirm-btn {
+    font-size: 1rem;
     padding: 1.5vh;
     font-weight: bold;
     border: none;
@@ -68,70 +68,84 @@
     background-color: rgba(168, 220, 148, 1);
     color: white;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 0.5vh;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.signUp-form button:hover {
+.signUp-confirm-btn:hover {
     background-color: #b6dfe3;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
 }
 
 .first-part {
-    margin-bottom: 6vh;
+    margin-bottom: 3vh;
 }
 
 .had-acc-btn {
-    background-color: white;
-    color: rgb(125, 115, 115);
+    text-align: center;
+    font-size: 1rem;
+    padding: 1.5vh;
     font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    background-color: rgba(168, 220, 148, 1);
+    color: white;
+    cursor: pointer;
+    margin-bottom: 0.5vh;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cloud-2 {
+.had-acc-btn:hover {
+    background-color: #b6dfe3;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.cloud-signUp {
     position: absolute;
     z-index: -1;
-    margin-top: 30vh;
-    width: 50vw;
-    height: 85vh;
-    margin-left: 24.8vw;
+    margin-top: 15vh;
+    width: 30vw;
+    height: 70vh;
+    margin-left: 36.5vw;
     background: white;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
     border-radius: 100px;
 }
 
-.cloud-2::after,
-.cloud-2::before {
+.cloud-signUp-1,
+.cloud-signUp-2,
+.cloud-signUp-3 {
     content: "";
     position: absolute;
     display: inline-block;
     background: inherit;
     border-radius: inherit;
-}
-
-.cloud-2::after {
-    width: 30vw;
-    height: 50vh;
-    bottom: 50vh;
-    right: 20vw;
-    border-radius: 50%;
-}
-
-.cloud-2::before {
-    width: 20vw;
-    height: 45vh;
-    left: 29.96vw;
-    bottom: 50vh;
-    border-radius: 50%;
-}
-
-.cloud-2-second {
-    position: absolute;
     background-color: white;
     z-index: -1;
-    width: 20vw;
-    height: 40vh;
-    bottom: 73vh;
-    right: 35vw;
+}
+
+.cloud-signUp-1 {
+    width: 15vw;
+    height: 35vh;
+    bottom: 46vh;
+    right: 33.5vw;
+    border-radius: 50%;
+}
+
+.cloud-signUp-2 {
+    width: 13vw;
+    height: 32vh;
+    bottom: 50vh;
+    right: 41vw;
+    border-radius: 50%;
+}
+
+.cloud-signUp-3 {
+    width: 17vw;
+    height: 37vh;
+    bottom: 45vh;
+    right: 46.5vw;
     border-radius: 50%;
 }

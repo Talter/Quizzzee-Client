@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../css/Login.css";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 function LoginPage() {
     const [isChecked, setIsChecked] = useState(false);
@@ -10,8 +11,10 @@ function LoginPage() {
 
     return (
         <div className="login-page">
-            <div className="cloud"></div>
-            <div className="cloud-second"></div>
+            <div className="cloud-login"></div>
+            <div className="cloud-login-1"></div>
+            <div className="cloud-login-2"></div>
+            <div className="cloud-login-3"></div>
             <div className="login-container">
                 <a className="login-title">Login</a>
                 <form className="login-form">
@@ -41,7 +44,9 @@ function LoginPage() {
                     </div>
                     <button className="login-confirm-btn" type="submit">Login</button>
                     <br />
-                    <button className="create-acc-btn" type="submit">Need an account?</button>
+                    <Link className="create-acc-btn" to="/signup">
+                        <button type="submit">Need an account?</button>
+                    </Link>
                 </form>
             </div>
         </div>
