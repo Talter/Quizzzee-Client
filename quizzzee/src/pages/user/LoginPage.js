@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../css/Login.css";
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import "../../css/Login.css";
 
 function LoginPage() {
     const [isChecked, setIsChecked] = useState(false);

@@ -22,6 +22,8 @@
 }
 
 .signUp-title {
+    width: 20vw;
+    text-align: center;
     font-size: 4vh;
     font-weight: bold;
 }

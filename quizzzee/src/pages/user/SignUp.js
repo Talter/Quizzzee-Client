@@ -1,5 +1,5 @@
 import React from "react"
-import "../css/SignUp.css";
+import "../../css/SignUp.css";
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 function SignUp() {
@@ -10,7 +10,9 @@ function SignUp() {
             <div className="cloud-signUp-2"></div>
             <div className="cloud-signUp-3"></div>
             <div className="signUp-container">
-                <a className="signUp-title">Sign Up</a>
+                <div className="signUp-title">
+                    <a>Sign Up</a>
+                </div>
                 <form className="signUp-form">
                     <div className="first-part">
                         <div className="input-field">
