@@ -151,3 +151,18 @@
     right: 46.5vw;
     border-radius: 50%;
 }
+
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    z-index: 5;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+}

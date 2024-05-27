@@ -7,13 +7,15 @@ import Quizzy from "./pages/user/Quizzy";
 import Header from "./components/layout/headerLayout";
 import Footer from "./components/layout/footerLayout";
 import AdminLogin from "./pages/AdminLogin";
+import UserDetail from "./pages/user/UserDetail";
 
 const Router = () => {
   console.log(window.location.pathname.startsWith("/quizzzy"));
   if (
     window.location.pathname === "/login" ||
     window.location.pathname === "/signup" ||
-    window.location.pathname === "/login/admin"
+    window.location.pathname === "/login/admin" ||
+    window.location.pathname === "/detail"
   ) {
     return (
       <BrowserRouter>
@@ -25,6 +27,7 @@ const Router = () => {
             <Route path="/login/admin" element={<AdminLogin />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/detail" element={<UserDetail />} />
           </Routes>
         </div>
       </BrowserRouter>

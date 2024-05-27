@@ -1,0 +1,242 @@
+.user-acc-page {
+    background: rgba(144, 172, 244, 1);
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    min-height: 90vh;
+    z-index: 0;
+    overflow: hidden;
+}
+.user-acc-container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 5vw;
+    margin: 10vh auto;
+    margin-left: 25vw;
+    width: 60vw;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
+.acc-setting {
+    font-size: 4vh;
+    font-weight: bold;
+    margin-bottom: 4vh;
+}
+
+.setting-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.data-input-field-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+    font-weight: bold;
+}
+
+.data-input-field-form .input-field {
+    width: 100%;
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    grid-template-columns: 1fr 15fr;
+    gap: 3vw;
+}
+
+.data-input-field-form label {
+    font-weight: bold;
+    text-align: right;
+    margin-right: 1vw;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+}
+
+.data-input-field-form input {
+    width: calc(100% - 25% - 1vw);
+    padding: 1.5vh 2vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    margin-left: 1vw;
+}
+
+.data-input-field-form input::placeholder {
+    text-align: center;
+    line-height: normal;
+    font-size: 1rem;
+}
+
+.data-input-field-form input:focus::placeholder {
+    visibility: hidden;
+}
+
+.data-input-field-form span {
+    font-size: 0.8rem;
+    color: red;
+    text-align: left;
+    display: block;
+    margin-top: 0.5vh;
+    margin-left: 2vw;
+}
+
+.first-name-part,
+.second-name-part {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.name-edit {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 2vw;
+}
+
+.btn-setup {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 3vh;
+}
+
+.dataform-edit,
+.dataform-confirm,
+.dataform-delete-acc {
+    font-size: 1rem;
+    padding: 1.5vh 2vw;
+    font-weight: bold;
+    border: none;
+    border-radius: 100px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dataform-edit {
+    background-color: rgba(168, 220, 148, 1);
+}
+
+.dataform-edit:hover {
+    background-color: #b6dfe3;
+}
+
+.dataform-confirm {
+    background-color: rgba(144, 172, 244, 1);
+}
+
+.dataform-confirm:hover {
+    background-color: #92ace5;
+}
+
+.dataform-delete-acc {
+    background-color: rgba(255, 77, 77, 1);
+}
+
+.dataform-delete-acc:hover {
+    background-color: #ff4d4d;
+}
+
+.username-edit,
+.email-edit,
+.birthday,
+.password-edit {
+    display: grid;
+    grid-template-columns: 3fr 12.5fr;
+}
+
+.first-name-part {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+}
+
+.first-name-part label {
+    justify-self: end;
+}
+
+.user-avatar {
+    position: absolute;
+    width: 10vw;
+    height: 21vh;
+    top: 10vh;
+    left: 15vw;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #89dc91;
+    z-index: 3;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-avatar input[type="file"] {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.setting-page-cloud {
+    position: absolute;
+    background-color: white;
+    width: 100vw;
+    height: 30vh;
+    z-index: -1;
+    bottom: 0;
+}
+
+.setting-page-cloud-1 {
+    position: absolute;
+    background-color: white;
+    width: 50vw;
+    height: 40vh;
+    border-radius: 100%;
+    z-index: -1;
+    bottom: 0;
+    right: 60vw;
+}
+
+.setting-page-cloud-2 {
+    position: absolute;
+    background-color: white;
+    width: 50vw;
+    height: 40vh;
+    border-radius: 100%;
+    z-index: -1;
+    bottom: 0;
+    left: 70vw;
+}
+
+.avatar-bg {
+    position: absolute;
+    background-color: white;
+    width: 12vw;
+    height: 25vh;
+    top: 8vh;
+    left: 14vw;
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
