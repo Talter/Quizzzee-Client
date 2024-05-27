@@ -1,18 +1,36 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme } from "antd";
 
 import MainPage from "./MainPage";
+import UserList from "./UserList";
 
 const { Header, Content, Footer } = Layout;
-const items = new Array(3).fill(null).map((_, index) => ({
-  key: index + 1,
-  label: `nav ${index + 1}`,
-}));
-const App = () => {
+const items = [
+  { key: 1, label: 'Dash Board', location: 'dashboard' },
+  { key: 2, label: 'User', location: 'user' },
+  { key: 3, label: 'nav 3' }
+]
+const AdminRouter = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const path = window.location.pathname;
+
+  function handlePageChange(e) {
+    const key = e.key;
+    const selectedItem = items.find(item => String(item.key) === key);
+    if (selectedItem) {
+      const location = selectedItem.location;
+      window.location.href = "/admin/" + location;
+    }
+  }
+  
+
+  function NotFound() {
+    return <h2>404 Not Found</h2>;
+  }
   return (
     <BrowserRouter>
       <Layout
@@ -30,11 +48,14 @@ const App = () => {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["2"]}
+            selectedKeys={(path.endsWith("/admin") || path.endsWith("/dashboard")) ? ["1"] : ["2"]}
             items={items}
             style={{
               flex: 1,
               minWidth: 0,
+            }}
+            onClick={(e) => {
+              handlePageChange(e);
             }}
           />
         </Header>
@@ -54,6 +75,8 @@ const App = () => {
             <Routes>
               <Route path="/admin" element={<MainPage />} />
               <Route path="/admin/dashboard" element={<MainPage />} />
+              <Route path="/admin/user" element={<UserList />} />
+              <Route path="/admin/*" element={<NotFound />} />
             </Routes>
           </div>
         </Content>
@@ -68,4 +91,4 @@ const App = () => {
     </BrowserRouter>
   );
 };
-export default App;
+export default AdminRouter;
