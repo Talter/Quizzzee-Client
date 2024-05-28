@@ -74,7 +74,7 @@ function Header() {
       </div>
       <div className="col-span-6 grid grid-cols-5 justify-center items-center text-center ">
         <div className="font-semibold">Quizzy</div>
-        <div className="font-semibold">About us</div>
+        <a href="/aboutus" className="font-semibold">About us</a>
         <div className="col-span-3">
           {" "}
           <Search

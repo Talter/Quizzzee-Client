@@ -5,13 +5,8 @@ import BasicRouter from "./BasicRouter";
 
 const Router = () => {
   if (window.location.pathname.startsWith("/admin")) {
-    return (
-      <AdminRouter />
-    );
-  } else
-  return (
-    <BasicRouter />
-  )
+    return <AdminRouter />;
+  } else return <BasicRouter />;
 };
 
 export default Router;
