@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
 import "../../css/Login.css";
 
+import { UserContext } from "../../context/UserContext";
+
 function LoginPage() {
+  const navi = useNavigate();
 
   const handleCheckboxChange = () => {
     setRememberMe(!rememberMe);
   };
+
+
+  //Auth Client
+  const { setUserEmail, login } = useContext(UserContext);
 
   //API values
   const [email, setEmail] = useState();
@@ -16,28 +23,25 @@ function LoginPage() {
   //API fetch
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log({
-    "email": email,
-    "password": password,
-    "rememberMe": rememberMe,
-})
+    const userData = {
+      "email": email,
+      "password": password,
+      "rememberMe": rememberMe,
+  }
     try {
         const response = await fetch('http://localhost:8080/api/commons/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                "email": email,
-                "password": password,
-                "rememberMe": rememberMe,
-            }),
+            body: JSON.stringify(userData),
         });
 
         if (response.ok) {
             // Login successful
             console.log('Login successful');
-            window.location.href= "/";
+            login();
+            navi("/");
         } else {
             // Login failed
             console.error('Login failed');
