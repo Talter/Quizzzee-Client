@@ -27,7 +27,7 @@ function SignUp() {
         const user = { username, email, password };
 
         try {
-            const response = await fetch('/api/commons/signup', {
+            const response = await fetch('http://localhost:8080/api/commons/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user),

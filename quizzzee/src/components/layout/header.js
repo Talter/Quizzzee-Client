@@ -1,41 +1,24 @@
-import { Button, Input } from "antd";
+import { Button, Divider, Input } from "antd";
 import React from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 
 const items = [
+  
   {
     label: (
       <a
-        target="_blank"
         rel="noopener noreferrer"
-        href="https://www.antgroup.com"
+        href="/aboutus"
       >
         1st menu item
       </a>
     ),
     key: "0",
   },
-  {
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.aliyun.com"
-      >
-        2nd menu item
-      </a>
-    ),
-    key: "1",
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: "3rd menu item (disabled)",
-    key: "3",
-    disabled: true,
-  },
+  // {
+  //   type: "divider",
+  // },
 ];
 const { Search } = Input;
 
@@ -43,14 +26,10 @@ function Header() {
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
-        <div className="font-bold text-3xl relative ">
+        <a href="/" className="font-bold text-3xl relative select-none">
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
-          <a
-            className="bg-transparent absolute w-full h-full left-0 hover:cursor-pointer"
-            href="/"
-          ></a>
-        </div>
+        </a>
         <div>
           <div>
             <Dropdown
