@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 
-import MainPage from "./MainPage";
-import UserList from "./UserList";
+import MainPage from "../pages/admin/MainPage";
+import UserList from "../pages/admin//UserList";
 
 const { Header, Content, Footer } = Layout;
 const items = [

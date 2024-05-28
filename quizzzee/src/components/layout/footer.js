@@ -19,7 +19,7 @@ function Footer() {
   }, []);
   return (
     <div
-      className="bg-cover min-h-96 pt-24 grid grid-rows-5 "
+      className="bg-cover min-h-96 pt-24 grid grid-rows-5"
       style={{ backgroundImage: `url(${Background})` }}
     >
       <div className="row-span-4 px-24 text-white relative">
