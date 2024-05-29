@@ -7,30 +7,25 @@ export const UserProvider = ({ children }) => {
     const storedData = localStorage.getItem('isLoggedIn');
     return storedData ? JSON.parse(storedData) : false 
   });
-  const [userEmail, setUserEmail] = useState(() => {
-    const storedData = localStorage.getItem('userEmail');
+  const [userId, setUserId] = useState(() => {
+    const storedData = localStorage.getItem('userId');
     return storedData ? JSON.parse(storedData) : "" 
   });
 
-  useEffect(() => {
-    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    localStorage.setItem('userEmail', JSON.stringify(userEmail));
-  }, [userEmail]);
-
-
-  const login = () => {
+  const login = (id) => {
     setIsLoggedIn(true);
+    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+    localStorage.setItem('userId', JSON.stringify(id));
   };
 
   const logout = () => {
     setIsLoggedIn(false);
+    setUserId("")
+    localStorage.clear();
   };
 
   return (
-    <UserContext.Provider value={{ userEmail, isLoggedIn, login, logout, setUserEmail }}>
+    <UserContext.Provider value={{ userId, isLoggedIn, login, logout, setUserId }}>
       {children}
     </UserContext.Provider>
   );

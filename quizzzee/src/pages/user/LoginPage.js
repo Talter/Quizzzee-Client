@@ -13,7 +13,7 @@ function LoginPage() {
 
 
   //Auth Client
-  const { setUserEmail, login } = useContext(UserContext);
+  const { setUserId, login } = useContext(UserContext);
 
   //API values
   const [email, setEmail] = useState();
@@ -38,9 +38,9 @@ function LoginPage() {
         });
 
         if (response.ok) {
-            // Login successful
-            console.log('Login successful');
-            login();
+            const responseBody = await response.json();
+            const { user_id } = responseBody;
+            login(user_id);
             navi("/");
         } else {
             // Login failed
