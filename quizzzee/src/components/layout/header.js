@@ -1,5 +1,5 @@
 import { Button, Input } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { UserContext } from "../../context/UserContext";
@@ -8,33 +8,62 @@ import DefaultProFileImage from "../../images/default/default-avatar.png";
 function Header() {
   const { Search } = Input;
   const { isLoggedIn, userId, logout } = useContext(UserContext);
+  const [userData, setUserData] = useState({});
 
-  
-const items = [
-  {
-    label: (
-      <a rel="noopener noreferrer" href="/aboutus">
-        1st menu item
-      </a>
-    ),
-    key: "0",
-  },
-];
+  const items = [
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          1st menu item
+        </a>
+      ),
+      key: "0",
+    },
+  ];
 
-const users = [
-  {
-    type: "divider",
-  },
-  {
-    label: (
-      <div rel="noopener noreferrer" onClick={() => logout()}>
-        Logout
-      </div>
-    ),
-    key: "0",
-  },
-];
+  const users = [
+    {
+      type: "divider",
+    },
+    {
+      label: (
+        <div rel="noopener noreferrer" onClick={() => logout()}>
+          Logout
+        </div>
+      ),
+      key: "0",
+    },
+  ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/users/${userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setUserData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    } else return;
+  }, [userId]);
+
+
+  function capitalizeFirstLetter(string) {
+    return string
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
 
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
@@ -80,14 +109,18 @@ const users = [
       </div>
       {isLoggedIn ? (
         <div className="col-span-3 ps-12 pe-16 flex justify-center items-center pt-1">
-          <div className="text-lg mr-6 font-bold">Welcome, user!</div>
+          <div className="text-lg mr-6 font-bold">
+             {userData.username ?("Welcome, "+ capitalizeFirstLetter(userData.username)+"!") : "Someone tell Talter there is a problem with his brain"}
+          </div>
           <Dropdown
             menu={{
               items: users,
             }}
           >
             <div>
-              <div className="size-12 bg-mainColor rounded-full overflow-hidden"><img src={DefaultProFileImage}/></div>
+              <div className="size-12 bg-mainColor rounded-full overflow-hidden">
+                <img src={DefaultProFileImage} />
+              </div>
             </div>
           </Dropdown>
         </div>
