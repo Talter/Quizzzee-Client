@@ -9,6 +9,7 @@ import Footer from "../components/layout/footer";
 import AdminLogin from "../pages/AdminLogin";
 import UserDetail from "../pages/user/UserDetail";
 import AboutUs from "../pages/user/AboutUs";
+import AddQuizz from "../pages/user/AddQuizz";
 
 import { UserProvider } from "../context/UserContext";
 
@@ -36,25 +37,25 @@ function BasicRouter() {
                 <Route path="/quizzzy/:id" element={<Quizzy />} />
                 <Route path="/detail" element={<UserDetail />} />
                 <Route path="/aboutus" element={<AboutUs />} />
+                <Route path="/addquizz" element={<AddQuizz />} />
               </Routes>
             </div>
             {![
               "/login",
               "/signup",
               "/login/admin",
-              "detail",
               "/aboutus",
             ].includes(window.location.pathname) && (
-              <div
-                className={
-                  window.location.pathname.startsWith("/quizzzy")
-                    ? " bg-[#F6F6F6]"
-                    : " bg-transparent"
-                }
-              >
-                <Footer />
-              </div>
-            )}
+                <div
+                  className={
+                    window.location.pathname.startsWith("/quizzzy")
+                      ? " bg-[#F6F6F6]"
+                      : " bg-transparent"
+                  }
+                >
+                  <Footer />
+                </div>
+              )}
           </div>
         </div>
       </UserProvider>
