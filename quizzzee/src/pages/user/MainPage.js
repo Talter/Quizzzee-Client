@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import mainPageImage from "../../images/system/mainPage.png";
 import Background1 from "../../images/system/mainPageBg1.png";
 import Background2 from "../../images/system/mainPageBg2.png";
@@ -33,11 +33,6 @@ function MainPage() {
   const onChange = (currentSlide) => {
     console.log(currentSlide);
   };
-  
-  const { isLoggedIn } = useContext(UserContext);
-  useEffect(() => {
-    console.log(isLoggedIn);
-  },[isLoggedIn]);
   return (
     <div>
       <section className="grid grid-cols-2 items-center pt-12">

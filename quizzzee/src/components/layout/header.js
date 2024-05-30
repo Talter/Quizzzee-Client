@@ -46,7 +46,6 @@ function Header() {
         }
         const data = await response.json();
         setUserData(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,12 +56,11 @@ function Header() {
     } else return;
   }, [userId]);
 
-
   function capitalizeFirstLetter(string) {
     return string
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   }
 
   return (
@@ -92,25 +90,26 @@ function Header() {
         </div>
       </div>
       <div className="col-span-6 grid grid-cols-5 justify-center items-center text-center ">
-        <div className="font-semibold">Quizzy</div>
+        <div className="font-semibold">Quizzzy</div>
         <a href="/aboutus" className="font-semibold">
           About us
         </a>
-        <div className="col-span-3">
-          <Search
-            className="px-12 rounded-full"
-            placeholder="Search . . . "
-            onSearch={() => {
-              console.log("test");
-            }}
-            enterButton
+        <div className="col-span-3 mx-6 relative">
+          <input
+            className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
+            placeholder="Search..."
           />
+          <button className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full">
+            Search
+          </button>
         </div>
       </div>
       {isLoggedIn ? (
         <div className="col-span-3 ps-12 pe-16 flex justify-center items-center pt-1">
           <div className="text-lg mr-6 font-bold">
-             {userData.username ?("Welcome, "+ capitalizeFirstLetter(userData.username)+"!") : "Someone tell Talter there is a problem with his brain"}
+            {userData.username
+              ? "Welcome, " + capitalizeFirstLetter(userData.username) + "!"
+              : "I'm loading god darn it"}
           </div>
           <Dropdown
             menu={{

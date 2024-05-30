@@ -11,6 +11,7 @@ import UserDetail from "../pages/user/UserDetail";
 import AboutUs from "../pages/user/AboutUs";
 
 import { UserProvider } from "../context/UserContext";
+import SearchResult from "../pages/user/SearchResult";
 
 function BasicRouter() {
   return (
@@ -36,6 +37,8 @@ function BasicRouter() {
                 <Route path="/quizzzy/:id" element={<Quizzy />} />
                 <Route path="/detail" element={<UserDetail />} />
                 <Route path="/aboutus" element={<AboutUs />} />
+                <Route path="/search" element={<SearchResult />} />
+                <Route path="/search/:searchvalue" element={<SearchResult />} />
               </Routes>
             </div>
             {![
