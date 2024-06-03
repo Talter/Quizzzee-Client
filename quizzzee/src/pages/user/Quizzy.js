@@ -9,15 +9,18 @@ import {
   HeartFilled,
   StepForwardOutlined,
   SwapOutlined,
+  ShareAltOutlined,
 } from "@ant-design/icons";
 import Content from "../../components/quizzy/content";
 import Tag from "../../components/quizzy/tag";
 import Related from "../../components/quizzy/related";
 import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
+import Sharing from "../../components/quizzy/sharing";
 
 function Quizzy() {
   const { id } = useParams();
   const [counter, setCounter] = useState(0);
+  const [isSharing, setIsSharing] = useState(false);
 
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
@@ -83,6 +86,13 @@ function Quizzy() {
         <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
           <HeartFilled />
         </div>
+
+        <div
+          className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
+          onClick={() => setIsSharing(true)}
+        >
+          <ShareAltOutlined />
+        </div>
       </section>
       <section>
         <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
@@ -135,10 +145,8 @@ function Quizzy() {
         </div>
       </section>
       <section>
-      <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
-          <div className="text-2xl font-semibold pl-4">
-            Related quizzy
-          </div>
+        <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
+          <div className="text-2xl font-semibold pl-4">Related quizzy</div>
           <div className="grid grid-cols-4 grid-flow-rows gap-10 px-10 pt-12">
             <Related />
             <Related />
@@ -150,15 +158,19 @@ function Quizzy() {
         </div>
       </section>
       <section>
-          <div className=" pt-24 px-36 font-semibold text-2xl">
-            All question in this quizzy
-          </div>
-          <div className="grid grid-flow-row gap-10 px-48 pt-12">
-            <QuestionSetOverview />
-            <QuestionSetOverview />
-            <QuestionSetOverview />
-          </div>
+        <div className=" pt-24 px-36 font-semibold text-2xl">
+          All question in this quizzy
+        </div>
+        <div className="grid grid-flow-row gap-10 px-48 pt-12">
+          <QuestionSetOverview />
+          <QuestionSetOverview />
+          <QuestionSetOverview />
+        </div>
       </section>
+
+      {isSharing && (
+        <Sharing setIsSharing={setIsSharing} url={window.location.href} />
+      )}
     </div>
   );
 }
