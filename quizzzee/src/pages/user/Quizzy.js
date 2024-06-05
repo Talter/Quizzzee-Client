@@ -10,17 +10,20 @@ import {
   StepForwardOutlined,
   SwapOutlined,
   ShareAltOutlined,
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
 import Content from "../../components/quizzy/content";
 import Tag from "../../components/quizzy/tag";
 import Related from "../../components/quizzy/related";
 import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
 import Sharing from "../../components/quizzy/sharing";
+import Report from "../../components/quizzy/report";
 
 function Quizzy() {
   const { id } = useParams();
   const [counter, setCounter] = useState(0);
   const [isSharing, setIsSharing] = useState(false);
+  const [isReport, setIsReport] = useState(false);
 
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
@@ -92,6 +95,13 @@ function Quizzy() {
           onClick={() => setIsSharing(true)}
         >
           <ShareAltOutlined />
+        </div>
+
+        <div
+          className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
+          onClick={() => setIsReport(true)}
+        >
+          <ExclamationCircleFilled />
         </div>
       </section>
       <section>
@@ -171,6 +181,7 @@ function Quizzy() {
       {isSharing && (
         <Sharing setIsSharing={setIsSharing} url={window.location.href} />
       )}
+      {isReport && <Report setIsReport={setIsReport} quizzzyId={id} />}
     </div>
   );
 }
