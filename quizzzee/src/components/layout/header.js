@@ -9,7 +9,6 @@ function Header() {
   const { Search } = Input;
   const { isLoggedIn, userId, logout } = useContext(UserContext);
   const [userData, setUserData] = useState({});
-
   const items = [
     {
       label: (
@@ -21,7 +20,14 @@ function Header() {
     },
   ];
 
-  const users = [
+  const users = [    {
+    label: (
+      <div rel="noopener noreferrer" onClick={() => window.location.href="/detail"}>
+        User Detail
+      </div>
+    ),
+    key: "1",
+  },
     {
       type: "divider",
     },

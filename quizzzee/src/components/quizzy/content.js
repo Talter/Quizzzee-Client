@@ -1,8 +1,10 @@
 import React from 'react'
 import { useState } from 'react';
 
-function Content() {
+function Content(props) {
     const [click, setClick] = useState(true);
+    const data = props.quizzzy;
+    console.log(data);
     return (
       <section className="flex items-center gap-10 relative">
         <div
@@ -10,26 +12,22 @@ function Content() {
             setClick(!click);
           }}
           className={
-            "bg-white h-96 w-1/2 translate-x-[5rem] rounded-xl shadow-lg line-clamp-5 text-3xl font-semibold flex justify-center items-center px-12 overflow-hidden z-10 " 
+            "bg-white select-none h-96 w-1/2 translate-x-[5rem] rounded-xl shadow-lg line-clamp-5 text-3xl font-semibold flex justify-center items-center px-12 overflow-hidden z-10 " 
           }
         >
-          lorem is lorem is lorem is lorem is lorem islorem islorem islorem
-          islorem islorem islorem islorem islorem islorem islorem islorem
-          islorem is
+          {data.text}
         </div>
-
         <div
           onClick={() => {
             setClick(!click);
           }}
           className={
-            "bg-mainColor h-96 w-1/2 transition tranform  translate-y-[1rem] rounded-xl shadow-lg line-clamp-5 text-3xl font-semibold flex justify-center items-center px-12 overflow-hidden " +
-            (click ? "translate-x-[-35rem] z-0" : "translate-x-[-5rem] z-20")
+            "bg-mainColor select-none h-96 w-1/2 transition tranform  translate-y-[1rem] rounded-xl shadow-lg line-clamp-5 text-3xl font-semibold flex justify-center items-center px-12 overflow-hidden text-white " +
+            // (click ? "translate-x-[-35rem] z-0" : "translate-x-[-5rem] z-20")
+            (click ? "translate-x-[-35rem] z-0" : "translate-x-[-5rem]")
           }
         >
-          lorem is lorem is lorem is lorem is lorem islorem islorem islorem
-          islorem islorem islorem islorem islorem islorem islorem islorem
-          islorem is
+          {data.answer_fc}
         </div>
       </section>
     );

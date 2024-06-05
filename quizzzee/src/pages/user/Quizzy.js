@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -21,44 +21,52 @@ import Report from "../../components/quizzy/report";
 
 function Quizzy() {
   const { id } = useParams();
+  const [data, setData] = useState();
+  const [quizzzies, setQuizzzies] = useState();
   const [counter, setCounter] = useState(0);
   const [isSharing, setIsSharing] = useState(false);
   const [isReport, setIsReport] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/quizzzy/${id}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setData(data);
+        setQuizzzies(data.quizzzes);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
       <div className=" mb-12 px-12 font-semibold text-2xl">
-        {id} Numa numa ei
+        {data && data.title}
       </div>
       <section>
         <div className={"pb-12 px-12 flex overflow-hidden"}>
-          <motion.div
-            className={"min-w-full"}
-            animate={{ x: -counter + "%" }}
-            transition={{ type: "tween" }}
-          >
-            <Content />
-          </motion.div>
-          <motion.div
-            className={"min-w-full"}
-            animate={{ x: -counter + "%" }}
-            transition={{ type: "tween" }}
-          >
-            <Content />
-          </motion.div>
-          <motion.div
-            className={"min-w-full"}
-            animate={{ x: -counter + "%" }}
-            transition={{ type: "tween" }}
-          >
-            <Content />
-          </motion.div>
+          {quizzzies &&
+            quizzzies.map((quizzzy) => (
+              <motion.div
+                className={"min-w-full"}
+                animate={{ x: -counter + "%" }}
+                transition={{ type: "tween" }}
+              >
+                <Content quizzzy={quizzzy} />
+              </motion.div>
+            ))}
         </div>
         <div className="flex justify-evenly item-center w-2/3">
           <button
             className=" size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:scale-105 active:scale-90 active:bg-gray-400  active:text-sm "
             onClick={() => {
-              setCounter(counter - 100);
+              if (counter !== 0) setCounter(counter - 100);
             }}
           >
             <CaretLeftFilled />
@@ -69,7 +77,7 @@ function Quizzy() {
           <button
             className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:bg-gray-300 hover:scale-105 active:bg-gray-400 active:scale-90 active:text-sm"
             onClick={() => {
-              setCounter(counter + 100);
+              if (counter !== (quizzzies.length*100 - 100)) setCounter(counter + 100);
             }}
           >
             <CaretRightOutlined />
@@ -110,39 +118,19 @@ function Quizzy() {
             <div className="bg-gray-300 size-16 rounded-full" />
             <div className="grid grid-rows-2">
               <div className=" font-semibold text-lg flex justify-center">
-                Mai Nhat DoAn
+                {data && data.createdBy}
               </div>
               <div className=" text-sm flex justify-center text-gray-700">
-                xx/xx/xxxx
+                {data && data.updatedAt.substring(0, 10)}
               </div>
             </div>
           </div>
           <div className=" px-12 py-3">
-            <span className="line-clamp-5">
-              lorem is lorem is lorem is lorem is lorem islorem islorem islorem
-              islorem islorem islorem islorem islorem islorem islorem islorem
-              islorem is lorem is lorem is lorem is lorem is lorem islorem
-              islorem islorem islorem islorem islorem islorem islorem islorem
-              islorem islorem islorem is lorem is lorem is lorem is lorem is
-              lorem islorem lorem is lorem is lorem is lorem is lorem islorem
-              islorem islorem islorem islorem islorem islorem islorem islorem
-              islorem islorem islorem is lorem is lorem is lorem is lorem is
-              lorem islorem islorem islorem islorem islorem islorem islorem
-              islorem islorem islorem islorem islorem is lorem is lorem is lorem
-              is lorem is lorem islorem islorem islorem islorem islorem islorem
-              islorem islorem islorem islorem islorem islorem is lorem is lorem
-              is lorem is lorem is lorem islorem islorem islorem islorem islorem
-              islorem islorem islorem islorem islorem islorem islorem is
-            </span>
+            <span className="line-clamp-5">{data && data.description}</span>
           </div>
           <div className="px-24 py-3 text-lg font-semibold">Tags:</div>
           <div className="px-16 py-2 grid grid-cols-6 grid-flow-row gap-10">
-            <Tag />
-            <Tag />
-            <Tag />
-            <Tag />
-            <Tag />
-            <Tag />
+            {data && data.tags.map((tag) => <Tag name={tag} />)}
           </div>
         </div>
       </section>
@@ -172,9 +160,10 @@ function Quizzy() {
           All question in this quizzy
         </div>
         <div className="grid grid-flow-row gap-10 px-48 pt-12">
-          <QuestionSetOverview />
-          <QuestionSetOverview />
-          <QuestionSetOverview />
+          {quizzzies &&
+            quizzzies.map((quizzzy) => (
+              <QuestionSetOverview quizzzy={quizzzy} />
+            ))}
         </div>
       </section>
 

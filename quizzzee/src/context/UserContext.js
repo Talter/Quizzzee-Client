@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
 
   const login = (id) => {
     setIsLoggedIn(true);
+    setUserId(id);
     localStorage.setItem('isLoggedIn', JSON.stringify(true));
     localStorage.setItem('userId', JSON.stringify(id));
   };

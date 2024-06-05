@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../css/UserSetting.css";
+import { UserContext } from "../../context/UserContext";
 
 function UserDetail() {
-    const [isEditing, setIsEditing] = useState(false);
+    const { isLoggedIn, userId, logout } = useContext(UserContext);
     const [formData, setFormData] = useState({
         username: "",
         firstName: "",
@@ -11,6 +12,43 @@ function UserDetail() {
         birthday: "",
         password: ""
     });
+    useEffect(() => {
+        if(!isLoggedIn){
+            window.location.href="/";
+        }
+    })
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch(
+              `http://localhost:8080/api/users/${userId}`
+            );
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            setFormData({
+                username: data.username,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                birthday: data.birthday,
+                password: "",
+            })
+
+            console.log(data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        if (userId) {
+          fetchData();
+        } else return;
+      }, [userId]);
+
+    const [isEditing, setIsEditing] = useState(false);
+
     const [avatar, setAvatar] = useState("");
     const [errors, setErrors] = useState({});
 
@@ -30,10 +68,34 @@ function UserDetail() {
         setIsEditing(true);
     };
 
+    const submitData = async () => {
+        console.log(JSON.stringify(formData));
+        try {
+          const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+      
+          const result = await response.json();
+          console.log('Data posted successfully:', result);
+        } catch (error) {
+          console.error('Failed to post data', error);
+        }
+      };
+      
+
     const handleConfirmClick = (e) => {
         e.preventDefault();
         const formErrors = validateForm(formData);
         if (Object.keys(formErrors).length === 0) {
+            submitData();
             setIsEditing(false);
         } else {
             setErrors(formErrors);
@@ -58,21 +120,21 @@ function UserDetail() {
 
     const validateForm = (data) => {
         const errors = {};
-        if (!data.username.trim()) {
+        if (!data.username || !data.username.trim()) {
             errors.username = "*Username is required";
         }
-        if (!data.firstName.trim()) {
+        if (!data.fistName || !data.firstName.trim()) {
             errors.firstName = "*First name is required";
         }
-        if (!data.lastName.trim()) {
+        if (!data.lastName || !data.lastName.trim()) {
             errors.lastName = "*Last name is required";
         }
-        if (!data.email.trim()) {
+        if (!data.email || !data.email.trim()) {
             errors.email = "*Email is required";
         } else if (!isValidEmail(data.email)) {
             errors.email = "*Invalid email format";
         }
-        if (!data.password.trim()) {
+        if (!data.password || !data.password.trim()) {
             errors.password = "*Password is required";
         }
         return errors;
