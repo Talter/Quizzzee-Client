@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, Input, Table } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 
 function MyComponent() {
-  // Generate fake data
-  const generateFakeData = (count) => {
-    const data = [];
-    for (let i = 1; i <= count; i++) {
-      data.push({ key: i, name: `Item ${i}`, fuck: `This ${i+1}` });
-    }
-    return data;
-  };
-
-  // Create fake data array
-  const fakeData = generateFakeData(69);
+  const navigate = useNavigate();
+  const [data, setData] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/quizzzy/`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+      fetchData();
+  },[])
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +31,9 @@ function MyComponent() {
 
   // Search
   const [searchQuery, setSearchQuery] = useState('');
-  const filteredData = fakeData.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = data  ? data.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  ): "";
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -47,14 +56,19 @@ function MyComponent() {
   // Table columns
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'title',
+      dataIndex: 'title',
+      key: '_id',
     },
     {
-        title: 'Fuck',
-        dataIndex: 'fuck',
-        key: 'fuck',
+        title: 'Description',
+        dataIndex: 'description',
+        key: '_id',
+      },
+      {
+        title: 'createdAt',
+        dataIndex: 'createdAt',
+        key: '_id',
       },
   ];
 
@@ -70,7 +84,7 @@ function MyComponent() {
         dataSource={currentPageData}
         pagination={false}
         onRow={(a) => ({
-            onClick: () => {window.location.href=`/admin/quizzzy/${a.key}`}
+            onClick: () => {navigate(`/admin/quizzzy/${a._id}`)}
         })}
       />
 

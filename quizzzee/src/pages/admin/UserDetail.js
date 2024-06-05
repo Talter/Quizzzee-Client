@@ -10,19 +10,19 @@ function UserDetail() {
   useEffect(() => {
     setMyQuizzzies([
       {
-        id: "0",
-        name: "Skoobido",
+        _id: "0",
+        title: "Skoobido",
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, consectetur libero. Nulla facilisi",
-        author: "Skoodido",
-        lastUpdate: "Sawconed",
+        createdBy: "Skoodido",
+        updatedAt: "Sawconed",
       },
       {
-        id: "1",
-        name: "Sawconed",
+        _id: "1",
+        title: "Sawconed",
         description: "Sawconed",
-        author: "Sawconed",
-        lastUpdate: "Sawconed",
+        createdBy: "Sawconed",
+        updatedAt: "Sawconed",
       },
     ]);
   });
@@ -52,7 +52,9 @@ function UserDetail() {
         </Col>
       </Row>
       <div>
-        <div className="mt-12 text-2xl mx-6 font-semibold">All quizzzy made by user</div>
+        <div className="mt-12 text-2xl mx-6 font-semibold">
+          All quizzzy made by user
+        </div>
         <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
           {myQuizzzies.map((mq) => (
             <QuizzzyCard key={mq.id} quizzzy={mq} />
@@ -60,20 +62,18 @@ function UserDetail() {
         </section>
       </div>
       <div>
-      <div className="mt-12 text-2xl mx-6 font-semibold">Reports</div>
-      <div className="grid grid-cols-2 grid-flow-row gap-16 px-16 mt-8">
-        <div className="bg-mainColorBold text-white text-lg px-12 py-6 rounded-lg">
+        <div className="mt-12 text-2xl mx-6 font-semibold">Reports</div>
+        <div className="grid grid-cols-2 grid-flow-row gap-16 px-16 mt-8">
+          <div className="bg-mainColorBold text-white text-lg px-12 py-6 rounded-lg">
             <div>Reported by: id</div>
             <div>Quizzzy id: id</div>
             <div>Issue: Reasons</div>
             <div>Report Date: Date</div>
             <div>Action: User Ban, Quizzzy Ban, Report Denied</div>
             <div>Report resolve date: Date</div>
+          </div>
+          <div className="bg-red-100">AA</div>
         </div>
-        <div className="bg-red-100">
-            AA
-        </div>
-      </div>
       </div>
     </div>
   );

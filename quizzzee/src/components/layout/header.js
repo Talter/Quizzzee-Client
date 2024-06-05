@@ -4,6 +4,7 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { UserContext } from "../../context/UserContext";
 import DefaultProFileImage from "../../images/default/default-avatar.png";
+import { Link } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
@@ -72,10 +73,10 @@ function Header() {
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
-        <a href="/" className="font-bold text-3xl relative select-none">
+        <Link to="/" className="font-bold text-3xl relative select-none">
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
-        </a>
+        </Link>
         <div>
           <Dropdown
             menu={{
@@ -97,9 +98,9 @@ function Header() {
       </div>
       <div className="col-span-6 grid grid-cols-5 justify-center items-center text-center ">
         <div className="font-semibold">Quizzzy</div>
-        <a href="/aboutus" className="font-semibold">
+        <Link to="/aboutus" className="font-semibold">
           About us
-        </a>
+        </Link>
         <div className="col-span-3 mx-6 relative">
           <input
             className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"

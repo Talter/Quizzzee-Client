@@ -35,6 +35,7 @@ function Quizzy() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log(data);
         setData(data);
         setQuizzzies(data.quizzzes);
       } catch (error) {

@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, Input, Table } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
 
 const { Search } = Input;
 
 function MyComponent() {
-  // Generate fake data
-  const generateFakeData = (count) => {
-    const data = [];
-    for (let i = 1; i <= count; i++) {
-      data.push({ key: i, name: `Item ${i}`, fuck: `This ${i+1}` });
-    }
-    return data;
-  };
-
-  // Create fake data array
-  const fakeData = generateFakeData(69);
+  const navigate = useNavigate();
+  const [data, setData] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/users/`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+      fetchData();
+  },[])
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +32,9 @@ function MyComponent() {
 
   // Search
   const [searchQuery, setSearchQuery] = useState('');
-  const filteredData = fakeData.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = data  ?data.filter(item =>
+    item.username.toLowerCase().includes(searchQuery.toLowerCase())
+  ): "";
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -47,15 +57,25 @@ function MyComponent() {
   // Table columns
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Username',
+      dataIndex: 'username',
+      key: '_id',
     },
     {
-        title: 'Fuck',
-        dataIndex: 'fuck',
-        key: 'fuck',
-      },
+      title: 'Email',
+      dataIndex: 'email',
+      key: '_id',
+    },
+    {
+      title: 'Join date',
+      dataIndex: 'username',
+      key: '_id',
+    },
+    {
+      title: 'Last update',
+      dataIndex: 'updatedAt',
+      key: '_id',
+    },
   ];
 
   return (
@@ -69,8 +89,9 @@ function MyComponent() {
         columns={columns}
         dataSource={currentPageData}
         pagination={false}
+        rowKey="_id"
         onRow={(a) => ({
-          onClick: () => {window.location.href=`/admin/user/${a.key}`}
+          onClick: () => {navigate(`/admin/user/${a._id}`)}
       })}
       />
 

@@ -1,8 +1,11 @@
+import { Link } from "react-router-dom";
+
+
 const QuizzzyCard = ({ quizzzy }) => {
   return (
-    <a
+    <Link
       className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105 active:scale-90"
-      href={`/quizzzy/${quizzzy._id}`}
+      to={`/quizzzy/${quizzzy._id}`}
     >
       <div className="min-h-36 text-xl text-white text-center flex items-center justify-center">
         {quizzzy.title}
@@ -14,7 +17,7 @@ const QuizzzyCard = ({ quizzzy }) => {
           Last update: {quizzzy.updatedAt.substring(0,10)}
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
