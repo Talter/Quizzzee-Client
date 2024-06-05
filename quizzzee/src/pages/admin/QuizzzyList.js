@@ -70,8 +70,8 @@ function MyComponent() {
         dataSource={currentPageData}
         pagination={false}
         onRow={(a) => ({
-          onClick: () => {window.location.href=`/admin/user/${a.key}`}
-      })}
+            onClick: () => {window.location.href=`/admin/quizzzy/${a.key}`}
+        })}
       />
 
       {/* Pagination */}

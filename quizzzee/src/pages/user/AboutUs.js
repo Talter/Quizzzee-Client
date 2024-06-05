@@ -3,7 +3,7 @@ import DDD from "../../images/squad/DDD.png";
 import DoAn from "../../images/squad/DoAn.png";
 import Ni from "../../images/squad/Ni.png";
 import VVV from "../../images/squad/VVV.png";
-import Habibi from "../../images/squad/Habibi.gif";
+import Habibi from "../../images/squad/Habibi.png.jpg.gif";
 import { motion } from "framer-motion";
 
 function Content(a) {
@@ -16,7 +16,7 @@ function Content(a) {
         whileHover={{
           rotate: 360,
           transition: {
-            duration: a.image === Habibi ? 0.1 : 2,
+            duration: a.image === Habibi ? 0.01 : 2,
             repeat: Infinity,
             ease: "linear",
             type: "tween",

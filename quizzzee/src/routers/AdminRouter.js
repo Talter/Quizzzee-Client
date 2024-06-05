@@ -3,13 +3,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 
 import MainPage from "../pages/admin/MainPage";
-import UserList from "../pages/admin//UserList";
+import UserList from "../pages/admin/UserList";
+import UserDetail from "../pages/admin/UserDetail";
+import QuizzzyList from "../pages/admin/QuizzzyList"
+import QuizzzyDetail from "../pages/admin/QuizzzyDetail"
 
 const { Header, Content, Footer } = Layout;
 const items = [
   { key: 1, label: 'Dash Board', location: 'dashboard' },
   { key: 2, label: 'User', location: 'user' },
-  { key: 3, label: 'nav 3' }
+  { key: 3, label: 'Quizzzy', location: 'quizzzy' },
+  { key: 4, label: 'nav 3' }
 ]
 const AdminRouter = () => {
   const {
@@ -76,6 +80,9 @@ const AdminRouter = () => {
               <Route path="/admin" element={<MainPage />} />
               <Route path="/admin/dashboard" element={<MainPage />} />
               <Route path="/admin/user" element={<UserList />} />
+              <Route path="/admin/user/:id" element={<UserDetail />} />
+              <Route path="/admin/quizzzy" element={<QuizzzyList />} />
+              <Route path="/admin/quizzzy/:id" element={<QuizzzyDetail />} />
               <Route path="/admin/*" element={<NotFound />} />
             </Routes>
           </div>
