@@ -73,7 +73,7 @@ function Header() {
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
-        <Link to="/" className="font-bold text-3xl relative select-none">
+        <Link to="/" className="font-bold text-3xl relative select-none" onClick={window.scrollTo(0, 0)}>
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
         </Link>

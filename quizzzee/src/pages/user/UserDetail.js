@@ -120,10 +120,11 @@ function UserDetail() {
 
     const validateForm = (data) => {
         const errors = {};
+        console.log(data);
         if (!data.username || !data.username.trim()) {
             errors.username = "*Username is required";
         }
-        if (!data.fistName || !data.firstName.trim()) {
+        if (!data.firstName || !data.firstName.trim()) {
             errors.firstName = "*First name is required";
         }
         if (!data.lastName || !data.lastName.trim()) {
