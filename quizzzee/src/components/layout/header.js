@@ -26,7 +26,7 @@ function Header() {
       label: (
         <div
           rel="noopener noreferrer"
-          onClick={() => (window.location.href = "/detail")}
+          onClick={() => (window.location.href = "/me/detail")}
         >
           Account Detail
         </div>
@@ -37,7 +37,7 @@ function Header() {
       label: (
         <div
           rel="noopener noreferrer"
-          onClick={() => (window.location.href = "/myquizzzy")}
+          onClick={() => (window.location.href = "/me/quizzzies")}
         >
           My Quizzzy
         </div>

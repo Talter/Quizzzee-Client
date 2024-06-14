@@ -38,12 +38,12 @@ function BasicRouter() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/" element={<MainPage />} />
               <Route path="/quizzzy/:id" element={<Quizzy />} />
-              <Route path="/detail" element={<UserDetail />} />
+              <Route path="/me/detail" element={<UserDetail />} />
               <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/search" element={<SearchResult />} />
               <Route path="/search/:searchvalue" element={<SearchResult />} />
               <Route path="/addquizz" element={<AddQuizz />} />
-              <Route path="/myquizzzy" element={<MyQuizzzy />} />
+              <Route path="/me/quizzzies" element={<MyQuizzzy />} />
             </Routes>
           </div>
           {!["/login", "/signup", "/login/admin", "/aboutus"].includes(
