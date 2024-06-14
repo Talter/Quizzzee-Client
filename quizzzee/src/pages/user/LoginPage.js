@@ -27,29 +27,29 @@ function LoginPage() {
       "email": email,
       "password": password,
       "rememberMe": rememberMe,
-  }
-    try {
-        const response = await fetch('http://localhost:8080/api/commons/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        });
-
-        if (response.ok) {
-            const responseBody = await response.json();
-            const { user_id } = responseBody;
-            login(user_id);
-            navi("/");
-        } else {
-            // Login failed
-            console.error('Login failed');
-        }
-    } catch (error) {
-        console.error('Error:', error);
     }
-};
+    try {
+      const response = await fetch('http://localhost:8080/api/commons/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const responseBody = await response.json();
+        const { user_id } = responseBody;
+        login(user_id);
+        navi("/");
+      } else {
+        // Login failed
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="login-page">
@@ -90,9 +90,8 @@ function LoginPage() {
                   />
                   <label htmlFor="remember" className="remember-label">
                     <span
-                      className={`checkbox-custom ${
-                        rememberMe ? "checked" : ""
-                      }`}
+                      className={`checkbox-custom ${rememberMe ? "checked" : ""
+                        }`}
                     ></span>
                     Remember Me
                   </label>

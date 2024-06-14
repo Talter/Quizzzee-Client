@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
@@ -21,6 +21,7 @@ import Report from "../../components/quizzy/report";
 
 function Quizzy() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [data, setData] = useState();
   const [quizzzies, setQuizzzies] = useState();
   const [counter, setCounter] = useState(0);
@@ -43,7 +44,11 @@ function Quizzy() {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
+
+  const handleExamClick = () => {
+    navigate(`/exam?id=${id}`);
+  };
 
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
@@ -78,7 +83,7 @@ function Quizzy() {
           <button
             className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:bg-gray-300 hover:scale-105 active:bg-gray-400 active:scale-90 active:text-sm"
             onClick={() => {
-              if (counter !== (quizzzies.length*100 - 100)) setCounter(counter + 100);
+              if (counter !== (quizzzies.length * 100 - 100)) setCounter(counter + 100);
             }}
           >
             <CaretRightOutlined />
@@ -136,8 +141,10 @@ function Quizzy() {
         </div>
       </section>
       <section className="flex justify-center items-center gap-24 pt-12">
-        <div className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer">
-          ABC
+        <div className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer"
+          onClick={handleExamClick}
+        >
+          Exam
         </div>
         <div className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer">
           ABC
