@@ -21,14 +21,29 @@ function Header() {
     },
   ];
 
-  const users = [    {
-    label: (
-      <div rel="noopener noreferrer" onClick={() => window.location.href="/detail"}>
-        User Detail
-      </div>
-    ),
-    key: "1",
-  },
+  const users = [
+    {
+      label: (
+        <div
+          rel="noopener noreferrer"
+          onClick={() => (window.location.href = "/detail")}
+        >
+          Account Detail
+        </div>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <div
+          rel="noopener noreferrer"
+          onClick={() => (window.location.href = "/myquizzzy")}
+        >
+          My Quizzzy
+        </div>
+      ),
+      key: "2",
+    },
     {
       type: "divider",
     },
@@ -73,7 +88,11 @@ function Header() {
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
-        <Link to="/" className="font-bold text-3xl relative select-none" onClick={window.scrollTo(0, 0)}>
+        <Link
+          to="/"
+          className="font-bold text-3xl relative select-none"
+          onClick={window.scrollTo(0, 0)}
+        >
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
         </Link>

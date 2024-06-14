@@ -119,7 +119,7 @@ function Quizzy() {
             <div className="bg-gray-300 size-16 rounded-full" />
             <div className="grid grid-rows-2">
               <div className=" font-semibold text-lg flex justify-center">
-                {data && data.createdBy}
+                {data && data.createdBy.username}
               </div>
               <div className=" text-sm flex justify-center text-gray-700">
                 {data && data.updatedAt.substring(0, 10)}

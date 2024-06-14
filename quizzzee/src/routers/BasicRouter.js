@@ -10,6 +10,7 @@ import AdminLogin from "../pages/AdminLogin";
 import UserDetail from "../pages/user/UserDetail";
 import AboutUs from "../pages/user/AboutUs";
 import AddQuizz from "../pages/user/AddQuizz";
+import MyQuizzzy from "../pages/user/MyQuizzzy";
 
 import { UserProvider } from "../context/UserContext";
 import SearchResult from "../pages/user/SearchResult";
@@ -42,6 +43,7 @@ function BasicRouter() {
               <Route path="/search" element={<SearchResult />} />
               <Route path="/search/:searchvalue" element={<SearchResult />} />
               <Route path="/addquizz" element={<AddQuizz />} />
+              <Route path="/myquizzzy" element={<MyQuizzzy />} />
             </Routes>
           </div>
           {!["/login", "/signup", "/login/admin", "/aboutus"].includes(

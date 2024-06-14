@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   HeartOutlined,
   FileDoneOutlined,
@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import "../../css/MyQuizzzy.css";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
+import { UserContext } from "../../context/UserContext";
 
 function MyQuizzzy() {
   const getWindowDimensions = () => {
@@ -100,28 +101,29 @@ function MyQuizzzy() {
 function MyCreatedQuizzzy(myQuizzzy) {
   const [isFetching, setIsFetching] = useState(true);
   const [myQuizzzies, setMyQuizzzies] = useState([]);
+  const { isLoggedIn, userId, logout } = useContext(UserContext);
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/quizzzy/${userId}/my_quizzzy`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      setMyQuizzzies(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
+    if(isLoggedIn)
     setTimeout(() => {
-      setMyQuizzzies([
-        {
-          id: "0",
-          name: "Skoobido",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, consectetur libero. Nulla facilisi",
-          author: "Skoodido",
-          lastUpdate: "Sawconed",
-        },
-        {
-          id: "1",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-      ]);
+      fetchData();
       setIsFetching(false);
-    }, 3000);
+    }, 100);
+    else 
+    window.location.href = "/myquizzzy";
   });
 
   return (
@@ -161,43 +163,43 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
 
   useEffect(() => {
     setTimeout(() => {
-      setMyFavoriteQuizzzies([
-        {
-          id: "0",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-        {
-          id: "1",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-        {
-          id: "2",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-        {
-          id: "3",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-        {
-          id: "4",
-          name: "Sawconed",
-          description: "Sawconed",
-          author: "Sawconed",
-          lastUpdate: "Sawconed",
-        },
-      ]);
+      // setMyFavoriteQuizzzies([
+      //   {
+      //     id: "0",
+      //     name: "Sawconed",
+      //     description: "Sawconed",
+      //     author: "Sawconed",
+      //     lastUpdate: "Sawconed",
+      //   },
+      //   {
+      //     id: "1",
+      //     name: "Sawconed",
+      //     description: "Sawconed",
+      //     author: "Sawconed",
+      //     lastUpdate: "Sawconed",
+      //   },
+      //   {
+      //     id: "2",
+      //     name: "Sawconed",
+      //     description: "Sawconed",
+      //     author: "Sawconed",
+      //     lastUpdate: "Sawconed",
+      //   },
+      //   {
+      //     id: "3",
+      //     name: "Sawconed",
+      //     description: "Sawconed",
+      //     author: "Sawconed",
+      //     lastUpdate: "Sawconed",
+      //   },
+      //   {
+      //     id: "4",
+      //     name: "Sawconed",
+      //     description: "Sawconed",
+      //     author: "Sawconed",
+      //     lastUpdate: "Sawconed",
+      //   },
+      // ]);
       setIsFetching(false);
     }, 3000);
   });
