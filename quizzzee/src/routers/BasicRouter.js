@@ -44,12 +44,9 @@ function BasicRouter() {
               <Route path="/search" element={<SearchResult />} />
               <Route path="/search/:searchvalue" element={<SearchResult />} />
               <Route path="/addquizz" element={<AddQuizz />} />
-<<<<<<< HEAD
               <Route path="/myquizzzy" element={<MyQuizzzy />} />
               <Route path="/exam" element={<ExamQuizz />} />
-=======
               <Route path="/me/quizzzies" element={<MyQuizzzy />} />
->>>>>>> 08c47724a59d679448783b541ca10f35e8855f16
             </Routes>
           </div>
           {!["/login", "/signup", "/login/admin", "/aboutus", "/exam"].includes(
