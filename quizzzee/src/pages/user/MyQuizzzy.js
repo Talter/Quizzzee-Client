@@ -124,7 +124,7 @@ function MyCreatedQuizzzy(myQuizzzy) {
     }, 100);
     else 
     window.location.href = "/myquizzzy";
-  });
+  },[]);
 
   return (
     <>
@@ -158,51 +158,34 @@ function MyCreatedQuizzzy(myQuizzzy) {
 
 function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
   const [isFetching, setIsFetching] = useState(true);
-
   const [myFavoriteQuizzzies, setMyFavoriteQuizzzies] = useState([]);
 
+  const { isLoggedIn, userId, logout } = useContext(UserContext);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/quizzzy/${userId}/favorite`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      setMyFavoriteQuizzzies(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
+    if(isLoggedIn)
     setTimeout(() => {
-      // setMyFavoriteQuizzzies([
-      //   {
-      //     id: "0",
-      //     name: "Sawconed",
-      //     description: "Sawconed",
-      //     author: "Sawconed",
-      //     lastUpdate: "Sawconed",
-      //   },
-      //   {
-      //     id: "1",
-      //     name: "Sawconed",
-      //     description: "Sawconed",
-      //     author: "Sawconed",
-      //     lastUpdate: "Sawconed",
-      //   },
-      //   {
-      //     id: "2",
-      //     name: "Sawconed",
-      //     description: "Sawconed",
-      //     author: "Sawconed",
-      //     lastUpdate: "Sawconed",
-      //   },
-      //   {
-      //     id: "3",
-      //     name: "Sawconed",
-      //     description: "Sawconed",
-      //     author: "Sawconed",
-      //     lastUpdate: "Sawconed",
-      //   },
-      //   {
-      //     id: "4",
-      //     name: "Sawconed",
-      //     description: "Sawconed",
-      //     author: "Sawconed",
-      //     lastUpdate: "Sawconed",
-      //   },
-      // ]);
+      fetchData();
       setIsFetching(false);
-    }, 3000);
-  });
+    }, 100);
+    else 
+    window.location.href = "/myquizzzy";
+  },[]);
+
 
   return (
     <>
@@ -217,7 +200,7 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
           </div>
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
-            {myFavoriteQuizzzies.map((mfq) => (
+            {myFavoriteQuizzzies && myFavoriteQuizzzies.favorites.map((mfq) => (
               <QuizzzyCard key={mfq.id} quizzzy={mfq} />
             ))}
           </section>
