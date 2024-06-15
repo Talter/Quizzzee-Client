@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -18,10 +18,12 @@ import Related from "../../components/quizzy/related";
 import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
 import Sharing from "../../components/quizzy/sharing";
 import Report from "../../components/quizzy/report";
+import { UserContext } from "../../context/UserContext";
 
 function Quizzy() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { userId } = useContext(UserContext);
   const [data, setData] = useState();
   const [quizzzies, setQuizzzies] = useState();
   const [counter, setCounter] = useState(0);
@@ -49,6 +51,27 @@ function Quizzy() {
   const handleExamClick = () => {
     navigate(`/exam?id=${id}`);
   };
+
+  const handleAddFavorite = async (userId, id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/favorite/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quizzzyId: id }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+
 
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
@@ -100,7 +123,9 @@ function Quizzy() {
         <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
           <DownloadOutlined />
         </div>
-        <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
+        <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold" onClick={()=>{
+          handleAddFavorite(userId, id);
+        }}>
           <HeartFilled />
         </div>
 

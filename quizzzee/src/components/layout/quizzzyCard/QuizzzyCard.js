@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 
 const QuizzzyCard = ({ quizzzy }) => {
-  console.log(quizzzy)
   return (
     <Link
       className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105 active:scale-90"
@@ -23,3 +22,4 @@ const QuizzzyCard = ({ quizzzy }) => {
 };
 
 export default QuizzzyCard;
+  
