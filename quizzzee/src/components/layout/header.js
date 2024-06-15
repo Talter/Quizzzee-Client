@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
-  const { isLoggedIn, userId, logout } = useContext(UserContext);
+  const { isLoggedIn, userId, logout, updateFavorites } = useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [search, setSearch] = useState("");
   const items = [
@@ -69,6 +69,7 @@ function Header() {
         }
         const data = await response.json();
         setUserData(data);
+        updateFavorites(data.favorites);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
