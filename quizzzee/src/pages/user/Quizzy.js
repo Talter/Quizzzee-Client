@@ -47,7 +47,7 @@ function Quizzy() {
   }, [id]);
 
   const handleExamClick = () => {
-    navigate(`/exam?id=${id}`);
+    navigate(`/exam/${id}`);
   };
 
   return (

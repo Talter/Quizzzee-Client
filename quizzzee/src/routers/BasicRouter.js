@@ -45,7 +45,7 @@ function BasicRouter() {
               <Route path="/search/:searchvalue" element={<SearchResult />} />
               <Route path="/addquizz" element={<AddQuizz />} />
               <Route path="/myquizzzy" element={<MyQuizzzy />} />
-              <Route path="/exam" element={<ExamQuizz />} />
+              <Route path="/exam/:id" element={<ExamQuizz />} />
               <Route path="/me/quizzzies" element={<MyQuizzzy />} />
             </Routes>
           </div>
