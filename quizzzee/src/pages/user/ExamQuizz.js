@@ -31,23 +31,17 @@ function ExamQuizz() {
                 const data = await response.json();
                 console.log(data);
 
-                // Determine maxQuestions based on returned data
-                const maxQuestions =
-                    data.amount >= 20 ? 20 : data.amount;
-
-                // Extract questions from quizzzes
-                const selectedQuizzzes = data.quizzzes.slice(0, maxQuestions);
+                const selectedQuizzzes = data.quizzzes;
                 const newQuestions = selectedQuizzzes.map((quizzze) => ({
-                    id: quizzze.id,
+                    id: quizzze._id,
                     question: quizzze.text,
                 }));
 
-                // Initialize answers state with empty object for each question
                 const initialAnswers = {};
                 newQuestions.forEach((question) => {
                     initialAnswers[question.id] = "";
                 });
-
+                setMaxQuestions(newQuestions.length);
                 setExamData(data); // Set examData state for later use
                 setQuestions(newQuestions);
                 setAnswers(initialAnswers);
@@ -97,14 +91,14 @@ function ExamQuizz() {
             setMaxQuestionsError("Max Questions must be between 1 and 999.");
             return;
         }
-
         try {
-            const response = await fetch(`http://localhost:8080/api/exam/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/quizzzy/exam/${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    amount: maxQuestions,
                     mode: "1",
                 }),
             });
@@ -131,6 +125,7 @@ function ExamQuizz() {
             });
 
             setQuestions(selectedQuizzzes);
+            setMaxQuestions(selectedQuizzzes.length);
             setAnswers(initialAnswers);
             setCurrentQuestionIndex(0);
             setAnsweredQuestions([]);
@@ -141,6 +136,30 @@ function ExamQuizz() {
             console.error("Error confirming settings:", error);
         }
     };
+
+    
+    const handleSubmit = async () => {
+        const exam = Object.keys(answers).map(key => ({
+            _id: key,
+            answer_us: answers[key]
+        }));
+        try {
+            const response = await fetch(`http://localhost:8080/api/quizzzy/exam/submit`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(exam),
+            });
+            if (!response.ok) {
+                throw new Error("I succ :<");
+            }
+            const data = await response.json();
+            // console.log(data);
+        }catch(err){
+            console.log(err);
+        }
+    }
 
     return (
         <div className="bg-gray-100 min-h-screen py-12 px-6 flex">
@@ -183,7 +202,7 @@ function ExamQuizz() {
                         type="text"
                         className="border border-gray-300 px-4 py-2 rounded-lg flex-1 mr-4"
                         placeholder="Your answer"
-                        value={answers[currentQuestionIndex]}
+                        value={questions[currentQuestionIndex] ? answers[questions[currentQuestionIndex].id] : ""}
                         onChange={handleInputChange}
                     />
                     <button
@@ -216,7 +235,7 @@ function ExamQuizz() {
                         </div>
                     </div>
                     <div className="mt-auto">
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full">
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full" onClick={() => {handleSubmit()}}>
                             Submit
                         </button>
                     </div>
@@ -238,9 +257,11 @@ function ExamQuizz() {
                         <h3 className="text-lg font-medium mb-2">Max Questions</h3>
                         <input
                             type="number"
-                            value={examData?.amount || ""}
-                            readOnly
+                            value={maxQuestions ? maxQuestions : ""}
+                            onChange={(e) => {setMaxQuestions(e.target.value)}}
                             className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+                            min={0}
+                            max={999}
                         />
                     </div>
 
@@ -254,7 +275,7 @@ function ExamQuizz() {
                         </button>
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                            onClick={handleConfirmSettings}
+                            onClick={() => handleConfirmSettings()}
                         >
                             Confirm Settings
                         </button>
