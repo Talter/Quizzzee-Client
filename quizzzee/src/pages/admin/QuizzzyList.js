@@ -11,7 +11,7 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/quizzzy/`
+          `http://localhost:8080/api/quizzzy/?isShowAll=true`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
