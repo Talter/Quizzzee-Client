@@ -243,7 +243,7 @@ function UserDetail() {
                                     />
                                 </div>
                             </div>
-                            <div className="password-edit">
+                            {/* <div className="password-edit">
                                 <label>Password:</label>
                                 <div>
                                     <input
@@ -257,7 +257,7 @@ function UserDetail() {
                                     />
                                     {errors.password && <span className="error">{errors.password}</span>}
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="btn-setup">
                             {isEditing ? (

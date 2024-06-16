@@ -9,6 +9,7 @@ import {
 import "../../css/MyQuizzzy.css";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import { UserContext } from "../../context/UserContext";
+import { Link } from "react-router-dom";
 
 function MyQuizzzy() {
   const getWindowDimensions = () => {
@@ -104,7 +105,9 @@ function MyCreatedQuizzzy(myQuizzzy) {
   const { isLoggedIn, userId, logout } = useContext(UserContext);
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/quizzzy/${userId}/my_quizzzy`);
+      const response = await fetch(
+        `http://localhost:8080/api/quizzzy/${userId}/my_quizzzy`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -117,14 +120,13 @@ function MyCreatedQuizzzy(myQuizzzy) {
   };
 
   useEffect(() => {
-    if(isLoggedIn)
-    setTimeout(() => {
-      fetchData();
-      setIsFetching(false);
-    }, 100);
-    else 
-    window.location.href = "/myquizzzy";
-  },[]);
+    if (isLoggedIn)
+      setTimeout(() => {
+        fetchData();
+        setIsFetching(false);
+      }, 100);
+    else window.location.href = "/myquizzzy";
+  }, []);
 
   return (
     <>
@@ -133,9 +135,12 @@ function MyCreatedQuizzzy(myQuizzzy) {
           My Quizzzy <FileDoneOutlined style={{ color: "#EFD59F" }} />
         </span>
         <span className="lg:float-end">
-          <button className="py-2 px-4 text-xl btn-create bg-subColorBold hover:bg-subColorLight text-white rounded">
+          <Link
+            to="/addquizz"
+            className="py-2 px-4 text-xl btn-create bg-subColorBold hover:bg-subColorLight text-white rounded hover:text-white"
+          >
             Create new
-          </button>
+          </Link>
         </span>
       </div>
 
@@ -164,7 +169,9 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/quizzzy/${userId}/favorite`);
+      const response = await fetch(
+        `http://localhost:8080/api/quizzzy/${userId}/favorite`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -177,15 +184,13 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
   };
 
   useEffect(() => {
-    if(isLoggedIn)
-    setTimeout(() => {
-      fetchData();
-      setIsFetching(false);
-    }, 100);
-    else 
-    window.location.href = "/myquizzzy";
-  },[]);
-
+    if (isLoggedIn)
+      setTimeout(() => {
+        fetchData();
+        setIsFetching(false);
+      }, 100);
+    else window.location.href = "/myquizzzy";
+  }, []);
 
   return (
     <>
@@ -200,9 +205,10 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
           </div>
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
-            {myFavoriteQuizzzies && myFavoriteQuizzzies.favorites.map((mfq) => (
-              <QuizzzyCard key={mfq.id} quizzzy={mfq} />
-            ))}
+            {myFavoriteQuizzzies.favorites &&
+              myFavoriteQuizzzies.favorites.map((mfq) => (
+                <QuizzzyCard key={mfq.id} quizzzy={mfq} />
+              ))}
           </section>
         )}
       </div>
