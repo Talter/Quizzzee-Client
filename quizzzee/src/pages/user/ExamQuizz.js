@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
+import AnswerRender from "../../components/exam/answer/AnswerRender";
 
 function ExamQuizz() {
   const { id } = useParams();
@@ -11,50 +12,54 @@ function ExamQuizz() {
   const [answeredCount, setAnsweredCount] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [maxQuestionsError, setMaxQuestionsError] = useState("");
-  const [maxQuestions, setMaxQuestions] = useState("");
+  const [maxQuestions, setMaxQuestions] = useState(0);
   const [examData, setExamData] = useState(null); // State to store fetched exam data
   const [result, setResult] = useState("");
-const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
+  const [mode, setMode] = useState(1);
+  const [modeRender, setModeRender] = useState(1);
+  const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
+
+  const fetchExamData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/quizzzy/${id}/exam`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:
+            maxQuestions !== 0
+              ? JSON.stringify({ mode, amount: maxQuestions })
+              : JSON.stringify({ mode }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch exam data");
+      }
+      const data = await response.json();
+      const selectedQuizzzes = data.quizzzes;
+      const newQuestions = selectedQuizzzes.map((quizzze) => ({
+        id: quizzze._id,
+        question: quizzze.text,
+        answer_qt: quizzze.answer_qt
+      }));
+
+      const initialAnswers = {};
+      newQuestions.forEach((question) => {
+        initialAnswers[question.id] = "";
+      });
+      setMaxQuestions(newQuestions.length);
+      setExamData(data); // Set examData state for later use
+      setQuestions(newQuestions);
+      setAnswers(initialAnswers);
+      setModeRender(data.mode)
+    } catch (error) {
+      console.error("Error fetching exam data:", error);
+    }
+  };
 
   useEffect(() => {
-    // Function to fetch exam data from server
-    const fetchExamData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/quizzzy/${id}/exam`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mode: 1 }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch exam data");
-        }
-        const data = await response.json();
-        // console.log(data);
-
-        const selectedQuizzzes = data.quizzzes;
-        const newQuestions = selectedQuizzzes.map((quizzze) => ({
-          id: quizzze._id,
-          question: quizzze.text,
-        }));
-
-        const initialAnswers = {};
-        newQuestions.forEach((question) => {
-          initialAnswers[question.id] = "";
-        });
-        setMaxQuestions(newQuestions.length);
-        setExamData(data); // Set examData state for later use
-        setQuestions(newQuestions);
-        setAnswers(initialAnswers);
-      } catch (error) {
-        console.error("Error fetching exam data:", error);
-      }
-    };
-
     fetchExamData(); // Fetch exam data on component mount
   }, []);
 
@@ -114,49 +119,19 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
       setMaxQuestionsError("Max Questions must be between 1 and 999.");
       return;
     }
-    try {
-        const response = await fetch(
-          `http://localhost:8080/api/quizzzy/${id}/exam`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mode: 1, amount: maxQuestions }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch exam data");
-        }
-        const data = await response.json();
-        // console.log(data);
-
-        const selectedQuizzzes = data.quizzzes;
-        const newQuestions = selectedQuizzzes.map((quizzze) => ({
-          id: quizzze._id,
-          question: quizzze.text,
-        }));
-
-        const initialAnswers = {};
-        newQuestions.forEach((question) => {
-          initialAnswers[question.id] = "";
-        });
-        setMaxQuestions(newQuestions.length);
-        setExamData(data); // Set examData state for later use
-        setQuestions(newQuestions);
-        setAnswers(initialAnswers);
-
-        closeModal();
-      } catch (error) {
-        console.error("Error fetching exam data:", error);
-      }
+    fetchExamData();
+    setResult("");
+    closeModal();
   };
 
   const handleSubmit = async () => {
-    const exam = Object.keys(answers).map((key) => ({
-      _id: key,
-      answer_us: answers[key],
-    }));
+    const exam = questions.map((question) => ({
+      _id : question.id,
+      answer_qt : question.answer_qt,
+      text: question.question,
+      answer_us : answers[question.id] === "true" ? true : answers[question.id]  === "false" ? false : answers[question.id] 
+    }))
+    // console.log(JSON.stringify({ answers: exam, mode, amount: 1 }));
     try {
       const response = await fetch(
         `http://localhost:8080/api/quizzzy/${id}/submit`,
@@ -165,7 +140,7 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ answers: exam, mode: 1, amount: 1 }),
+          body: JSON.stringify({ answers: exam, mode, amount: 1 }),
         }
       );
       if (!response.ok) {
@@ -208,10 +183,17 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
               </button>
               <div className="content">
                 <p className="text-lg font-semibold">
-                    You got {result.point}/{maxQuestions}
+                  You got {result.point}/{maxQuestions}
                 </p>
-                <p className={"pl-4 font-bold " + (result.point/maxQuestions >= 0.5 ? "text-green-500" : "text-red-500") }>
-                    You {result.point/maxQuestions >= 0.5 ? "Passed" : "Failed"}
+                <p
+                  className={
+                    "pl-4 font-bold " +
+                    (result.point / maxQuestions >= 0.5
+                      ? "text-green-500"
+                      : "text-red-500")
+                  }
+                >
+                  You {result.point / maxQuestions >= 0.5 ? "Passed" : "Failed"}
                 </p>
               </div>
             </div>
@@ -220,7 +202,7 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
       </>
     );
   };
-  
+
   return (
     <div className="bg-gray-100 min-h-screen py-12 px-6 flex">
       <style>
@@ -256,70 +238,22 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
         </div>
         <div className="bg-white p-4 shadow-md rounded-lg mb-6 max-h-96 overflow-y-auto sticky bottom-0">
           <p className="text-lg">
-            {questions[currentQuestionIndex]?.question || ""}
+            Question: {questions[currentQuestionIndex]?.question || ""}
+          </p>
+          <p className={ "text-lg " + (modeRender != 2 && "hidden " )}>
+            Answer: {questions[currentQuestionIndex]?.answer_qt || ""}
           </p>
         </div>
-        {!result ? (
-          <section>
-            <div className="flex items-center justify-between mt-4">
-              <input
-                type="text"
-                className="border border-gray-300 px-4 py-2 rounded-lg flex-1 mr-4"
-                placeholder="Your answer"
-                value={
-                  questions[currentQuestionIndex]
-                    ? answers[questions[currentQuestionIndex].id]
-                    : ""
-                }
-                onChange={handleInputChange}
-              />
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                onClick={handleNextQuestion}
-              >
-                Next Question
-              </button>
-            </div>
-          </section>
-        ) : (
-            <section>
-            <div className="flex items-center justify-between mt-4">
-              <input
-                type="text"
-                className="border border-gray-300 px-4 py-2 rounded-lg flex-1 mr-4"
-                value={
-                    "Your answer: " + (answers[questions[currentQuestionIndex].id])
-                }
-                readOnly
-              />
-            </div>
-            <div className="flex items-center justify-between mt-4">
-              <input
-                type="text"
-                className={ "border border-gray-300 px-4 py-2 rounded-lg flex-1 mr-4 " + ( result.checkedAnswers[currentQuestionIndex].answer_fc == undefined && "hidden" )} 
-                value={
-                    "Correct answer: " + result.checkedAnswers[currentQuestionIndex].answer_fc
-                }
-                readOnly
-              />
-            </div>
-            <div className="flex items-evenly justify-between mt-6">
-            <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                onClick={handlePreviousQuestion}
-              >
-                Previous Question
-              </button>
-            <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                onClick={handleNextQuestion}
-              >
-                Next Question
-              </button>
-            </div>
-            
-          </section>
-        )}
+        <AnswerRender
+          result={result}
+          questions={questions}
+          currentQuestionIndex={currentQuestionIndex}
+          answers={answers}
+          handleInputChange={handleInputChange}
+          handleNextQuestion={handleNextQuestion}
+          handlePreviousQuestion={handlePreviousQuestion}
+          mode={modeRender}
+        />
       </div>
       <div className="w-1/4">
         <div className="bg-white p-4 shadow-md rounded-lg mb-6">
@@ -381,7 +315,19 @@ const [resultPopupIsOpen, setResultPopupIsOpen] = useState(false);
               max={999}
             />
           </div>
-
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-2">Max Questions</h3>
+            <select
+              className="border border-gray-300 px-4 py-2 rounded-lg w-full"
+              value={mode}
+              onChange={(e) => {
+                setMode(parseInt(e.target.value));
+              }}
+            >
+              <option value="1">Eassay</option>
+              <option value="2">True/False</option>
+            </select>
+          </div>
           {/* Part 2: Buttons */}
           <div className="flex justify-end space-x-4">
             <button
