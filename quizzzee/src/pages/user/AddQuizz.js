@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../css/AddQuizz.css";
-import defaultImage from "../../images/default/picture-default.png";
+import { UserContext } from "../../context/UserContext";
+// import defaultImage from "../../images/default/picture-default.png";
 
 const AddQuizz = () => {
+    // const [questions, setQuestions] = useState([
+    //     { text1: '', text2: '', image: null, imageUploaded: false },
+    //     { text1: '', text2: '', image: null, imageUploaded: false },
+    //     { text1: '', text2: '', image: null, imageUploaded: false },
+    // ]);
+    const { isLoggedIn, userId } = useContext(UserContext);
+
+    useEffect(() => {
+        if(!isLoggedIn){
+            window.location.href="/";
+        }
+    })
+
     const [questions, setQuestions] = useState([
-        { text1: '', text2: '', image: null, imageUploaded: false },
-        { text1: '', text2: '', image: null, imageUploaded: false },
-        { text1: '', text2: '', image: null, imageUploaded: false },
+        { text1: '', text2: ''},
+        { text1: '', text2: ''},
+        { text1: '', text2: ''},
     ]);
 
     const [title, setTitle] = useState('');
@@ -30,22 +44,24 @@ const AddQuizz = () => {
     };
 
     const handleAddQuestion = () => {
-        setQuestions([...questions, { text1: '', text2: '', image: null, imageUploaded: false }]);
+        // setQuestions([...questions, { text1: '', text2: '', image: null, imageUploaded: false }]);
+        setQuestions([...questions, { text1: '', text2: ''}]);
+
         setErrors({
             ...errors,
             questions: [...errors.questions, { text1: '', text2: '' }]
         });
     };
 
-    const handleFileChange = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const newQuestions = [...questions];
-            newQuestions[index].image = file;
-            newQuestions[index].imageUploaded = true;
-            setQuestions(newQuestions);
-        }
-    };
+    // const handleFileChange = (index, event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         const newQuestions = [...questions];
+    //         newQuestions[index].image = file;
+    //         newQuestions[index].imageUploaded = true;
+    //         setQuestions(newQuestions);
+    //     }
+    // };
 
     const handleDeleteQuestion = (index) => {
         if (questions.length > 2) {
@@ -81,7 +97,7 @@ const AddQuizz = () => {
                 valid = false;
             }
             else if (!question.text2) {
-                newErrors.questions[index].text2 = 'Question is required';
+                newErrors.questions[index].text1 = 'Answer is required';
                 valid = false;
             }
         });
@@ -92,27 +108,22 @@ const AddQuizz = () => {
             return;
         }
 
-        const formData = new FormData();
-        questions.forEach((question, index) => {
-            if (question.image) {
-                formData.append(`image${index}`, question.image);
-            }
-        });
-
-        const questionsData = questions.map((question) => ({
-            text1: question.text1,
-            text2: question.text2,
-            image: question.image ? URL.createObjectURL(question.image) : null,
+        const quizzzes = questions.map((question) => ({
+            text: question.text1,
+            answer_fc: question.text2,
+            // image: question.image ? URL.createObjectURL(question.image) : null,
         }));
 
         const quizData = {
+            createdBy: userId,
             title,
             description,
-            questions: questionsData,
+            quizzzes: quizzzes,
         };
+        console.log(JSON.stringify(quizData))
 
         try {
-            const response = await fetch('http://localhost:5000/api/quizzes', {
+            const response = await fetch('http://localhost:8080/api/quizzzy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +181,7 @@ const AddQuizz = () => {
                                     onChange={(e) => handleQuestionChange(index, 'text2', e.target.value)}
                                 />
                             </div>
-                            <div className="img-quizz-container">
+                            {/* <div className="img-quizz-container">
                                 <img
                                     src={question.image ? URL.createObjectURL(question.image) : defaultImage}
                                     alt=""
@@ -184,7 +195,7 @@ const AddQuizz = () => {
                                         onChange={(e) => handleFileChange(index, e)}
                                     />
                                 </label>
-                            </div>
+                            </div> */}
                             <button
                                 type="button"
                                 className="delete-question-btn"
