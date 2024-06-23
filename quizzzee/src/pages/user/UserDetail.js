@@ -9,8 +9,8 @@ function UserDetail() {
         firstName: "",
         lastName: "",
         email: "",
-        birthday: "",
-        password: ""
+        birthDate: "",
+        // password: ""
     });
     useEffect(() => {
         if(!isLoggedIn){
@@ -32,8 +32,8 @@ function UserDetail() {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
-                birthday: data.birthday,
-                password: "",
+                birthDate: data.birthDate,
+                // password: "",
             })
 
             console.log(data);
@@ -111,7 +111,7 @@ function UserDetail() {
                 firstName: "",
                 lastName: "",
                 email: "",
-                birthday: "",
+                birthDate: "",
                 password: "",
             });
             setAvatar("");
@@ -120,7 +120,6 @@ function UserDetail() {
 
     const validateForm = (data) => {
         const errors = {};
-        console.log(data);
         if (!data.username || !data.username.trim()) {
             errors.username = "*Username is required";
         }
@@ -135,9 +134,9 @@ function UserDetail() {
         } else if (!isValidEmail(data.email)) {
             errors.email = "*Invalid email format";
         }
-        if (!data.password || !data.password.trim()) {
-            errors.password = "*Password is required";
-        }
+        // if (!data.password || !data.password.trim()) {
+        //     errors.password = "*Password is required";
+        // }
         return errors;
     };
 
@@ -231,13 +230,13 @@ function UserDetail() {
                                 </div>
                             </div>
                             <div className="birthday">
-                                <label>Birthday:</label>
+                                <label>Birth Date:</label>
                                 <div>
                                     <input
                                         className="DoB"
                                         type="date"
-                                        name="birthday"
-                                        value={formData.birthday}
+                                        name="birthDate"
+                                        value={formData.birthDate}
                                         onChange={handleInputChange}
                                         disabled={!isEditing}
                                     />
