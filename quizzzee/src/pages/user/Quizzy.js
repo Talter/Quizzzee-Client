@@ -248,7 +248,7 @@ function Quizzy() {
           <div className="px-12 py-3">
             <span className="line-clamp-5">{data && data.description}</span>
           </div>
-          <div className="px-24 py-3 text-lg font-semibold">Tags:</div>
+          <div className={"px-24 py-3 text-lg font-semibold " + ((data && data.tags.length == 0) && " hidden")}>Tags:</div>
           <div className="px-16 py-2 grid grid-cols-6 grid-flow-row gap-10">
             {data && data.tags.map((tag) => <Tag key={tag} name={tag} />)}
           </div>
