@@ -4,7 +4,6 @@ import { useState } from 'react';
 function Content(props) {
     const [click, setClick] = useState(true);
     const data = props.quizzzy;
-    console.log(data);
     return (
       <section className="flex items-center gap-10 relative">
         <div

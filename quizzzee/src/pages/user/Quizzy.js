@@ -1,10 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  CaretLeftFilled, CaretRightOutlined, DownloadOutlined, 
-  HeartFilled, StepForwardOutlined, SwapOutlined, 
-  ShareAltOutlined, ExclamationCircleFilled 
+import {
+  CaretLeftFilled,
+  CaretRightOutlined,
+  DownloadOutlined,
+  HeartFilled,
+  StepForwardOutlined,
+  SwapOutlined,
+  ShareAltOutlined,
+  ExclamationCircleFilled,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import Content from "../../components/quizzy/content";
 import Tag from "../../components/quizzy/tag";
@@ -17,12 +23,15 @@ import { UserContext } from "../../context/UserContext";
 function Quizzy() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { userId, addFavorites, removeFavorites, favorites } = useContext(UserContext);
+  const { userId, addFavorites, favorites } = useContext(UserContext);
   const [data, setData] = useState();
   const [quizzzies, setQuizzzies] = useState([]);
   const [counter, setCounter] = useState(0);
   const [isSharing, setIsSharing] = useState(false);
   const [isReport, setIsReport] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isAuto, setIsAuto] = useState(false);
+  const [isLoadingQuizzzy, setIsLoadingQuizzzy] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +43,9 @@ function Quizzy() {
         const data = await response.json();
         setData(data);
         setQuizzzies(data.quizzzes);
+        setTimeout(() => {
+          setIsLoadingQuizzzy(false);
+        },2000)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -41,97 +53,168 @@ function Quizzy() {
     fetchData();
   }, [id]);
 
-  const handleExamClick = () => {
-    navigate(`/exam/${id}`);
-  };
+  useEffect(() => {
+    if (favorites.includes(id)) {
+      setIsFavorite(true);
+      return;
+    }
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/users/${userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        addFavorites(data.favorites);
+        if (data.favorites.includes(id)) setIsFavorite(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    } else return;
+  }, [userId]);
+
+  useEffect(() => {
+    let interval;
+    if (isAuto) {
+      interval = setInterval(() => {
+        if (counter !== quizzzies.length * 100 - 100) {
+          setCounter(counter + 100);
+        } else setCounter(0);
+      }, 5000);
+    } else if (!isAuto && interval) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isAuto, counter]);
 
   const handleAddFavorite = async (userId, id, event) => {
     event.preventDefault(); // Prevent default behavior that might cause a page reload
 
     let link = "";
-    if (!favorites.includes(id))
+    if (!isFavorite)
       link = `http://localhost:8080/api/users/favorite/${userId}`;
-    else 
-      link = `http://localhost:8080/api/users/unfavorite/${userId}`;
-    
+    else link = `http://localhost:8080/api/users/unfavorite/${userId}`;
+
     try {
       const response = await fetch(link, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ quizzzyId: id }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
-      console.log(data);
-      if (!favorites.includes(id)) {
-        addFavorites(id);
-      } else {
-        removeFavorites(id);
-      }
+      setIsFavorite(!isFavorite);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  function shuffleArray() {
+    let array = quizzzies;
+    setIsLoadingQuizzzy(true);
+    setTimeout(() => {
+      setIsLoadingQuizzzy(false);
+    },2000)
+    let currentIndex = array.length,
+      randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+    setQuizzzies(array);
+    return;
+  }
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
       <div className="mb-12 px-12 font-semibold text-2xl">
         {data && data.title}
       </div>
-      <section>
-        <div className={"pb-12 px-12 flex overflow-hidden"}>
-          {quizzzies &&
-            quizzzies.map((quizzzy) => (
-              <motion.div
-                key={quizzzy.id}
-                className={"min-w-full"}
-                animate={{ x: -counter + "%" }}
-                transition={{ type: "tween" }}
-              >
-                <Content quizzzy={quizzzy} />
-              </motion.div>
-            ))}
-        </div>
-        <div className="flex justify-evenly item-center w-2/3">
-          <button
-            type="button"
-            className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:scale-105 active:scale-90 active:bg-gray-400 active:text-sm"
-            onClick={() => {
-              if (counter !== 0) setCounter(counter - 100);
-            }}
-          >
-            <CaretLeftFilled />
-          </button>
-          <div className="flex justify-center items-center text-lg">
-            {counter / 100 + 1}
+      <section className=" min-h-[30rem]">
+        {isLoadingQuizzzy || !quizzzies ? (
+          <div className="flex justify-center items-center h-[26rem] text-6xl text-mainColor">
+            <LoadingOutlined />
           </div>
-          <button
-            type="button"
-            className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:bg-gray-300 hover:scale-105 active:bg-gray-400 active:scale-90 active:text-sm"
-            onClick={() => {
-              if (counter !== (quizzzies.length * 100 - 100)) setCounter(counter + 100);
-            }}
-          >
-            <CaretRightOutlined />
-          </button>
-        </div>
+        ) : (
+          <>
+            <div className={"pb-12 px-12 flex overflow-hidden"}>
+              {quizzzies.map((quizzzy, index) => (
+                <motion.div
+                  key={index}
+                  className={"min-w-full"}
+                  animate={{ x: -counter + "%" }}
+                  transition={{ type: "tween" }}
+                >
+                  <Content quizzzy={quizzzy} />
+                </motion.div>
+              ))}
+            </div>
+            <div className="flex justify-evenly item-center w-2/3">
+              <button
+                type="button"
+                className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:scale-105 active:scale-90 active:bg-gray-400 active:text-sm"
+                onClick={() => {
+                  if (counter !== 0) setCounter(counter - 100);
+                }}
+              >
+                <CaretLeftFilled />
+              </button>
+              <div className="flex justify-center items-center text-lg">
+                {counter / 100 + 1}
+              </div>
+              <button
+                type="button"
+                className="size-12 bg-gray-200 text-lg flex justify-center items-center rounded-full transform transition hover:bg-gray-300 hover:scale-105 active:bg-gray-400 active:scale-90 active:text-sm"
+                onClick={() => {
+                  if (counter !== quizzzies.length * 100 - 100)
+                    setCounter(counter + 100);
+                }}
+              >
+                <CaretRightOutlined />
+              </button>
+            </div>
+          </>
+        )}
       </section>
       <section className="flex justify-evenly items-center pt-12 px-12">
-        <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer">
+        <div
+          className={
+            "w-36 h-12 flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer " +
+            (isAuto ? " bg-mainColor" : " bg-subColor")
+          }
+          onClick={() => {
+            setIsAuto(!isAuto);
+          }}
+        >
           <StepForwardOutlined />
         </div>
-        <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
+        <div
+          className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
+          onClick={() => {
+            shuffleArray();
+          }}
+        >
           <SwapOutlined />
         </div>
         <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
           <DownloadOutlined />
         </div>
-        <div 
-          className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${(favorites.includes(id) ? " text-red-500" : " text-white ")}`}
+        <div
+          className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
+            isFavorite ? " text-red-500" : " text-white "
+          }`}
           onClick={(event) => handleAddFavorite(userId, id, event)}
         >
           <HeartFilled />
@@ -172,15 +255,13 @@ function Quizzy() {
         </div>
       </section>
       <section className="flex justify-center items-center gap-24 pt-12">
-        <div 
+        <Link
           className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer"
-          onClick={handleExamClick}
+          to={`/exam/${id}`}
         >
           Exam
-        </div>
-        <div 
-          className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer"
-        >
+        </Link>
+        <div className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer">
           ABC
         </div>
       </section>
@@ -203,8 +284,8 @@ function Quizzy() {
         </div>
         <div className="grid grid-flow-row gap-10 px-48 pt-12">
           {quizzzies &&
-            quizzzies.map((quizzzy) => (
-              <QuestionSetOverview key={quizzzy.id} quizzzy={quizzzy} />
+            quizzzies.map((quizzzy, index) => (
+              <QuestionSetOverview key={index} quizzzy={quizzzy} />
             ))}
         </div>
       </section>
