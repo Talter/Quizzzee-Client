@@ -29,7 +29,7 @@ function LoginPage() {
       "rememberMe": rememberMe,
     }
     try {
-      const response = await fetch('http://localhost:8080/api/commons/login', {
+      const response = await fetch('${process.env.REACT_APP_API_BASE_URL}/commons/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ function ExamQuizz() {
   const fetchExamData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/quizzzy/${id}/exam`,
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}/exam`,
         {
           method: "POST",
           headers: {
@@ -134,7 +134,7 @@ function ExamQuizz() {
     // console.log(JSON.stringify({ answers: exam, mode, amount: 1 }));
     try {
       const response = await fetch(
-        `http://localhost:8080/api/quizzzy/${id}/submit`,
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}/submit`,
         {
           method: "POST",
           headers: {

@@ -10,7 +10,7 @@ function QuizzzyDetail() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/api/quizzzy/${id}`);
+          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}`);
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }

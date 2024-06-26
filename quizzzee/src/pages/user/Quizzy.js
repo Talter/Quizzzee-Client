@@ -36,7 +36,7 @@ function Quizzy() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/quizzzy/${id}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -61,7 +61,7 @@ function Quizzy() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/users/${userId}`
+          `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -98,8 +98,8 @@ function Quizzy() {
 
     let link = "";
     if (!isFavorite)
-      link = `http://localhost:8080/api/users/favorite/${userId}`;
-    else link = `http://localhost:8080/api/users/unfavorite/${userId}`;
+      link = `${process.env.REACT_APP_API_BASE_URL}/users/favorite/${userId}`;
+    else link = `${process.env.REACT_APP_API_BASE_URL}/users/unfavorite/${userId}`;
 
     try {
       const response = await fetch(link, {

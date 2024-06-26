@@ -21,7 +21,7 @@ function UserDetail() {
         const fetchData = async () => {
           try {
             const response = await fetch(
-              `http://localhost:8080/api/users/${userId}`
+              `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
             );
             if (!response.ok) {
               throw new Error("Network response was not ok");
@@ -71,7 +71,7 @@ function UserDetail() {
     const submitData = async () => {
         console.log(JSON.stringify(formData));
         try {
-          const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

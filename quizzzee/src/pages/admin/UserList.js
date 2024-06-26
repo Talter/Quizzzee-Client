@@ -12,7 +12,7 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/users/`
+          `${process.env.REACT_APP_API_BASE_URL}/users/`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");

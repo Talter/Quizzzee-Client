@@ -106,7 +106,7 @@ function MyCreatedQuizzzy(myQuizzzy) {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/quizzzy/${userId}/my_quizzzy`
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/my_quizzzy`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -170,7 +170,7 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/quizzzy/${userId}/favorite`
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

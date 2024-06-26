@@ -59,7 +59,7 @@ function SearchResult() {
   const fetchData = async (name) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/commons/search?quizzzy=${name}`
+        `${process.env.REACT_APP_API_BASE_URL}/commons/search?quizzzy=${name}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
