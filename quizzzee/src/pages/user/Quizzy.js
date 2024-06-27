@@ -23,7 +23,7 @@ import { UserContext } from "../../context/UserContext";
 function Quizzy() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { userId, addFavorites, favorites } = useContext(UserContext);
+  const { userId, token, addFavorites, favorites } = useContext(UserContext);
   const [data, setData] = useState();
   const [quizzzies, setQuizzzies] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -36,7 +36,9 @@ function Quizzy() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}`);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${id}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -45,7 +47,7 @@ function Quizzy() {
         setQuizzzies(data.quizzzes);
         setTimeout(() => {
           setIsLoadingQuizzzy(false);
-        },2000)
+        }, 2000);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -61,14 +63,19 @@ function Quizzy() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
+          `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        addFavorites(data.favorites);
-        if (data.favorites.includes(id)) setIsFavorite(true);
+        addFavorites(data);
+        if (data.includes(id)) setIsFavorite(true);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -99,13 +106,15 @@ function Quizzy() {
     let link = "";
     if (!isFavorite)
       link = `${process.env.REACT_APP_API_BASE_URL}/users/favorite/${userId}`;
-    else link = `${process.env.REACT_APP_API_BASE_URL}/users/unfavorite/${userId}`;
+    else
+      link = `${process.env.REACT_APP_API_BASE_URL}/users/unfavorite/${userId}`;
 
     try {
       const response = await fetch(link, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ quizzzyId: id }),
       });
@@ -123,7 +132,7 @@ function Quizzy() {
     setIsLoadingQuizzzy(true);
     setTimeout(() => {
       setIsLoadingQuizzzy(false);
-    },2000)
+    }, 2000);
     let currentIndex = array.length,
       randomIndex;
     while (currentIndex !== 0) {
@@ -248,7 +257,14 @@ function Quizzy() {
           <div className="px-12 py-3">
             <span className="line-clamp-5">{data && data.description}</span>
           </div>
-          <div className={"px-24 py-3 text-lg font-semibold " + ((data && data.tags.length == 0) && " hidden")}>Tags:</div>
+          <div
+            className={
+              "px-24 py-3 text-lg font-semibold " +
+              (data && data.tags.length == 0 && " hidden")
+            }
+          >
+            Tags:
+          </div>
           <div className="px-16 py-2 grid grid-cols-6 grid-flow-row gap-10">
             {data && data.tags.map((tag) => <Tag key={tag} name={tag} />)}
           </div>

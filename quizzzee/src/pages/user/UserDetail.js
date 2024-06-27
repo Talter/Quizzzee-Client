@@ -3,7 +3,7 @@ import "../../css/UserSetting.css";
 import { UserContext } from "../../context/UserContext";
 
 function UserDetail() {
-    const { isLoggedIn, userId, logout } = useContext(UserContext);
+    const { isLoggedIn, userId, token } = useContext(UserContext);
     const [formData, setFormData] = useState({
         username: "",
         firstName: "",
@@ -21,7 +21,11 @@ function UserDetail() {
         const fetchData = async () => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
+              `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                  }
+              }
             );
             if (!response.ok) {
               throw new Error("Network response was not ok");
@@ -75,6 +79,7 @@ function UserDetail() {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(formData),
           });

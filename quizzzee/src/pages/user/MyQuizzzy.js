@@ -102,11 +102,15 @@ function MyQuizzzy() {
 function MyCreatedQuizzzy(myQuizzzy) {
   const [isFetching, setIsFetching] = useState(true);
   const [myQuizzzies, setMyQuizzzies] = useState([]);
-  const { isLoggedIn, userId, logout } = useContext(UserContext);
+  const { isLoggedIn, userId, token } = useContext(UserContext);
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/my_quizzzy`
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/my_quizzzy`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -165,12 +169,16 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
   const [isFetching, setIsFetching] = useState(true);
   const [myFavoriteQuizzzies, setMyFavoriteQuizzzies] = useState([]);
 
-  const { isLoggedIn, userId, logout } = useContext(UserContext);
+  const { isLoggedIn, userId, token } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
