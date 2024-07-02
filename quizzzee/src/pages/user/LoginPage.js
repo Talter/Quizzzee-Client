@@ -13,7 +13,7 @@ function LoginPage() {
 
 
   //Auth Client
-  const { setUserId, login } = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   //API values
   const [email, setEmail] = useState();
@@ -29,7 +29,7 @@ function LoginPage() {
       "rememberMe": rememberMe,
     }
     try {
-      const response = await fetch('${process.env.REACT_APP_API_BASE_URL}/commons/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/commons/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,8 +39,9 @@ function LoginPage() {
 
       if (response.ok) {
         const responseBody = await response.json();
-        const { user_id } = responseBody;
-        login(user_id);
+        console.log(responseBody);
+        const { user_id, access } = responseBody;
+        login(user_id, access);
         navi("/");
       } else {
         // Login failed

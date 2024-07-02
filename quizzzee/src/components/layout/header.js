@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
-  const { isLoggedIn, userId, logout, updateFavorites } = useContext(UserContext);
+  const { isLoggedIn, userId, token, logout, updateFavorites } = useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [search, setSearch] = useState("");
   const items = [
@@ -60,12 +60,14 @@ function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`;
-      console.log(apiUrl);
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`
-        );
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          }
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

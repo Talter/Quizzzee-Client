@@ -9,27 +9,43 @@ export const UserProvider = ({ children }) => {
   });
   const [userId, setUserId] = useState(() => {
     const storedData = localStorage.getItem('userId');
-    return storedData ? JSON.parse(storedData) : "";
+    return storedData ? JSON.parse(storedData) : '';
   });
   const [favorites, setFavorites] = useState(() => {
     const storedData = localStorage.getItem('favorites');
     return storedData ? JSON.parse(storedData) : [];
   });
-
+  const [token, setToken] = useState(() => {
+    const storedData = localStorage.getItem('token');
+    return storedData ? JSON.parse(storedData) : '';
+  });
   useEffect(() => {
-    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
-    localStorage.setItem('userId', JSON.stringify(userId));
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [isLoggedIn, userId, favorites]);
+    if (isLoggedIn) {
+      localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+    }
+    if (userId !== '') {
+      localStorage.setItem('userId', JSON.stringify(userId));
+    }
+    if (favorites.length !== 0) {
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+    if(token !== ''){
+      localStorage.setItem('token', JSON.stringify(token));
+    }
+  }, [isLoggedIn, userId, favorites, token]);
+  
 
-  const login = (id) => {
+  const login = (id, token) => {
     setIsLoggedIn(true);
     setUserId(id);
+    setToken(token);
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    setUserId("");
+    setUserId('');
+    setFavorites([]);
+    setToken('')
     localStorage.clear();
   };
 
@@ -56,7 +72,18 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ userId, isLoggedIn, favorites, login, logout, setUserId, addFavorites, updateFavorites, removeFavorites }}
+      value={{
+        userId,
+        isLoggedIn,
+        favorites,
+        token,
+        login,
+        logout,
+        setUserId,
+        addFavorites,
+        updateFavorites,
+        removeFavorites,
+      }}
     >
       {children}
     </UserContext.Provider>
