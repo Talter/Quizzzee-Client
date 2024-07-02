@@ -2,57 +2,95 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
 
+const setGlobalExpiry = (ttl) => {
+  const now = new Date();
+  localStorage.setItem('global_expiry', now.getTime() + ttl);
+};
+
+const isExpired = () => {
+  const expiryStr = localStorage.getItem('global_expiry');
+  if (!expiryStr) {
+    return true;
+  }
+  const now = new Date();
+  const expiry = parseInt(expiryStr, 10);
+  if (now.getTime() > expiry) {
+    localStorage.clear();
+    return true;
+  }
+  return false;
+};
+
+const setItem = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+const getItem = (key) => {
+  const itemStr = localStorage.getItem(key);
+  return itemStr ? JSON.parse(itemStr) : null;
+};
+
 export const UserProvider = ({ children }) => {
+  const ttlShort = 1 * 60 * 60 * 1000;
+  const ttlLong = 3 * 24 * 60 * 60 * 1000;
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const storedData = localStorage.getItem('isLoggedIn');
-    return storedData ? JSON.parse(storedData) : false;
+    return !isExpired() && getItem('isLoggedIn') !== null ? getItem('isLoggedIn') : false;
   });
   const [userId, setUserId] = useState(() => {
-    const storedData = localStorage.getItem('userId');
-    return storedData ? JSON.parse(storedData) : '';
+    return !isExpired() && getItem('userId') !== null ? getItem('userId') : '';
   });
   const [favorites, setFavorites] = useState(() => {
-    const storedData = localStorage.getItem('favorites');
-    return storedData ? JSON.parse(storedData) : [];
+    return !isExpired() && getItem('favorites') !== null ? getItem('favorites') : [];
   });
   const [token, setToken] = useState(() => {
-    const storedData = localStorage.getItem('token');
-    return storedData ? JSON.parse(storedData) : '';
+    return !isExpired() && getItem('token') !== null ? getItem('token') : '';
   });
+  const [remember, setRemember] = useState(false);
+
   useEffect(() => {
     if (isLoggedIn) {
-      localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+      setItem('isLoggedIn', isLoggedIn);
     }
     if (userId !== '') {
-      localStorage.setItem('userId', JSON.stringify(userId));
+      setItem('userId', userId);
     }
     if (favorites.length !== 0) {
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+      setItem('favorites', favorites);
     }
-    if(token !== ''){
-      localStorage.setItem('token', JSON.stringify(token));
+    if (token !== '') {
+      setItem('token', token);
     }
-  }, [isLoggedIn, userId, favorites, token]);
-  
+    if (isLoggedIn || userId !== '' || favorites.length !== 0 || token !== '') {
+      const ttl = remember ? ttlLong : ttlShort;
+      setGlobalExpiry(ttl);
+    }
+  }, [isLoggedIn, userId, favorites, token, remember]);
 
-  const login = (id, token) => {
+  const login = (id, token, remember) => {
     setIsLoggedIn(true);
     setUserId(id);
     setToken(token);
+    setRemember(remember);
+    const ttl = remember ? ttlLong : ttlShort;
+    setGlobalExpiry(ttl);
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     setUserId('');
     setFavorites([]);
-    setToken('')
+    setToken('');
+    setRemember(false);
     localStorage.clear();
   };
 
   const addFavorites = (id) => {
     setFavorites((prevFavorites) => {
       const newFavorites = [...prevFavorites, id];
-      localStorage.setItem('favorites', JSON.stringify(newFavorites));
+      setItem('favorites', newFavorites);
+      const ttl = remember ? ttlLong : ttlShort;
+      setGlobalExpiry(ttl);
       return newFavorites;
     });
   };
@@ -60,14 +98,18 @@ export const UserProvider = ({ children }) => {
   const removeFavorites = (id) => {
     setFavorites((prevFavorites) => {
       const newFavorites = prevFavorites.filter((item) => item !== id);
-      localStorage.setItem('favorites', JSON.stringify(newFavorites));
+      setItem('favorites', newFavorites);
+      const ttl = remember ? ttlLong : ttlShort;
+      setGlobalExpiry(ttl);
       return newFavorites;
     });
   };
 
   const updateFavorites = (arrayOfFavorites) => {
     setFavorites(arrayOfFavorites);
-    localStorage.setItem('favorites', JSON.stringify(arrayOfFavorites));
+    setItem('favorites', arrayOfFavorites);
+    const ttl = remember ? ttlLong : ttlShort;
+    setGlobalExpiry(ttl);
   };
 
   return (
@@ -83,6 +125,7 @@ export const UserProvider = ({ children }) => {
         addFavorites,
         updateFavorites,
         removeFavorites,
+        setRemember,
       }}
     >
       {children}

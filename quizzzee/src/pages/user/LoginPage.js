@@ -41,7 +41,7 @@ function LoginPage() {
         const responseBody = await response.json();
         console.log(responseBody);
         const { user_id, access } = responseBody;
-        login(user_id, access);
+        login(user_id, access, rememberMe);
         navi("/");
       } else {
         // Login failed
