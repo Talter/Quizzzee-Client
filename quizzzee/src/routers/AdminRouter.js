@@ -1,5 +1,11 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Link,
+} from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
 import { useState } from "react";
 
@@ -8,14 +14,9 @@ import UserList from "../pages/admin/UserList";
 import UserDetail from "../pages/admin/UserDetail";
 import QuizzzyList from "../pages/admin/QuizzzyList";
 import QuizzzyDetail from "../pages/admin/QuizzzyDetail";
+import { UserContext, UserProvider } from "../context/UserContext";
 
 const { Header, Content, Footer } = Layout;
-const items = [
-  { key: 1, label: 'Dash Board', location: 'dashboard' },
-  { key: 2, label: 'User', location: 'user' },
-  { key: 3, label: 'Quizzzy', location: 'quizzzy' },
-  { key: 4, label: 'nav 3' }
-];
 
 const AdminRouter = () => {
   const {
@@ -28,7 +29,7 @@ const AdminRouter = () => {
   }
 
   return (
-    <BrowserRouter>
+    <UserProvider>
       <Layout style={{ minHeight: "100vh" }}>
         <Header style={{ display: "flex", alignItems: "center" }}>
           <div className="demo-logo" />
@@ -58,33 +59,51 @@ const AdminRouter = () => {
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
       </Layout>
-    </BrowserRouter>
+    </UserProvider>
   );
 };
 
 const NavMenu = ({ path }) => {
   const navigate = useNavigate();
-
+  const { logout } = useContext(UserContext);
   const handlePageChange = (e) => {
     const key = e.key;
-    const selectedItem = items.find(item => String(item.key) === key);
-    if (selectedItem) {
-      const location = selectedItem.location;
-      navigate("/admin/" + location);
+    if (key !== "done") {
+      navigate("/admin/" + key);
+      return;
     }
+    logout();
+    window.location.href = "/";
   };
+  const defaultSelectedKey = path.split("/")[2]
+    ? path.split("/")[2]
+    : "dashboard";
   return (
-    <Menu
-      theme="dark"
-      mode="horizontal"
-      defaultSelectedKeys={path ? String(["dashboard", "user", "quizzzy"].indexOf(path.split("/")[2])+1) : ["0"]}
-      items={items}
-      style={{ flex: 1, minWidth: 0 }}
-      onClick={(e) => {
-        handlePageChange(e);
-      }}
-    />
+    <div className="flex w-full">
+      <Menu
+        mode="horizontal"
+        theme="dark"
+        defaultSelectedKeys={[defaultSelectedKey]}
+        onClick={(e) => handlePageChange(e)}
+        className="w-full"
+      >
+        <Menu.Item key="dashboard">Dash Board</Menu.Item>
+        <Menu.Item key="user">User</Menu.Item>
+        <Menu.Item key="quizzzy">Quizzzy</Menu.Item>
+        <Menu.Item key="done" style={{ marginLeft: "auto" }}>
+          I'm done
+        </Menu.Item>
+      </Menu>
+    </div>
   );
 };
 
-export default AdminRouter;
+function App() {
+  return (
+    <BrowserRouter>
+      <AdminRouter />
+    </BrowserRouter>
+  );
+}
+
+export default App;
