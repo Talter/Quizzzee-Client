@@ -24,6 +24,7 @@ function MyQuizzzy() {
     getWindowDimensions()
   );
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [activeTab, setActiveTab] = useState("0");
 
   useEffect(() => {
@@ -62,7 +63,12 @@ function MyQuizzzy() {
                 </div>
               ),
               key: "0",
-              children: <MyCreatedQuizzzy />,
+              children: (
+                <MyCreatedQuizzzy
+                  isDeleting={isDeleting}
+                  setIsDeleting={setIsDeleting}
+                />
+              ),
             },
             {
               label: (
@@ -93,23 +99,29 @@ function MyQuizzzy() {
             )
           }
           withCreate={activeTab === "0"}
+          isDeleting={isDeleting}
+          setIsDeleting={setIsDeleting}
         />
       )}
     </>
   );
 }
 
-function MyCreatedQuizzzy(myQuizzzy) {
+function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
   const [isFetching, setIsFetching] = useState(true);
   const [myQuizzzies, setMyQuizzzies] = useState([]);
   const { isLoggedIn, userId, token } = useContext(UserContext);
+  const [ isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [ deleteTarget, setDeleteTarget ] = useState({});
+
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/my_quizzzy`,{
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/my_quizzzy`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
         }
       );
       if (!response.ok) {
@@ -123,6 +135,32 @@ function MyCreatedQuizzzy(myQuizzzy) {
     }
   };
 
+  
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${deleteTarget._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("I succ :<");
+      }
+      const data = await response.json();
+      setIsDeleteModalOpen(false);
+      setDeleteTarget({});
+      fetchData();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn)
       setTimeout(() => {
@@ -132,6 +170,45 @@ function MyCreatedQuizzzy(myQuizzzy) {
     else window.location.href = "/myquizzzy";
   }, []);
 
+  const DeleteModal = () => {
+    return (
+      <>
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden">
+            <div className="fixed inset-0 bg-black opacity-50"></div>
+            <div className="absolute z-50 bg-white p-6 rounded-lg shadow-lg max-w-lg transform transition-all duration-500 -translate-y-1/2  w-full md:w-1/2">
+              <button
+                className="absolute top-0 right-0 p-2 text-gray-500 hover:text-gray-800"
+                onClick={() => {setIsDeleteModalOpen(false); setDeleteTarget({});}}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <div className="content">
+                <div className="text-xl text-center pb-3">Delete "{deleteTarget.title}" ?</div>
+                <div className="flex justify-evenly">
+                <button className="text-lg bg-red-500 text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => {handleDelete()}}>Yes</button>
+                <button className="text-lg bg-subColorBold text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => {setIsDeleteModalOpen(false); setDeleteTarget({});}}>No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
   return (
     <>
       <div>
@@ -139,6 +216,17 @@ function MyCreatedQuizzzy(myQuizzzy) {
           My Quizzzy <FileDoneOutlined style={{ color: "#EFD59F" }} />
         </span>
         <span className="lg:float-end">
+          <span
+            className={
+              " select-none hover:cursor-pointer mr-2 py-2 px-4 text-xl btn-create text-white rounded hover:text-white " +
+              (isDeleting
+                ? " bg-red-500 hover:bg-red-300"
+                : " bg-subColorBold hover:bg-subColorLight ")
+            }
+            onClick={() => setIsDeleting(!isDeleting)}
+          >
+            Delete
+          </span>
           <Link
             to="/addquizz"
             className="py-2 px-4 text-xl btn-create bg-subColorBold hover:bg-subColorLight text-white rounded hover:text-white"
@@ -156,11 +244,16 @@ function MyCreatedQuizzzy(myQuizzzy) {
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
             {myQuizzzies.map((mq) => (
-              <QuizzzyCard key={mq.id} quizzzy={mq} />
+              <>
+              <div onClick={() => { if(isDeleting){ setIsDeleteModalOpen(true); setDeleteTarget(mq) }}} >
+                <QuizzzyCard key={mq.id} quizzzy={mq} disabled={isDeleting} />
+                </div>
+              </>
             ))}
           </section>
         )}
       </div>
+      <DeleteModal />
     </>
   );
 }
@@ -174,10 +267,11 @@ function MyFavoriteQuizzzy() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`,{
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/${userId}/favorite`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
         }
       );
       if (!response.ok) {
@@ -224,7 +318,7 @@ function MyFavoriteQuizzzy() {
   );
 }
 
-function MyQuizzzyHeader({ title, withCreate }) {
+function MyQuizzzyHeader({ title, withCreate, isDeleting, setIsDeleting }) {
   return (
     <div className="fixed sm:top-32 md:top-28 lg:top-16">
       <div className="w-screen pt-10 pb-5 px-14 bg-white shadow-lg">
@@ -232,8 +326,19 @@ function MyQuizzzyHeader({ title, withCreate }) {
           {title}
         </span>
         {withCreate && (
-          <span>
-            <button className="md:float-end py-2 px-4 btn-create bg-subColorBold hover:bg-subColorLight text-white rounded">
+          <span className="md:float-end">
+            <button
+              className={
+                "py-2 px-4 mr-2 btn-create text-white rounded " +
+                (isDeleting
+                  ? " bg-red-500 hover:bg-red-300"
+                  : " bg-subColorBold hover:bg-subColorLight ")
+              }
+              onClick={() => setIsDeleting(!isDeleting)}
+            >
+              Delete
+            </button>
+            <button className="py-2 px-4 btn-create bg-subColorBold hover:bg-subColorLight text-white rounded">
               Create new
             </button>
           </span>

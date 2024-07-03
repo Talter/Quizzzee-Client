@@ -9,7 +9,7 @@ const AddQuizz = () => {
   //     { text1: '', text2: '', image: null, imageUploaded: false },
   //     { text1: '', text2: '', image: null, imageUploaded: false },
   // ]);
-  const { isLoggedIn, userId } = useContext(UserContext);
+  const { isLoggedIn, userId, token } = useContext(UserContext);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -139,10 +139,11 @@ const AddQuizz = () => {
     console.log(JSON.stringify(quizData));
 
     try {
-      const response = await fetch("${process.env.REACT_APP_API_BASE_URL}/quizzzy", {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(quizData),
       });
