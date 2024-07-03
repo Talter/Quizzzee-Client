@@ -165,7 +165,7 @@ function MyCreatedQuizzzy(myQuizzzy) {
   );
 }
 
-function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
+function MyFavoriteQuizzzy() {
   const [isFetching, setIsFetching] = useState(true);
   const [myFavoriteQuizzzies, setMyFavoriteQuizzzies] = useState([]);
 
@@ -213,8 +213,8 @@ function MyFavoriteQuizzzy(myFavoriteQuizzzy) {
           </div>
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
-            {myFavoriteQuizzzies.favorites &&
-              myFavoriteQuizzzies.favorites.map((mfq) => (
+            {myFavoriteQuizzzies[0] &&
+              myFavoriteQuizzzies[0].favorites.map((mfq) => (
                 <QuizzzyCard key={mfq.id} quizzzy={mfq} />
               ))}
           </section>
