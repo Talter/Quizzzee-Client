@@ -11,7 +11,7 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/quizzzy/?isShowAll=true`
+          `${process.env.REACT_APP_API_BASE_URL}/quizzzy`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
