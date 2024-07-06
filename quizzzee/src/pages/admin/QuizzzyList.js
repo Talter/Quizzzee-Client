@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Pagination, Input, Table } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Pagination, Input, Table } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -22,18 +22,20 @@ function MyComponent() {
         console.error("Error fetching data:", error);
       }
     };
-      fetchData();
-  },[])
+    fetchData();
+  }, []);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize,setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
 
   // Search
-  const [searchQuery, setSearchQuery] = useState('');
-  const filteredData = data  ? data.filter(item =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
-  ): "";
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredData = data
+    ? data.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : "";
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -45,7 +47,7 @@ function MyComponent() {
   };
 
   const onShowSizeChange = (current, pageSize) => {
-    setPageSize(pageSize)
+    setPageSize(pageSize);
   };
 
   // Calculate the start and end index for the current page
@@ -56,41 +58,58 @@ function MyComponent() {
   // Table columns
   const columns = [
     {
-      title: 'title',
-      dataIndex: 'title',
-      key: '_id',
+      title: "title",
+      dataIndex: "title",
+      key: "_id",
     },
     {
-        title: 'Description',
-        dataIndex: 'description',
-        key: '_id',
-      },
-      {
-        title: 'createdAt',
-        dataIndex: 'createdAt',
-        key: '_id',
-      },
+      title: "Description",
+      dataIndex: "description",
+      key: "_id",
+    },
+    {
+      title: "createdAt",
+      dataIndex: "createdAt",
+      key: "_id",
+    },
   ];
+
+  const getRowClassName = (record, index) => {
+    return record.isPrivate ? "bg-gray-200 hover:cursor-not-allowed" : "";
+  };
 
   return (
     <div>
       {/* Search Bar */}
       <div className="flex justify-end">
-      <Search placeholder="Search..." onSearch={handleSearch} style={{ width: 200, marginBottom: 16 }} />
+        <Search
+          placeholder="Search..."
+          onSearch={handleSearch}
+          style={{ width: 200, marginBottom: 16 }}
+        />
       </div>
       {/* Table */}
       <Table
         columns={columns}
         dataSource={currentPageData}
+        rowClassName={getRowClassName}
         pagination={false}
         onRow={(a) => ({
-            onClick: () => {navigate(`/admin/quizzzy/${a._id}`)}
+          onClick: () => {
+            if (!a.isPrivate) navigate(`/admin/quizzzy/${a._id}`);
+          },
         })}
       />
 
       {/* Pagination */}
       <div className="mt-6 flex justify-center">
-      <Pagination current={currentPage} total={filteredData.length} pageSize={pageSize} onChange={handlePageChange} onShowSizeChange={onShowSizeChange}/>
+        <Pagination
+          current={currentPage}
+          total={filteredData.length}
+          pageSize={pageSize}
+          onChange={handlePageChange}
+          onShowSizeChange={onShowSizeChange}
+        />
       </div>
     </div>
   );
