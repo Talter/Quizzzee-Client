@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
-  const { isLoggedIn, userId, token, logout, updateFavorites } = useContext(UserContext);
+  const { isLoggedIn, userId, token, logout, updateFavorites } =
+    useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [search, setSearch] = useState("");
   const items = [
@@ -61,13 +62,16 @@ function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,{
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -131,9 +135,14 @@ function Header() {
             className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
             placeholder="Search..."
             value={search}
-            onChange={(e) => {setSearch(e.target.value)}}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
           />
-          <Link to={"/search/name="+search} className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full">
+          <Link
+            to={"/search/name=" + search}
+            className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full"
+          >
             Search
           </Link>
         </div>
@@ -152,7 +161,10 @@ function Header() {
           >
             <div>
               <div className="size-12 bg-mainColor rounded-full overflow-hidden">
-                <img src={DefaultProFileImage} />
+                <img
+                  className="object-cover h-full w-full"
+                  src={userData.image || DefaultProFileImage}
+                />
               </div>
             </div>
           </Dropdown>
