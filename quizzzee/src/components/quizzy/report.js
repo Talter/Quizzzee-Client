@@ -8,8 +8,9 @@ import { LoadingOutlined } from "@ant-design/icons";
 const Report = ({ setIsReport, quizzzyId }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [reportBody, setReportBody] = useState("");
+  const [reason, setReason] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userId } = useContext(UserContext);
+  const { userId, token } = useContext(UserContext);
 
   const openMessage = () => {
     messageApi.open({
@@ -18,22 +19,40 @@ const Report = ({ setIsReport, quizzzyId }) => {
     });
   };
 
-  const handleReport = () => {
+  const handleReport = async () => {
     setIsFetching(true);
+    
     const reportData = {
       quizzzyId,
-      reportBody,
-      userId: userId ? userId : "Anonymous",
+      message: reportBody,
+      createdBy: userId,
+      reason,
     };
-    console.log(reportData);
-
-    setTimeout(() => {
+  
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/report/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(reportData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to report');
+      }
+  
+      console.log('Report successfully sent:', reportData);
+      openMessage();
+    } catch (error) {
+      console.error('Error reporting:', error);
+    } finally {
       setIsFetching(false);
       setIsReport(false);
-    }, 2000);
-    openMessage();
+    }
   };
-
+  
   return (
     <div
       className="fixed w-screen h-screen top-0 bg-black bg-opacity-40"
@@ -57,7 +76,7 @@ const Report = ({ setIsReport, quizzzyId }) => {
           <h3>Or use our available message</h3>
           <Radio.Group
             onChange={(e) => {
-              setReportBody(e.target.value);
+              setReason(e.target.value);
             }}
           >
             <Space direction="vertical">

@@ -23,7 +23,8 @@ import { UserContext } from "../../context/UserContext";
 function Quizzy() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { userId, token, addFavorites, favorites } = useContext(UserContext);
+  const { isLoggedIn, userId, token, addFavorites, favorites } =
+    useContext(UserContext);
   const [data, setData] = useState();
   const [quizzzies, setQuizzzies] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -32,6 +33,7 @@ function Quizzy() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isAuto, setIsAuto] = useState(false);
   const [isLoadingQuizzzy, setIsLoadingQuizzzy] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,6 +148,11 @@ function Quizzy() {
     setQuizzzies(array);
     return;
   }
+  const handleMouseToggle = (enter) => {
+    if (!isLoggedIn) {
+      setShowTooltip(enter);
+    }
+  };
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
       <div className="mb-12 px-12 font-semibold text-2xl">
@@ -220,13 +227,24 @@ function Quizzy() {
         <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
           <DownloadOutlined />
         </div>
-        <div
-          className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
-            isFavorite ? " text-red-500" : " text-white "
-          }`}
-          onClick={(event) => handleAddFavorite(userId, id, event)}
-        >
-          <HeartFilled />
+        <div className="relative inline-block">
+          <div
+            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
+              isFavorite ? " text-red-500" : " text-white "
+            }`}
+            onClick={(event) => {
+              if (isLoggedIn) handleAddFavorite(userId, id, event);
+            }}
+            onMouseEnter={() => handleMouseToggle("Favorite")}
+            onMouseLeave={() => handleMouseToggle(false)}
+          >
+            <HeartFilled />
+          </div>
+          {showTooltip === "Favorite" && !isLoggedIn && (
+            <div className="select-none tooltip absolute bg-gray-800 text-white p-2 rounded-md">
+              Please log in to report.
+            </div>
+          )}
         </div>
         <div
           className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
@@ -234,11 +252,22 @@ function Quizzy() {
         >
           <ShareAltOutlined />
         </div>
-        <div
-          className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
-          onClick={() => setIsReport(true)}
-        >
-          <ExclamationCircleFilled />
+        <div className="relative inline-block">
+          <div
+            className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
+            onClick={() => {
+              if (isLoggedIn) setIsReport(true);
+            }}
+            onMouseEnter={() => handleMouseToggle("Report")}
+            onMouseLeave={() => handleMouseToggle(false)}
+          >
+            <ExclamationCircleFilled />
+          </div>
+          {showTooltip === "Report" && !isLoggedIn && (
+            <div className="select-none tooltip absolute bg-gray-800 text-white p-2 rounded-md">
+              Please log in to report.
+            </div>
+          )}
         </div>
       </section>
       <section>
