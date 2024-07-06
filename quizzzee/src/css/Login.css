@@ -27,7 +27,8 @@
 }
 
 .login-form {
-    font-size: 3vh;
+    font-size: 1rem;
+    width: inherit;
     margin-top: 2vh;
     margin-bottom: 4vh;
     display: flex;
@@ -35,6 +36,8 @@
 }
 
 .login-form input {
+    font-size: 1rem;
+    width: 100%;
     padding: 1vh 3vw;
     margin-top: 1vh;
     font-weight: bold;
@@ -46,7 +49,7 @@
     margin-bottom: 0.5vh;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
+    text-align: center;    
 }
 
 .login-form input::placeholder {

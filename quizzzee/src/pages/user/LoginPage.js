@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import "../../css/Login.css";
 
 import { UserContext } from "../../context/UserContext";
@@ -11,7 +17,6 @@ function LoginPage() {
     setRememberMe(!rememberMe);
   };
 
-
   //Auth Client
   const { login } = useContext(UserContext);
 
@@ -19,36 +24,55 @@ function LoginPage() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+
+  // Page status
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setError({});
+  }, [email, password]);
 
   //API fetch
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const userData = {
-      "email": email,
-      "password": password,
-      "rememberMe": rememberMe,
-    }
+      email: email,
+      password: password,
+      rememberMe: rememberMe,
+    };
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/commons/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/commons/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
+      const responseBody = await response.json();
       if (response.ok) {
-        const responseBody = await response.json();
         console.log(responseBody);
         const { user_id, access } = responseBody;
         login(user_id, access, rememberMe);
         navi("/");
       } else {
         // Login failed
-        console.error('Login failed');
+        console.error("Login failed", responseBody);
+        setError({ ...responseBody });
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,7 +92,11 @@ function LoginPage() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
+              {error.email !== "" && (
+                <p className="text-red-600">{error.email}</p>
+              )}
             </div>
             <div className="input-field">
               <input
@@ -76,7 +104,11 @@ function LoginPage() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
+              {error.password !== "" && (
+                <p className="text-red-600">{error.password}</p>
+              )}
               <div className="options">
                 <a href="#" className="forget-password">
                   Forget Password?
@@ -91,8 +123,9 @@ function LoginPage() {
                   />
                   <label htmlFor="remember" className="remember-label">
                     <span
-                      className={`checkbox-custom ${rememberMe ? "checked" : ""
-                        }`}
+                      className={`checkbox-custom ${
+                        rememberMe ? "checked" : ""
+                      }`}
                     ></span>
                     Remember Me
                   </label>
@@ -100,8 +133,13 @@ function LoginPage() {
               </div>
             </div>
           </div>
-          <button className="login-confirm-btn" type="submit">
+          <button
+            className="login-confirm-btn"
+            type="submit"
+            disabled={loading}
+          >
             Login
+            {loading && <LoadingOutlined />}
           </button>
           <br />
           <Link className="create-acc-btn" to="/signup">

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../../css/AddQuizz.css";
 import { UserContext } from "../../context/UserContext";
+import { LoadingOutlined } from "@ant-design/icons";
 // import defaultImage from "../../images/default/picture-default.png";
 
 const AddQuizz = () => {
@@ -10,6 +11,7 @@ const AddQuizz = () => {
   //     { text1: '', text2: '', image: null, imageUploaded: false },
   // ]);
   const { isLoggedIn, userId, token } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -88,7 +90,7 @@ const AddQuizz = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setLoading(true);
     const newErrors = {
       title: "",
       description: "",
@@ -139,14 +141,17 @@ const AddQuizz = () => {
     console.log(JSON.stringify(quizData));
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(quizData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(quizData),
+        }
+      );
 
       if (response.ok) {
         console.log("Quiz saved successfully!");
@@ -156,7 +161,14 @@ const AddQuizz = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+
+    setLoading(false);
+    window.location.href = "/myquizzzy";
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, [title, description, questions, selectedSubjects, isPrivate]);
 
   return (
     <div className="quiz-page">
@@ -222,9 +234,22 @@ const AddQuizz = () => {
               </option>
             ))}
           </select>
-          
+
           <div>Publicity:</div>
-          <div className="pl-4 font-semibold text-base">I want my Quizzzy to be <span className={"py-2 px-5 rounded-lg select-none cursor-pointer " + (isPrivate ? "bg-red-300" : "bg-green-300")} onClick={() => {setIsPrivate(!isPrivate)}}>{isPrivate ? "Private" : "Public" }</span></div>
+          <div className="pl-4 font-semibold text-base">
+            I want my Quizzzy to be{" "}
+            <span
+              className={
+                "py-2 px-5 rounded-lg select-none cursor-pointer " +
+                (isPrivate ? "bg-red-300" : "bg-green-300")
+              }
+              onClick={() => {
+                setIsPrivate(!isPrivate);
+              }}
+            >
+              {isPrivate ? "Private" : "Public"}
+            </span>
+          </div>
           <span>
             {errors.description && (
               <div className="error-message">{errors.description}</div>
@@ -292,8 +317,8 @@ const AddQuizz = () => {
           >
             Add Question
           </button>
-          <button type="submit" className="submit-btn">
-            Submit
+          <button type="submit" className="submit-btn" disabled={loading}>
+            Submit {loading && <LoadingOutlined className="loading-icon" />}
           </button>
         </div>
       </form>

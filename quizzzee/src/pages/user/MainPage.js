@@ -24,7 +24,9 @@ function MainPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/quizzzy/`);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/quizzzy?isActive=true&isPrivate=false`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
