@@ -12,47 +12,53 @@ const Report = ({ setIsReport, quizzzyId }) => {
   const [isFetching, setIsFetching] = useState(false);
   const { userId, token } = useContext(UserContext);
 
-  const openMessage = () => {
+  const openMessage = (type, content) => {
     messageApi.open({
-      type: "success",
-      content: "Report submitted!",
+      type,
+      content,
     });
   };
 
   const handleReport = async () => {
     setIsFetching(true);
-    
+
     const reportData = {
       quizzzyId,
       message: reportBody,
       createdBy: userId,
       reason,
     };
-  
+
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/report/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(reportData),
-      });
-  
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/report/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(reportData),
+        }
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to report');
+        throw new Error("Failed to report");
       }
-  
-      console.log('Report successfully sent:', reportData);
-      openMessage();
+
+      console.log("Report successfully sent:", reportData);
+      openMessage("success", "Report Submited!");
     } catch (error) {
-      console.error('Error reporting:', error);
+      console.error("Error reporting:", error);
+      openMessage("warning", "Report Failed!");
     } finally {
       setIsFetching(false);
-      setIsReport(false);
+      setTimeout(() => {
+        setIsReport(false);
+      },3000);
     }
   };
-  
+
   return (
     <div
       className="fixed w-screen h-screen top-0 bg-black bg-opacity-40"

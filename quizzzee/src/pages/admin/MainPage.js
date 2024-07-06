@@ -19,8 +19,10 @@ const MainPage = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
-        console.log(data);
+        let data = await response.json();
+        if(link === `${process.env.REACT_APP_API_BASE_URL}/report`){
+          data = data.filter(d => d.status != "Not Checked");
+        }
         lazy(data.length);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,7 +31,6 @@ const MainPage = () => {
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/users`, setLength1);
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, setLength2);
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/report`, setLength3);
-
   }, []);
   return (
     <div className="p-6">

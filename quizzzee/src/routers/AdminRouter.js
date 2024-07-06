@@ -14,6 +14,8 @@ import UserList from "../pages/admin/UserList";
 import UserDetail from "../pages/admin/UserDetail";
 import QuizzzyList from "../pages/admin/QuizzzyList";
 import QuizzzyDetail from "../pages/admin/QuizzzyDetail";
+import ReportList from "../pages/admin/ReportList";
+import ReportDetail from "../pages/admin/ReportDetail";
 import { UserContext, UserProvider } from "../context/UserContext";
 
 const { Header, Content, Footer } = Layout;
@@ -51,6 +53,8 @@ const AdminRouter = () => {
               <Route path="/admin/user/:id" element={<UserDetail />} />
               <Route path="/admin/quizzzy" element={<QuizzzyList />} />
               <Route path="/admin/quizzzy/:id" element={<QuizzzyDetail />} />
+              <Route path="/admin/report/" element={<ReportList />} />
+              <Route path="/admin/report/:id" element={<ReportDetail />} />
               <Route path="/admin/*" element={<NotFound />} />
             </Routes>
           </div>
@@ -90,6 +94,7 @@ const NavMenu = ({ path }) => {
         <Menu.Item key="dashboard">Dash Board</Menu.Item>
         <Menu.Item key="user">User</Menu.Item>
         <Menu.Item key="quizzzy">Quizzzy</Menu.Item>
+        <Menu.Item key="report">Report</Menu.Item>
         <Menu.Item key="done" style={{ marginLeft: "auto" }}>
           I'm done
         </Menu.Item>
