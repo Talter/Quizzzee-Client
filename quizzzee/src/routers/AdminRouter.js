@@ -60,7 +60,7 @@ const AdminRouter = () => {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Quizzzy {new Date().getFullYear()} Created By QuizzziT
         </Footer>
       </Layout>
     </UserProvider>
