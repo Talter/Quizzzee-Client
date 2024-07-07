@@ -56,6 +56,10 @@ function LoginPage() {
           }
           case 'admin':{
             window.location.href = "/admin";
+            break;
+          }
+          case 'superAdmin':{
+            window.location.href = "/sadmin";
           }
         }
       } else {

@@ -20,7 +20,7 @@ const MainPage = () => {
           throw new Error("Network response was not ok");
         }
         let data = await response.json();
-        if(link === `${process.env.REACT_APP_API_BASE_URL}/report`){
+        if(link.startsWith(`${process.env.REACT_APP_API_BASE_URL}/report`)){
           data = data.filter(d => d.status != "Not Checked");
         }
         lazy(data.length);
@@ -30,7 +30,8 @@ const MainPage = () => {
     };
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/users`, setLength1);
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, setLength2);
-    fetchData(`${process.env.REACT_APP_API_BASE_URL}/report`, setLength3);
+    fetchData(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "/sadmin" : ""}`, setLength3);
+    console.log(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "sadmin" : ""}`);
   }, []);
   return (
     <div className="p-6">

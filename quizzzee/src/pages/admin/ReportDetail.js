@@ -12,7 +12,7 @@ function QuizzzyDetail() {
   const [reported, setReported] = useState();
   const [quizzzies, setQuizzzies] = useState();
   const [messageApi, contextHolder] = message.useMessage();
-  const { token } = useContext(UserContext);
+  const { token, userId } = useContext(UserContext);
 
   const fetchReport = async () => {
     try {
@@ -262,7 +262,7 @@ function QuizzzyDetail() {
             <Select
               value={report ? report.status : "Not Checked"}
               onChange={(e) => {
-                setReport((prev) => ({ ...prev, status: e }));
+                setReport((prev) => ({ ...prev, status: e, resolvedBy: userId }));
               }}
               className="w-36 h-10 text-lg "
               options={[

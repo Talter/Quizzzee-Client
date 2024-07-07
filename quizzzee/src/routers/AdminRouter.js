@@ -16,6 +16,8 @@ import QuizzzyList from "../pages/admin/QuizzzyList";
 import QuizzzyDetail from "../pages/admin/QuizzzyDetail";
 import ReportList from "../pages/admin/ReportList";
 import ReportDetail from "../pages/admin/ReportDetail";
+import AdminList from "../pages/admin/AdminList";
+import AdminDetail from "../pages/admin/AdminDetail";
 import { UserContext, UserProvider } from "../context/UserContext";
 
 const { Header, Content, Footer } = Layout;
@@ -56,6 +58,11 @@ const AdminRouter = () => {
               <Route path="/admin/report/" element={<ReportList />} />
               <Route path="/admin/report/:id" element={<ReportDetail />} />
               <Route path="/admin/*" element={<NotFound />} />
+              <Route path="/sadmin" element={<MainPage />} />
+              <Route path="/sadmin/dashboard" element={<MainPage />} />
+              <Route path="/sadmin/admin" element={<AdminList />} />
+              <Route path="/sadmin/admin/:id" element={<AdminDetail />} />
+              <Route path="/sadmin/*" element={<NotFound />} />
             </Routes>
           </div>
         </Content>
@@ -70,10 +77,11 @@ const AdminRouter = () => {
 const NavMenu = ({ path }) => {
   const navigate = useNavigate();
   const { logout } = useContext(UserContext);
+  const start = window.location.pathname.split("/")[1];
   const handlePageChange = (e) => {
     const key = e.key;
     if (key !== "done") {
-      navigate("/admin/" + key);
+      navigate("/" + start + "/" + key);
       return;
     }
     logout();
@@ -92,9 +100,18 @@ const NavMenu = ({ path }) => {
         className="w-full"
       >
         <Menu.Item key="dashboard">Dash Board</Menu.Item>
-        <Menu.Item key="user">User</Menu.Item>
-        <Menu.Item key="quizzzy">Quizzzy</Menu.Item>
-        <Menu.Item key="report">Report</Menu.Item>
+        {window.location.pathname.split("/")[1] === "admin" ? (
+          <>
+            <Menu.Item key="user">User</Menu.Item>
+            <Menu.Item key="quizzzy">Quizzzy</Menu.Item>
+            <Menu.Item key="report">Report</Menu.Item>
+          </>
+        ) : (
+          <>
+            <Menu.Item key="admin">Admin</Menu.Item>
+          </>
+        )}
+
         <Menu.Item key="done" style={{ marginLeft: "auto" }}>
           I'm done
         </Menu.Item>
