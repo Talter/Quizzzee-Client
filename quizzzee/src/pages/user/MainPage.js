@@ -16,9 +16,10 @@ const contentStyle = {
   height: '260px',
   color: '#fff',
   textAlign: 'left',
-  background: '#364d79',
+  // background: '#364d79',
   padding: '20px',
   boxSizing: 'border-box',
+  background: 'linear-gradient(to right, #cdffd8, #94b9ff)',
 };
 
 const imageStyle = {
@@ -26,6 +27,7 @@ const imageStyle = {
   height: '100%',
   width: '100%',
   objectFit: 'cover',
+  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
 };
 
 const textStyle = {
@@ -35,14 +37,19 @@ const textStyle = {
 };
 
 const titleStyle = {
-  fontSize: '5vh',
+  fontSize: '2rem',
   margin: 0,
   color: '#fff',
+  fontWeight: 'bold',
+  letterSpacing: '-0.025em',
+  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+  textTransform: 'uppercase',
+  fontFamily: 'Quicksand',
 };
 
 const detailStyle = {
-  fontSize: '16px',
-  color: '#fff',
+  fontSize: '1.25rem',
+  color: '#50545c',
 };
 
 function MainPage() {
@@ -100,8 +107,8 @@ function MainPage() {
         className="bg-cover pt-36"
         style={{ backgroundImage: `url(${Background1})` }}
       >
-        <div className="text-5xl text-center font-semibold text-white pb-12">
-          What we offer
+        <div className="text-5xl text-center font-bold text-green-100 pb-12">
+          What we offer...
         </div>
         <div className="rounded-xl overflow-hidden bg-red-100 mx-56 mb-12">
           <Carousel arrows infinite autoplay>
