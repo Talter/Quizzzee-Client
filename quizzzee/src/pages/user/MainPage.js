@@ -1,23 +1,63 @@
 import React, { useEffect, useState } from "react";
 import mainPageImage from "../../images/system/mainPage.png";
+import learnzee from "../../images/default/Learnzee.png";
+import examzee from "../../images/default/Examzee.png";
+import addzee from "../../images/default/Addzee.png";
 import Background1 from "../../images/system/mainPageBg1.png";
 import Background2 from "../../images/system/mainPageBg2.png";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import { Carousel } from "antd";
-
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const contentStyle = {
-  margin: 0,
-  height: "260px",
-  color: "#fff",
-  lineHeight: "260px",
-  textAlign: "center",
-  background: "#364d79",
+  display: 'flex',
+  alignItems: 'center',
+  height: '260px',
+  color: '#fff',
+  textAlign: 'left',
+  background: '#364d79',
+  padding: '20px',
+  boxSizing: 'border-box',
 };
+
+const imageStyle = {
+  flex: 5,
+  height: '100%',
+  width: '100%',
+  objectFit: 'cover',
+};
+
+const textStyle = {
+  flex: 7,
+  paddingLeft: '20px',
+  boxSizing: 'border-box',
+};
+
+const titleStyle = {
+  fontSize: '5vh',
+  margin: 0,
+  color: '#fff',
+};
+
+const detailStyle = {
+  fontSize: '16px',
+  color: '#fff',
+};
+
 function MainPage() {
+  const navigate = useNavigate();
+
   const onChange = (currentSlide) => {
     console.log(currentSlide);
+  };
+
+  const handleSmoothScroll = (event, targetId) => {
+    event.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const [quizzzy, setQuizzzy] = useState();
@@ -29,7 +69,6 @@ function MainPage() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-
         setQuizzzy(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -67,22 +106,41 @@ function MainPage() {
         <div className="rounded-xl overflow-hidden bg-red-100 mx-56 mb-12">
           <Carousel arrows infinite autoplay>
             <div>
-              <h3 style={contentStyle}>1</h3>
+              <a href="#quizzz" onClick={(e) => handleSmoothScroll(e, 'quizzz')}>
+                <div style={contentStyle}>
+                  <img src={learnzee} alt="Banner 1" style={imageStyle} />
+                  <div style={textStyle}>
+                    <h3 style={titleStyle}>Master your learning with quizzzes and study modes</h3>
+                    <p style={detailStyle}>Join our community of leaners using Quizzzess's quizzzes, practice tests, and AI tools to improve scores.</p>
+                  </div>
+                </div>
+              </a>
             </div>
             <div>
-              <h3 style={contentStyle}>2</h3>
+              <div style={contentStyle}>
+                <img src={examzee} alt="Banner 2" style={imageStyle} />
+                <div style={textStyle}>
+                  <h3 style={titleStyle}>100% ready for exam day</h3>
+                  <p style={detailStyle}>With Study and Exam, turn your quizzzes into practice tests and master your study material.</p>
+                </div>
+              </div>
             </div>
             <div>
-              <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>4</h3>
+              <a href="/">
+                <div style={contentStyle}>
+                  <img src={addzee} alt="Banner 3" style={imageStyle} />
+                  <div style={textStyle}>
+                    <h3 style={titleStyle}>Find or create quizzzes</h3>
+                    <p style={detailStyle}>Get the right content you need to learn. For a fun way to learn quizzzes, play popular learning games like Match.</p>
+                  </div>
+                </div>
+              </a>
             </div>
           </Carousel>
         </div>
         <div className="py-1"></div>
       </section>
-      <section
+      <section id="quizzz"
         className="bg-cover pt-36 bg-mainColor min-h-96 grid grid-cols-4 grid-flow-rows px-36 gap-12 mb-12"
         style={{ backgroundImage: `url(${Background2})` }}
       >
