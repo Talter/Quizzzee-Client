@@ -279,6 +279,10 @@ function QuizzzyDetail() {
                   value: "Block User",
                   label: "Block User",
                 },
+                {
+                  value: "Block Quizzzy",
+                  label: "Block Quizzzy",
+                },
               ]}
             />
           </Space>

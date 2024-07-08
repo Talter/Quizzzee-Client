@@ -15,11 +15,67 @@ function Header() {
   const items = [
     {
       label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          1st menu item
+        <a rel="noopener noreferrer" href={window.location.pathname.split("/")[1] === "search" ? (window.location.pathname.split("/")[2] + "&tag=math"): "/search/tag=math"}>
+          Math
         </a>
       ),
       key: "0",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Literature
+        </a>
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Science
+        </a>
+      ),
+      key: "2",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          History
+        </a>
+      ),
+      key: "3",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Geography
+        </a>
+      ),
+      key: "4",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Art
+        </a>
+      ),
+      key: "5",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Music
+        </a>
+      ),
+      key: "6",
+    },
+    {
+      label: (
+        <a rel="noopener noreferrer" href="/aboutus">
+          Physic
+        </a>
+      ),
+      key: "7",
     },
   ];
 
