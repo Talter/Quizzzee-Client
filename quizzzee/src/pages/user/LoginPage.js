@@ -1,5 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import "../../css/Login.css";
 
 import { UserContext } from "../../context/UserContext";
@@ -10,7 +15,6 @@ function LoginPage() {
   const handleCheckboxChange = () => {
     setRememberMe(!rememberMe);
   };
-
 
   //Auth Client
   const { login } = useContext(UserContext);
@@ -24,31 +28,46 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userData = {
-      "email": email,
-      "password": password,
-      "rememberMe": rememberMe,
-    }
+      email: email,
+      password: password,
+      rememberMe: rememberMe,
+    };
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/commons/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/commons/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (response.ok) {
         const responseBody = await response.json();
         console.log(responseBody);
-        const { user_id, access } = responseBody;
+        const { user_id, access, role } = responseBody;
         login(user_id, access, rememberMe);
-        navi("/");
+        switch(role){
+          case 'user':{
+            navi("/");
+            break;
+          }
+          case 'admin':{
+            window.location.href = "/admin";
+            break;
+          }
+          case 'superAdmin':{
+            window.location.href = "/sadmin";
+          }
+        }
       } else {
         // Login failed
-        console.error('Login failed');
+        console.error("Login failed");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -91,8 +110,9 @@ function LoginPage() {
                   />
                   <label htmlFor="remember" className="remember-label">
                     <span
-                      className={`checkbox-custom ${rememberMe ? "checked" : ""
-                        }`}
+                      className={`checkbox-custom ${
+                        rememberMe ? "checked" : ""
+                      }`}
                     ></span>
                     Remember Me
                   </label>

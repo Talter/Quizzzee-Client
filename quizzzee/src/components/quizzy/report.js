@@ -8,30 +8,55 @@ import { LoadingOutlined } from "@ant-design/icons";
 const Report = ({ setIsReport, quizzzyId }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [reportBody, setReportBody] = useState("");
+  const [reason, setReason] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const { userId } = useContext(UserContext);
+  const { userId, token } = useContext(UserContext);
 
-  const openMessage = () => {
+  const openMessage = (type, content) => {
     messageApi.open({
-      type: "success",
-      content: "Report submitted!",
+      type,
+      content,
     });
   };
 
-  const handleReport = () => {
+  const handleReport = async () => {
     setIsFetching(true);
+
     const reportData = {
       quizzzyId,
-      reportBody,
-      userId: userId ? userId : "Anonymous",
+      message: reportBody,
+      createdBy: userId,
+      reason,
     };
-    console.log(reportData);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/report/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(reportData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to report");
+      }
+
+      console.log("Report successfully sent:", reportData);
+      openMessage("success", "Report Submited!");
+    } catch (error) {
+      console.error("Error reporting:", error);
+      openMessage("warning", "Report Failed!");
+    } finally {
       setIsFetching(false);
-      setIsReport(false);
-    }, 2000);
-    openMessage();
+      setTimeout(() => {
+        setIsReport(false);
+      },3000);
+    }
   };
 
   return (
@@ -57,7 +82,7 @@ const Report = ({ setIsReport, quizzzyId }) => {
           <h3>Or use our available message</h3>
           <Radio.Group
             onChange={(e) => {
-              setReportBody(e.target.value);
+              setReason(e.target.value);
             }}
           >
             <Space direction="vertical">

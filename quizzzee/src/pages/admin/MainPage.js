@@ -1,34 +1,46 @@
-import React from "react";
-import { Card, Statistic, Row, Col, Divider, Avatar, Progress } from "antd";
-
-// Fake data for demonstration
-const fakeUserData = [
-  { name: "John Doe", avatar: "J", count: 25 },
-  { name: "Jane Smith", avatar: "J", count: 20 },
-  { name: "Alice Johnson", avatar: "A", count: 18 },
-];
-
-const fakeQuizzData = [
-  { name: "Quiz A", count: 10 },
-  { name: "Quiz B", count: 8 },
-  { name: "Quiz C", count: 6 },
-];
-
-const totalContributions = fakeUserData.reduce((acc, curr) => acc + curr.count, 0);
+import React, { useContext, useEffect, useState } from "react";
+import { Card, Statistic, Row, Col, Divider } from "antd";
+import { UserContext } from "../../context/UserContext";
 
 const MainPage = () => {
-  // Calculate total new users and quizzes
-  const totalNewUsers = fakeUserData.reduce((acc, curr) => acc + curr.count, 0);
-  const totalNewQuizzes = fakeQuizzData.reduce((acc, curr) => acc + curr.count, 0);
-
+  const { token } = useContext(UserContext);
+  const [length1, setLength1] = useState(0);
+  const [length2, setLength2] = useState(0);
+  const [length3, setLength3] = useState(0);
+  useEffect(() => {
+    const fetchData = async (link, lazy) => {
+      try {
+        const response = await fetch(link, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        let data = await response.json();
+        if(link.startsWith(`${process.env.REACT_APP_API_BASE_URL}/report`)){
+          data = data.filter(d => d.status != "Not Checked");
+        }
+        lazy(data.length);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData(`${process.env.REACT_APP_API_BASE_URL}/users`, setLength1);
+    fetchData(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, setLength2);
+    fetchData(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "/sadmin" : ""}`, setLength3);
+    console.log(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "sadmin" : ""}`);
+  }, []);
   return (
     <div className="p-6">
       <Row gutter={16}>
         <Col span={12}>
           <Card>
             <Statistic
-              title="New Users Last Month"
-              value={totalNewUsers}
+              title="Total users"
+              value={length1}
               precision={0}
               valueStyle={{ color: "#3f8600" }}
             />
@@ -37,8 +49,8 @@ const MainPage = () => {
         <Col span={12}>
           <Card>
             <Statistic
-              title="New Quizzes Last Month"
-              value={totalNewQuizzes}
+              title="Total Quizzzies"
+              value={length2}
               precision={0}
               valueStyle={{ color: "#3f8600" }}
             />
@@ -49,28 +61,17 @@ const MainPage = () => {
         <Col span={24}>
           <div className="w-2/3 mx-auto">
             <Card>
-              <h3 className="mb-4 text-center">Top 3 Contributors</h3>
-              {fakeUserData.map((user, index) => (
-                <div key={index} className="mb-4 grid grid-cols-12 items-center">
-                  <Avatar className="col-span-1">{user.avatar}</Avatar>
-                  <span className="col-span-2 ml-4">{user.name}</span>
-                  <span className="col-span-1 text-center">{user.count}</span>
-                  <div className="col-span-8 flex items-center">
-                    <Progress
-                      className="w-full"
-                      percent={(user.count / totalContributions) * 100}
-                      size="small"
-                      showInfo={false} // Hides the percentage
-                    />
-                  </div>
-                </div>
-              ))}
+              <Statistic
+                title="Unchecked reports"
+                value={length3}
+                precision={0}
+                valueStyle={{ color: "#d61c44" }}
+              />
             </Card>
           </div>
         </Col>
       </Row>
       <Divider />
-      {/* Additional content can be added here */}
     </div>
   );
 };

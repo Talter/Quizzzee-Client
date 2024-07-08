@@ -4,30 +4,56 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { UserContext } from "../../context/UserContext";
 import DefaultProFileImage from "../../images/default/default-avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
-  const { isLoggedIn, userId, token, logout, updateFavorites } = useContext(UserContext);
+  const navi = useNavigate();
+  const { isLoggedIn, userId, token, logout, updateFavorites } =
+    useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [search, setSearch] = useState("");
-  const items = [
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          1st menu item
-        </a>
-      ),
-      key: "0",
-    },
+
+  const tagSearch = (subject) => {
+    const location = window.location.pathname.split("/");
+  
+    if (location[1] !== "search") {
+      return `/search/tag=${subject}`;
+    }
+  
+    const searchParams = new URLSearchParams(location[2]);
+    const name = searchParams.get("name");
+  
+    return name ? `/search/name=${name}&tag=${subject}` : `/search/tag=${subject}`;
+  };
+  
+  const subjects = [
+    "math",
+    "literature",
+    "science",
+    "history",
+    "geography",
+    "art",
+    "music",
+    "physics",
   ];
+  
+  const items = subjects.map((subject, index) => ({
+    label: (
+      <div rel="noopener noreferrer" onClick={() => {navi(tagSearch(subject));}}>
+        {subject.charAt(0).toUpperCase() + subject.slice(1)}
+      </div>
+    ),
+    key: index.toString(),
+  }));
+  
 
   const users = [
     {
       label: (
         <div
           rel="noopener noreferrer"
-          onClick={() => (window.location.href = "/me/detail")}
+          onClick={() => (navi("/me/detail"))}
         >
           Account Detail
         </div>
@@ -61,13 +87,16 @@ function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,{
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -91,6 +120,21 @@ function Header() {
       .join(" ");
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const location = window.location.pathname.split("/");
+  
+    if (location[1] !== "search") {
+      navi(`/search/name=${search}`);
+      return;
+    }
+  
+    const searchParams = new URLSearchParams(location[2]);
+    const subject = searchParams.get("tag");
+  
+    navi(subject ? `/search/name=${search}&tag=${subject}` : `/search/name=${search}`);
+    return;
+  }
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
@@ -127,15 +171,22 @@ function Header() {
           About us
         </Link>
         <div className="col-span-3 mx-6 relative">
+          <form onSubmit={handleSubmit}>
           <input
             className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
             placeholder="Search..."
             value={search}
-            onChange={(e) => {setSearch(e.target.value)}}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
           />
-          <Link to={"/search/name="+search} className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full">
+          <button
+            className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full"
+          >
             Search
-          </Link>
+          </button>
+          </form>
+          
         </div>
       </div>
       {isLoggedIn ? (
@@ -152,7 +203,10 @@ function Header() {
           >
             <div>
               <div className="size-12 bg-mainColor rounded-full overflow-hidden">
-                <img src={DefaultProFileImage} />
+                <img
+                  className="object-cover h-full w-full"
+                  src={userData.image || DefaultProFileImage}
+                />
               </div>
             </div>
           </Dropdown>

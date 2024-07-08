@@ -121,11 +121,9 @@ export const UserProvider = ({ children }) => {
         token,
         login,
         logout,
-        setUserId,
         addFavorites,
         updateFavorites,
         removeFavorites,
-        setRemember,
       }}
     >
       {children}
