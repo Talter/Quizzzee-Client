@@ -4,87 +4,56 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { UserContext } from "../../context/UserContext";
 import DefaultProFileImage from "../../images/default/default-avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const { Search } = Input;
+  const navi = useNavigate();
   const { isLoggedIn, userId, token, logout, updateFavorites } =
     useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [search, setSearch] = useState("");
-  const items = [
-    {
-      label: (
-        <a rel="noopener noreferrer" href={window.location.pathname.split("/")[1] === "search" ? (window.location.pathname.split("/")[2] + "&tag=math"): "/search/tag=math"}>
-          Math
-        </a>
-      ),
-      key: "0",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Literature
-        </a>
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Science
-        </a>
-      ),
-      key: "2",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          History
-        </a>
-      ),
-      key: "3",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Geography
-        </a>
-      ),
-      key: "4",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Art
-        </a>
-      ),
-      key: "5",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Music
-        </a>
-      ),
-      key: "6",
-    },
-    {
-      label: (
-        <a rel="noopener noreferrer" href="/aboutus">
-          Physic
-        </a>
-      ),
-      key: "7",
-    },
+
+  const tagSearch = (subject) => {
+    const location = window.location.pathname.split("/");
+  
+    if (location[1] !== "search") {
+      return `/search/tag=${subject}`;
+    }
+  
+    const searchParams = new URLSearchParams(location[2]);
+    const name = searchParams.get("name");
+  
+    return name ? `/search/name=${name}&tag=${subject}` : `/search/tag=${subject}`;
+  };
+  
+  const subjects = [
+    "math",
+    "literature",
+    "science",
+    "history",
+    "geography",
+    "art",
+    "music",
+    "physics",
   ];
+  
+  const items = subjects.map((subject, index) => ({
+    label: (
+      <div rel="noopener noreferrer" onClick={() => {navi(tagSearch(subject));}}>
+        {subject.charAt(0).toUpperCase() + subject.slice(1)}
+      </div>
+    ),
+    key: index.toString(),
+  }));
+  
 
   const users = [
     {
       label: (
         <div
           rel="noopener noreferrer"
-          onClick={() => (window.location.href = "/me/detail")}
+          onClick={() => (navi("/me/detail"))}
         >
           Account Detail
         </div>
@@ -151,6 +120,21 @@ function Header() {
       .join(" ");
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const location = window.location.pathname.split("/");
+  
+    if (location[1] !== "search") {
+      navi(`/search/name=${search}`);
+      return;
+    }
+  
+    const searchParams = new URLSearchParams(location[2]);
+    const subject = searchParams.get("tag");
+  
+    navi(subject ? `/search/name=${search}&tag=${subject}` : `/search/name=${search}`);
+    return;
+  }
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
@@ -187,6 +171,7 @@ function Header() {
           About us
         </Link>
         <div className="col-span-3 mx-6 relative">
+          <form onSubmit={handleSubmit}>
           <input
             className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
             placeholder="Search..."
@@ -195,12 +180,13 @@ function Header() {
               setSearch(e.target.value);
             }}
           />
-          <Link
-            to={"/search/name=" + search}
+          <button
             className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full"
           >
             Search
-          </Link>
+          </button>
+          </form>
+          
         </div>
       </div>
       {isLoggedIn ? (
