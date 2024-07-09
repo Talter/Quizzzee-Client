@@ -1,37 +1,47 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
 import "../../css/Login.css";
-
+import { message } from "antd";
 import { UserContext } from "../../context/UserContext";
 
 function LoginPage() {
   const navi = useNavigate();
-
-  const handleCheckboxChange = () => {
-    setRememberMe(!rememberMe);
-  };
-
-  //Auth Client
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const { login } = useContext(UserContext);
 
-  //API values
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [rememberMe, setRememberMe] = useState(false);
-
-  //API fetch
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    if (!email || !password) {
+      message.error("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      message.error("Invalid email format");
+      setLoading(false);
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      message.error(
+        "Password must be at least 6 characters long and should not contain emoji"
+      );
+      setLoading(false);
+      return;
+    }
+
     const userData = {
       email: email,
       password: password,
       rememberMe: rememberMe,
     };
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/commons/login`,
@@ -46,34 +56,54 @@ function LoginPage() {
 
       if (response.ok) {
         const responseBody = await response.json();
-        console.log(responseBody);
         const { user_id, access, role } = responseBody;
         login(user_id, access, rememberMe);
-        console.log(role);
-        switch(role){
-          case 'user':{
+
+        switch (role) {
+          case "user":
             navi("/");
             break;
-          }
-          case 'admin':{
-            window.location.href = "/admin";
+          case "admin":
+            navi("/admin");
             break;
-          }
-          case 'superAdmin':{
-            window.location.href = "/sadmin";
-          }
+          case "superAdmin":
+            navi("/sadmin");
+            break;
+          default:
+            navi("/");
         }
       } else {
-        // Login failed
+        message.error("Account or Password is Incorrect");
         console.error("Login failed");
       }
     } catch (error) {
       console.error("Error:", error);
+      message.error("An error occurred, please try again later");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password) => {
+    const emojiPattern = /[^\u0000-\u1F9FF\u2000-\u2BFF\uFB00-\uFFFD]+/;
+    return password.length >= 6 && !emojiPattern.test(password);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value.trim());
   };
 
   return (
     <div className="login-page">
+      <div className="overlay text-white font-bold flex-col text-xl" style={{ display: loading ? 'flex' : 'none' }}>
+        Logging in...
+        <div className="loading-bar"></div>
+      </div>
       <div className="cloud-login"></div>
       <div className="cloud-login-1"></div>
       <div className="cloud-login-2"></div>
@@ -87,7 +117,7 @@ function LoginPage() {
                 type="text"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
               />
             </div>
             <div className="input-field">
@@ -107,13 +137,11 @@ function LoginPage() {
                     id="remember"
                     className="remember-checkbox"
                     checked={rememberMe}
-                    onChange={handleCheckboxChange}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                   />
                   <label htmlFor="remember" className="remember-label">
                     <span
-                      className={`checkbox-custom ${
-                        rememberMe ? "checked" : ""
-                      }`}
+                      className={`checkbox-custom ${rememberMe ? "checked" : ""}`}
                     ></span>
                     Remember Me
                   </label>
@@ -121,7 +149,7 @@ function LoginPage() {
               </div>
             </div>
           </div>
-          <button className="login-confirm-btn" type="submit">
+          <button className="login-confirm-btn" type="submit" disabled={loading}>
             Login
           </button>
           <br />
