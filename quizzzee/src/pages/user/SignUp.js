@@ -1,61 +1,92 @@
 import React, { useState } from "react";
 import "../../css/SignUp.css";
-import { BrowserRouter as Router, Route, Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import { notification } from "antd";
 
 function SignUp() {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [popupMessage, setPopupMessage] = useState('');
-    const [popupType, setPopupType] = useState('');
-    const navy = useNavigate();
-
-    const validateEmail = (email) => {
-        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return re.test(String(email).toLowerCase());
-    }
+    const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSignUp = async (event) => {
         event.preventDefault();
+        setLoading(true);
+
+        if (!validateUsername(username)) {
+            openNotification('error', 'Username should not contain special charactrs');
+            setLoading(false);
+            return;
+        }
 
         if (!validateEmail(email)) {
-            setPopupMessage('Invalid email format');
-            setPopupType('error');
+            openNotification('error', 'Invalid email format');
+            setLoading(false);
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            openNotification('error', 'Password must be at least 6 characters long and should not contain special symbols');
+            setLoading(false);
             return;
         }
 
         const user = { username, email, password };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/commons/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            });
+            const response = await fetch(
+                `${process.env.REACT_APP_API_BASE_URL}/commons/signup`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(user),
+                }
+            );
 
             if (response.ok) {
-                setPopupMessage('Sign up successful! Redirecting to login...');
-                setPopupType('success');
+                openNotification('success', 'Sign up successful! Redirecting to login...');
                 setTimeout(() => {
-                    navy('/login');
-                }, 3000);
+                    navigate("/login");
+                }, 2000);
             } else {
-                setPopupMessage('Sign up failed. Please try again.');
-                setPopupType('error');
+                openNotification('error', 'Sign up failed. Please try again.');
             }
         } catch (error) {
-            setPopupMessage('An error occurred. Please try again.');
-            setPopupType('error');
+            openNotification('error', 'An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
-    }
+    };
+
+    const validateUsername = (username) => {
+        const regex = /^[a-zA-Z0-9]+$/;
+        return regex.test(username);
+    };
+
+    const validateEmail = (email) => {
+        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+    };
+
+    const validatePassword = (password) => {
+        const emojiPattern = /[^\u0000-\u1F9FF\u2000-\u2BFF\uFB00-\uFFFD]+/;
+        return password.length >= 6 && !emojiPattern.test(password);
+    };
+
+    const openNotification = (type, message) => {
+        notification[type]({
+            message: message,
+            duration: 2,
+        });
+    };
 
     return (
         <div className="signUp-page">
-            {popupMessage && (
-                <div className={`popup ${popupType}`}>
-                    {popupMessage}
-                </div>
-            )}
+            <div className="overlay text-white font-bold flex-col text-xl" style={{ display: loading ? 'flex' : 'none' }}>
+                Signing up...
+                <div className="loading-bar"></div>
+            </div>
             <div className="cloud-signUp"></div>
             <div className="cloud-signUp-1"></div>
             <div className="cloud-signUp-2"></div>
@@ -91,7 +122,9 @@ function SignUp() {
                             />
                         </div>
                     </div>
-                    <button className="signUp-confirm-btn" type="submit">Sign Up</button>
+                    <button className="signUp-confirm-btn" type="submit" disabled={loading}>
+                        Sign Up
+                    </button>
                     <br />
                     <Link className="had-acc-btn" to="/login">
                         <button type="button">Already have an account?</button>

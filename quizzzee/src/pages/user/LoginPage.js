@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
 import "../../css/Login.css";
-import { message } from "antd";
+import { notification } from "antd";
 import { UserContext } from "../../context/UserContext";
 
 function LoginPage() {
@@ -17,21 +17,19 @@ function LoginPage() {
     setLoading(true);
 
     if (!email || !password) {
-      message.error("Please fill in all fields");
+      openNotification('error', 'Please fill in all fields');
       setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
-      message.error("Invalid email format");
+      openNotification('error', 'Invalid email format');
       setLoading(false);
       return;
     }
 
     if (!validatePassword(password)) {
-      message.error(
-        "Password must be at least 6 characters long and should not contain emoji"
-      );
+      openNotification('error', 'Password must be at least 6 characters long and should not contain special symbols');
       setLoading(false);
       return;
     }
@@ -73,20 +71,20 @@ function LoginPage() {
             navi("/");
         }
       } else {
-        message.error("Account or Password is Incorrect");
+        openNotification('error', 'Account or Password is Incorrect');
         console.error("Login failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      message.error("An error occurred, please try again later");
+      openNotification('error', 'An error occurred, please try again later');
     } finally {
       setLoading(false);
     }
   };
 
   const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email));
   };
 
   const validatePassword = (password) => {
@@ -98,10 +96,17 @@ function LoginPage() {
     setEmail(e.target.value.trim());
   };
 
+  const openNotification = (type, message) => {
+    notification[type]({
+      message: message,
+      duration: 2,
+    });
+  };
+
   return (
     <div className="login-page">
       <div className="overlay text-white font-bold flex-col text-xl" style={{ display: loading ? 'flex' : 'none' }}>
-        Logging in...
+        Entering Quizzzee...
         <div className="loading-bar"></div>
       </div>
       <div className="cloud-login"></div>
