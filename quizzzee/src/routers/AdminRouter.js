@@ -99,7 +99,7 @@ const NavMenu = ({ path }) => {
         onClick={(e) => handlePageChange(e)}
         className="w-full"
       >
-        <Menu.Item key="dashboard">Dash Board</Menu.Item>
+        <Menu.Item key="dashboard">Dashboard</Menu.Item>
         {window.location.pathname.split("/")[1] === "admin" ? (
           <>
             <Menu.Item key="user">User</Menu.Item>

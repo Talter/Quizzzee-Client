@@ -47,7 +47,6 @@ function SearchResult() {
       const [key, value] = part.split("=");
       if (key === "name") {
         setName(value);
-        fetchData(value);
       } else if (key === "tag") {
         if (value === "") setTag("None");
         else setTag(value);
@@ -56,17 +55,41 @@ function SearchResult() {
     setCurrentPage(1);
   }, [searchvalue]);
 
-  const fetchData = async (name) => {
+  useEffect(() => {
+      fetchData(name, tag);
+    return;
+  },[name,tag])
+  const fetchData = async (name,tag) => {
     try {
-      const response = await fetch(
+      const response1 = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/commons/search?quizzzy=${name}`
       );
-      if (!response.ok) {
+      if (!response1.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
-      setQuizzzy(data);
+      const data1 = await response1.json();
+  
+      const response2 = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/quizzzy/`
+      );
+      if (!response2.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data2 = await response2.json();
+      const data2Filtered = data2.filter(d => d.tags.includes(tag));
+      const finalData = data1.filter(data => {
+        return data2Filtered.some(filteredData => filteredData._id === data._id);
+      });
+      console.log(tag);
+      if(name !== "" && tag !== "None"){
+        setQuizzzy(finalData);
+      } else if(name !== ""){
+        setQuizzzy(data1)
+      } else if (tag !== ""){
+        setQuizzzy(data2)
+      }
     } catch (error) {
+      console.error("Error fetching data:", error);
       setQuizzzy([]);
     }
   };

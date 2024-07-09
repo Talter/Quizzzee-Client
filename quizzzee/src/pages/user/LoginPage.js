@@ -49,6 +49,7 @@ function LoginPage() {
         console.log(responseBody);
         const { user_id, access, role } = responseBody;
         login(user_id, access, rememberMe);
+        console.log(role);
         switch(role){
           case 'user':{
             navi("/");

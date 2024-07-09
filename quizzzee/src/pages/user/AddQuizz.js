@@ -41,6 +41,7 @@ const AddQuizz = () => {
     "Art",
     "Music",
     "Physics",
+    "Language"
   ];
   const [isPrivate, setIsPrivate] = useState(false);
   const handleQuestionChange = (index, key, value) => {
@@ -192,7 +193,7 @@ const AddQuizz = () => {
           <div className="grid grid-cols-4 grid-flow-row gap-4">
             {selectedSubjects.map((subject, index) => (
               <div
-                className=" cursor-pointer bg-subColor py-3 px-5 mx-3 rounded-lg select-none transform transition hover:bg-red-500 hover:scale-105 active:scale-90"
+                className=" cursor-pointer text-center bg-subColor py-3 px-5 mx-3 rounded-lg select-none transform transition hover:bg-red-500 hover:scale-105 active:scale-90"
                 key={"subject" + index}
                 onClick={() => {
                   const update = selectedSubjects.filter(
@@ -209,7 +210,7 @@ const AddQuizz = () => {
             className="rounded-lg border border-black py-4 px-5"
             onChange={(e) => {
               if (!selectedSubjects.includes(e.target.value))
-                setSelectedSubjects((prevs) => [...prevs, e.target.value]);
+                setSelectedSubjects((prevs) => [...prevs, e.target.value.toLowerCase]);
             }}
             defaultValue={""}
           >
