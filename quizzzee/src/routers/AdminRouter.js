@@ -18,6 +18,7 @@ import ReportList from "../pages/admin/ReportList";
 import ReportDetail from "../pages/admin/ReportDetail";
 import AdminList from "../pages/admin/AdminList";
 import AdminDetail from "../pages/admin/AdminDetail";
+import CreateAdmin from "../pages/admin/CreateAdmin";
 import { UserContext, UserProvider } from "../context/UserContext";
 
 const { Header, Content, Footer } = Layout;
@@ -61,6 +62,7 @@ const AdminRouter = () => {
               <Route path="/sadmin" element={<MainPage />} />
               <Route path="/sadmin/dashboard" element={<MainPage />} />
               <Route path="/sadmin/admin" element={<AdminList />} />
+              <Route path="/sadmin/admin/create" element={<CreateAdmin />} />
               <Route path="/sadmin/admin/:id" element={<AdminDetail />} />
               <Route path="/sadmin/*" element={<NotFound />} />
             </Routes>
