@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -34,6 +34,9 @@ function Quizzy() {
   const [isAuto, setIsAuto] = useState(false);
   const [isLoadingQuizzzy, setIsLoadingQuizzzy] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isDownloadPopupVisible, setIsDownloadPopupVisible] = useState(false);
+
+  const popupRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +132,39 @@ function Quizzy() {
     }
   };
 
+  const handleDownload = (format) => {
+    const link = document.createElement("a");
+    link.href = `${process.env.REACT_APP_API_BASE_URL}/quizzzy/export/${id}?format=${format}`;
+    link.setAttribute("download", `quizzzy.${format}`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setIsDownloadPopupVisible(false);
+  };
+
+  const handleMouseToggle = (enter) => {
+    if (!isLoggedIn) {
+      setShowTooltip(enter);
+    }
+  };
+
+  const handleClickOutside = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) {
+      setIsDownloadPopupVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDownloadPopupVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDownloadPopupVisible]);
+
   function shuffleArray() {
     let array = quizzzies;
     setIsLoadingQuizzzy(true);
@@ -148,11 +184,7 @@ function Quizzy() {
     setQuizzzies(array);
     return;
   }
-  const handleMouseToggle = (enter) => {
-    if (!isLoggedIn) {
-      setShowTooltip(enter);
-    }
-  };
+
   return (
     <div className="bg-[#F6F6F6] min-h-screen py-12">
       <div className="mb-12 px-12 font-semibold text-2xl">
@@ -224,14 +256,16 @@ function Quizzy() {
         >
           <SwapOutlined />
         </div>
-        <div className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold">
+        <div
+          className="w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg text-white transform transition hover:scale-105 active:scale-90 active:bg-subColorBold"
+          onClick={() => setIsDownloadPopupVisible(true)}
+        >
           <DownloadOutlined />
         </div>
         <div className="relative inline-block">
           <div
-            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
-              isFavorite ? " text-red-500" : " text-white "
-            }`}
+            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${isFavorite ? " text-red-500" : " text-white "
+              }`}
             onClick={(event) => {
               if (isLoggedIn) handleAddFavorite(userId, id, event);
             }}
@@ -339,6 +373,34 @@ function Quizzy() {
         <Sharing setIsSharing={setIsSharing} url={window.location.href} />
       )}
       {isReport && <Report setIsReport={setIsReport} quizzzyId={id} />}
+
+      {isDownloadPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div ref={popupRef} className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Download As</h2>
+            <div className="flex justify-around flex-col">
+              <button
+                onClick={() => handleDownload("excel")}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg mb-4"
+              >
+                Excel
+              </button>
+              <button
+                onClick={() => handleDownload("csv")}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg"
+              >
+                CSV
+              </button>
+            </div>
+            <button
+              onClick={() => setIsDownloadPopupVisible(false)}
+              className="mt-4 bg-red-600 rounded-md p-2 text-white ml-40"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
