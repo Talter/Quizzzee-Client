@@ -14,7 +14,7 @@ import {
 } from "@ant-design/icons";
 import Content from "../../components/quizzy/content";
 import Tag from "../../components/quizzy/tag";
-import Related from "../../components/quizzy/related";
+import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
 import Sharing from "../../components/quizzy/sharing";
 import Report from "../../components/quizzy/report";
@@ -35,7 +35,8 @@ function Quizzy() {
   const [isLoadingQuizzzy, setIsLoadingQuizzzy] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
   const [isDownloadPopupVisible, setIsDownloadPopupVisible] = useState(false);
-
+  const [related, setRelated] = useState();
+  const [tags, setTags] = useState();
   const popupRef = useRef();
 
   useEffect(() => {
@@ -50,6 +51,7 @@ function Quizzy() {
         const data = await response.json();
         setData(data);
         setQuizzzies(data.quizzzes);
+        setTags(data.tags);
         setTimeout(() => {
           setIsLoadingQuizzzy(false);
         }, 2000);
@@ -59,6 +61,36 @@ function Quizzy() {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchData = async (tags) => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_BASE_URL}/quizzzy`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data2 = await response.json();
+        let array = [];
+        data2.forEach((d) => {
+          const set = new Set(tags);
+          for (const elem of d.tags) {
+            if (set.has(elem)) {
+              array.push(d);
+              return;
+            }
+          }
+        });
+          setRelated(array);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (tags) {
+      fetchData(tags);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (favorites.includes(id)) {
@@ -264,8 +296,9 @@ function Quizzy() {
         </div>
         <div className="relative inline-block">
           <div
-            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${isFavorite ? " text-red-500" : " text-white "
-              }`}
+            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
+              isFavorite ? " text-red-500" : " text-white "
+            }`}
             onClick={(event) => {
               if (isLoggedIn) handleAddFavorite(userId, id, event);
             }}
@@ -329,7 +362,7 @@ function Quizzy() {
             Tags:
           </div>
           <div className="px-16 py-2 grid grid-cols-6 grid-flow-row gap-10">
-            {data && data.tags.map((tag) => <Tag key={tag} name={tag} />)}
+            {data && data.tags.map((tag) => <Tag key={tag} name={tag}/>)}
           </div>
         </div>
       </section>
@@ -340,20 +373,12 @@ function Quizzy() {
         >
           Exam
         </Link>
-        <div className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer">
-          ABC
-        </div>
       </section>
       <section>
         <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
           <div className="text-2xl font-semibold pl-4">Related quizzy</div>
           <div className="grid grid-cols-4 grid-flow-rows gap-10 px-10 pt-12">
-            <Related />
-            <Related />
-            <Related />
-            <Related />
-            <Related />
-            <Related />
+            {related && related.map((r) => (<QuizzzyCard quizzzy={r} />))}
           </div>
         </div>
       </section>

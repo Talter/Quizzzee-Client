@@ -86,7 +86,7 @@ function SearchResult() {
       } else if(name !== ""){
         setQuizzzy(data1)
       } else if (tag !== ""){
-        setQuizzzy(data2)
+        setQuizzzy(data2Filtered)
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -105,7 +105,7 @@ function SearchResult() {
 
   return (
     <div className="py-24">
-      <div className="flex justify-center gap-3 items-center">
+      {/* <div className="flex justify-center gap-3 items-center">
         <span>Searching for</span>
         <span>{name}</span>
         <span>with</span>{" "}
@@ -118,7 +118,7 @@ function SearchResult() {
           </Button>
         </Dropdown>{" "}
         tags
-      </div>
+      </div> */}
       <section className="px-36 grid grid-cols-4 grid-flow-rows justify-center items-center gap-12 mt-12">
         {currentQuizzzy &&
           currentQuizzzy.map((data) => (
