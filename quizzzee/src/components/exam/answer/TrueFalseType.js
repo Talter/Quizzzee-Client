@@ -16,7 +16,7 @@ const TrueFalseType = ({
 
   const Cap = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
+  };
   if (!result) {
     return (
       <section>
@@ -24,14 +24,22 @@ const TrueFalseType = ({
           <button
             value={Boolean(true)}
             onClick={handleInputChange}
-            className={answers[questions[currentQuestionIndex].id] == "true" ? selected : selectedNot}
+            className={
+              answers[questions[currentQuestionIndex].id] == "true"
+                ? selected
+                : selectedNot
+            }
           >
             True
           </button>
           <button
             value={Boolean(false)}
             onClick={handleInputChange}
-            className={answers[questions[currentQuestionIndex].id] == "false" ? selected : selectedNot}
+            className={
+              answers[questions[currentQuestionIndex].id] == "false"
+                ? selected
+                : selectedNot
+            }
           >
             False
           </button>
@@ -49,17 +57,27 @@ const TrueFalseType = ({
       <section>
         <div className="grid grid-cols-12 gap-4 items-center justify-between mt-4">
           <button
-            className={"text-white text-lg font-semibold px-2 py-2 rounded-lg col-start-1 col-span-3" + (result.checkedAnswers[currentQuestionIndex].correct ? " bg-green-500" : " bg-red-500") }
+            className={
+              "text-white text-lg font-semibold px-2 py-2 rounded-lg col-start-1 col-span-3" +
+              (result.checkedAnswers[currentQuestionIndex].correct
+                ? " bg-green-500"
+                : " bg-red-500")
+            }
             disabled
           >
             {Cap(answers[questions[currentQuestionIndex].id])}
           </button>
-          <button
-            className={"bg-green-500 text-white text-lg font-semibold px-2 py-2 rounded-lg col-span-9 " + (result.checkedAnswers[currentQuestionIndex].correct && " hidden")}
-            disabled
-          >
-            {!result.checkedAnswers[currentQuestionIndex].correct && Cap(result.checkedAnswers[currentQuestionIndex].answer_fc)}
-          </button>
+          {!result.checkedAnswers[currentQuestionIndex].correct && (
+            <button
+              className={
+                "bg-green-500 text-white text-lg font-semibold px-2 py-2 rounded-lg col-span-9 "
+              }
+              disabled
+            >
+              {!result.checkedAnswers[currentQuestionIndex].correct &&
+                Cap(result.checkedAnswers[currentQuestionIndex].answer_fc)}
+            </button>
+          )}
         </div>
         <div className="grid grid-cols-12 gap-4 items-center justify-between mt-4">
           <button
