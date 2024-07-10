@@ -86,7 +86,7 @@ function SearchResult() {
       } else if(name !== ""){
         setQuizzzy(data1)
       } else if (tag !== ""){
-        setQuizzzy(data2)
+        setQuizzzy(data2Filtered)
       }
     } catch (error) {
       console.error("Error fetching data:", error);
