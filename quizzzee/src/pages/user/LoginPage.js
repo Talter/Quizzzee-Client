@@ -62,10 +62,10 @@ function LoginPage() {
             navi("/");
             break;
           case "admin":
-            navi("/admin");
+            window.location.href ="/admin";
             break;
           case "superAdmin":
-            navi("/sadmin");
+            window.location.href = "/sadmin";
             break;
           default:
             navi("/");
