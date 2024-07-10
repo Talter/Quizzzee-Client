@@ -3,8 +3,10 @@ import "../../css/UserSetting.css";
 import { UserContext } from "../../context/UserContext";
 import { LoadingOutlined } from "@ant-design/icons";
 import { notification } from "antd";
+import { isValid, parseISO } from 'date-fns';
 
 function UserDetail() {
+  const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const { isLoggedIn, userId, token } = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -13,7 +15,6 @@ function UserDetail() {
     lastName: "",
     email: "",
     birthDate: "",
-    // password: ""
   });
   useEffect(() => {
     if (!isLoggedIn) {
@@ -30,7 +31,7 @@ function UserDetail() {
     api[type]({
       message: message,
       description: description,
-      duration: 3,
+      duration: 2,
     });
   };
 
@@ -55,7 +56,6 @@ function UserDetail() {
           lastName: data.lastName,
           email: data.email,
           birthDate: data.birthDate,
-          // password: ""
         });
 
         console.log(data);
@@ -107,43 +107,25 @@ function UserDetail() {
 
       const result = await response.json();
       console.log("Data posted successfully:", result);
+      openNotificationWithIcon("success", "Success", "Data updated successfully");
+      setIsEditing(false);
     } catch (error) {
       console.error("Failed to post data", error);
+      openNotificationWithIcon("error", "Error", "Failed to update data");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleConfirmClick = (e) => {
     e.preventDefault();
     const formErrors = validateForm(formData);
+
     if (Object.keys(formErrors).length === 0) {
+      setLoading(true);
       submitData();
-      openNotificationWithIcon(
-        "success",
-        "Success",
-        "Data update successfully"
-      );
     } else {
       setErrors(formErrors);
-      openNotificationWithIcon("error", "Error", "Failed to update data");
-    }
-    setIsEditing(false);
-  };
-
-  const handleDeleteClick = (e) => {
-    e.preventDefault();
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account?"
-    );
-    if (confirmDelete) {
-      setFormData({
-        username: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        birthDate: "",
-        password: "",
-      });
-      setAvatar("");
     }
   };
 
@@ -151,27 +133,57 @@ function UserDetail() {
     const errors = {};
     if (!data.username || !data.username.trim()) {
       errors.username = "*Username is required";
+    } else if (!validateUsername(data.username)) {
+      errors.username = "Invalid username"
     }
     if (!data.firstName || !data.firstName.trim()) {
       errors.firstName = "*First name is required";
+    } else if (!validateFName(data.firstName)) {
+      errors.firstName = "Invalid Name"
     }
     if (!data.lastName || !data.lastName.trim()) {
       errors.lastName = "*Last name is required";
+    } else if (!validateLName(data.lastName)) {
+      errors.lastName = "Invalid Name"
     }
     if (!data.email || !data.email.trim()) {
       errors.email = "*Email is required";
-    } else if (!isValidEmail(data.email)) {
+    } else if (!validateEmail(data.email)) {
       errors.email = "*Invalid email format";
     }
-    // if (!data.password || !data.password.trim()) {
-    //     errors.password = "*Password is required";
-    // }
+    if (!validateBirthDate(data.birthDate)) {
+      errors.birthDate = "*Invalid birth date";
+    }
     return errors;
   };
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const validateUsername = (username) => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    return regex.test(username);
+  };
+
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email));
+  };
+
+  const validateFName = (firstName) => {
+    const emojiPattern = /[^\u0000-\u1F9FF\u2000-\u2BFF\uFB00-\uFFFD]+/;
+    return !emojiPattern.test(firstName);
+  };
+
+  const validateLName = (lastName) => {
+    const emojiPattern = /[^\u0000-\u1F9FF\u2000-\u2BFF\uFB00-\uFFFD]+/;
+    return !emojiPattern.test(lastName);
+  };
+
+  const validateBirthDate = (birthDate) => {
+    if (!isValid(parseISO(birthDate))) {
+      return false;
+    }
+    const date = new Date(birthDate);
+    const today = new Date();
+    return date <= today;
   };
 
   const handleAvatarChange = (e) => {
@@ -218,6 +230,11 @@ function UserDetail() {
 
   return (
     <div className="user-acc-page">
+      <div className="overlay text-white font-bold flex-col text-xl" style={{ display: loading ? 'flex' : 'none' }}>
+        Updating...
+        <div className="loading-bar"></div>
+      </div>
+
       {contextHolder}
 
       <div className="setting-page-cloud"></div>
@@ -331,23 +348,11 @@ function UserDetail() {
                     onChange={handleInputChange}
                     disabled={!isEditing}
                   />
+                  {errors.birthDate && (
+                    <span className="error">{errors.birthDate}</span>
+                  )}
                 </div>
               </div>
-              {/* <div className="password-edit">
-                                <label>Password:</label>
-                                <div>
-                                    <input
-                                        className="password-input"
-                                        type="password"
-                                        name="password"
-                                        placeholder="Password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        disabled={!isEditing}
-                                    />
-                                    {errors.password && <span className="error">{errors.password}</span>}
-                                </div>
-                            </div> */}
             </div>
             <div className="btn-setup">
               {isEditing ? (
@@ -370,7 +375,6 @@ function UserDetail() {
               <button
                 className="dataform-delete-acc"
                 type="button"
-                onClick={handleDeleteClick}
               >
                 Delete Account
               </button>

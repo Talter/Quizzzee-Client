@@ -14,6 +14,12 @@ function SignUp() {
         event.preventDefault();
         setLoading(true);
 
+        if (!email || !password || !username) {
+            openNotification('error', 'Please fill in all fields');
+            setLoading(false);
+            return;
+        }
+
         if (!validateUsername(username)) {
             openNotification('error', 'Username should not contain special charactrs');
             setLoading(false);
@@ -32,7 +38,7 @@ function SignUp() {
             return;
         }
 
-        const user = { username, email, password };
+        const user = { username: username, email: email, password: password };
 
         try {
             const response = await fetch(
@@ -66,7 +72,7 @@ function SignUp() {
 
     const validateEmail = (email) => {
         const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return re.test(String(email).toLowerCase());
+        return re.test(String(email));
     };
 
     const validatePassword = (password) => {
