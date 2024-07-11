@@ -1,7 +1,12 @@
-import React, { useContext, useState } from "react";
-import { BrowserRouter as Router, Route, Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import "../../css/Login.css";
-import { notification } from "antd";
+import { Modal, notification, Input } from "antd";
 import { UserContext } from "../../context/UserContext";
 
 function LoginPage() {
@@ -12,24 +17,120 @@ function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const { login } = useContext(UserContext);
 
+  const [toggleModal, setToggleModal] = useState(false);
+  const [resetData, setResetData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [resetError, setResetError] = useState({
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    // validate email
+    if (resetData.email) {
+      if (!validateEmail(resetData.email)) {
+        setResetError((prev) => ({
+          ...prev,
+          email: "Invalid email format",
+        }));
+
+        return;
+      } else {
+        setResetError((prev) => ({ ...prev, email: "" }));
+      }
+    }
+  }, [resetData.email]);
+
+  useEffect(() => {
+    // validate password
+    if (resetData.password) {
+      if (!validatePassword(resetData.password)) {
+        setResetError((prev) => ({
+          ...prev,
+          password:
+            "Password must be at least 6 characters long and should not contain special symbols",
+        }));
+
+        return;
+      } else {
+        setResetError((prev) => ({ ...prev, password: "" }));
+      }
+    }
+  }, [resetData.password]);
+
+  const handleToggleModal = (e) => {
+    e.preventDefault();
+
+    // Clear the form fields
+    setEmail("");
+    setPassword("");
+
+    setToggleModal(true);
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!resetData.email || !resetData.password) {
+      openNotification("error", "Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/commons/forget-password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...resetData,
+            new_password: resetData.password,
+          }),
+        }
+      );
+
+      const responseBody = await response.json();
+      if (response.ok) {
+        openNotification("success", "Password reset successful");
+        setToggleModal(false);
+      } else {
+        openNotification("error", responseBody.message);
+      }
+    } catch (error) {
+      openNotification("error", "An error occurred, please try again later");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (!email || !password) {
-      openNotification('error', 'Please fill in all fields');
+      openNotification("error", "Please fill in all fields");
       setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
-      openNotification('error', 'Invalid email format');
+      openNotification("error", "Invalid email format");
       setLoading(false);
       return;
     }
 
     if (!validatePassword(password)) {
-      openNotification('error', 'Password must be at least 6 characters long and should not contain special symbols');
+      openNotification(
+        "error",
+        "Password must be at least 6 characters long and should not contain special symbols"
+      );
       setLoading(false);
       return;
     }
@@ -62,7 +163,7 @@ function LoginPage() {
             navi("/");
             break;
           case "admin":
-            window.location.href ="/admin";
+            window.location.href = "/admin";
             break;
           case "superAdmin":
             window.location.href = "/sadmin";
@@ -71,12 +172,12 @@ function LoginPage() {
             navi("/");
         }
       } else {
-        openNotification('error', 'Account or Password is Incorrect');
+        openNotification("error", "Account or Password is Incorrect");
         console.error("Login failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      openNotification('error', 'An error occurred, please try again later');
+      openNotification("error", "An error occurred, please try again later");
     } finally {
       setLoading(false);
     }
@@ -105,10 +206,68 @@ function LoginPage() {
 
   return (
     <div className="login-page">
-      <div className="overlay text-white font-bold flex-col text-xl" style={{ display: loading ? 'flex' : 'none' }}>
+      <div
+        className="overlay text-white font-bold flex-col text-xl"
+        style={{ display: loading ? "flex" : "none" }}
+      >
         Entering Quizzzee...
         <div className="loading-bar"></div>
       </div>
+
+      <Modal
+        open={toggleModal}
+        onCancel={() => setToggleModal(false)}
+        footer={[]}
+      >
+        <form className="modal-form mx-3">
+          <div className="font-bold text-xl">Forget Password</div>
+          <div className="">
+            <input
+              className="mt-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2 text-lg"
+              type="text"
+              name="email"
+              placeholder="Enter to verify Email"
+              onChange={(e) =>
+                setResetData({ ...resetData, email: e.target.value.trim() })
+              }
+              onClick={(e) => setResetError({ ...resetError, email: "" })}
+            />
+            {resetError.email !== "" && (
+              <span className="text-md text-red-500 font-semibold">
+                {resetError.email}
+              </span>
+            )}
+
+            <br />
+
+            <Input.Password
+              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 w-full p-2 mt-3 text-lg"
+              type="password"
+              name="password"
+              placeholder="Enter New password"
+              onChange={(e) =>
+                setResetData({ ...resetData, password: e.target.value })
+              }
+              onClick={(e) => setResetError({ ...resetError, password: "" })}
+            />
+
+            {resetError.password !== "" && (
+              <span className="text-md text-red-500 font-semibold">
+                {resetError.password}
+              </span>
+            )}
+
+            <button
+              className="login-confirm-btn w-full mt-10"
+              onClick={handleResetPassword}
+              disabled={resetError.email || resetError.password || loading}
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </Modal>
+
       <div className="cloud-login"></div>
       <div className="cloud-login-1"></div>
       <div className="cloud-login-2"></div>
@@ -130,12 +289,19 @@ function LoginPage() {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  console.log(password);
+                }}
               />
               <div className="options">
-                <a href="#" className="forget-password">
+                <button
+                  href="#"
+                  className="forget-password"
+                  onClick={handleToggleModal}
+                >
                   Forget Password?
-                </a>
+                </button>
                 <div className="remember-me">
                   <input
                     type="checkbox"
@@ -146,7 +312,9 @@ function LoginPage() {
                   />
                   <label htmlFor="remember" className="remember-label">
                     <span
-                      className={`checkbox-custom ${rememberMe ? "checked" : ""}`}
+                      className={`checkbox-custom ${
+                        rememberMe ? "checked" : ""
+                      }`}
                     ></span>
                     Remember Me
                   </label>
@@ -154,7 +322,11 @@ function LoginPage() {
               </div>
             </div>
           </div>
-          <button className="login-confirm-btn" type="submit" disabled={loading}>
+          <button
+            className="login-confirm-btn"
+            type="submit"
+            disabled={loading}
+          >
             Login
           </button>
           <br />
