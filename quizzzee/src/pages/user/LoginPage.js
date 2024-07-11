@@ -95,12 +95,11 @@ function LoginPage() {
           }),
         }
       );
-
-      const responseBody = await response.json();
       if (response.ok) {
         openNotification("success", "Password reset successful");
         setToggleModal(false);
       } else {
+        const responseBody = await response.json();
         openNotification("error", responseBody.message);
       }
     } catch (error) {
