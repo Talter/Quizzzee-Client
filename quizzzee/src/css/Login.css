@@ -28,12 +28,11 @@
 
 .login-form {
   font-size: 3vh;
-  margin-top: 2vh;
   margin-bottom: 4vh;
   display: flex;
   flex-direction: column;
   background-color: white;
-  padding: 2rem 4rem 4rem 4rem;
+  padding: 4rem 4rem 4rem 4rem;
   border-radius: 3rem;
   text-align: center;
 }
@@ -138,41 +137,6 @@
 .create-acc-btn:hover {
   background-color: #b6dfe3;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
-}
-
-.cloud-login-1,
-.cloud-login-2,
-.cloud-login-3 {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  background: inherit;
-  border-radius: inherit;
-  background-color: white;
-  z-index: -1;
-}
-.cloud-login-1 {
-  width: 15rem;
-  height: 15rem;
-  bottom: 20rem;
-  right: 33.97rem;
-  border-radius: 50%;
-}
-
-.cloud-login-2 {
-  width: 13rem;
-  height: 13rem;
-  bottom: 22rem;
-  right: 41rem;
-  border-radius: 50%;
-}
-
-.cloud-login-3 {
-  width: 16rem;
-  height: 16rem;
-  bottom: 20rem;
-  right: 46rem;
-  border-radius: 50%;
 }
 
 .forget-password,

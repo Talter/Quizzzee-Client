@@ -267,9 +267,6 @@ function LoginPage() {
         </form>
       </Modal>
 
-      <div className="cloud-login-1"></div>
-      <div className="cloud-login-2"></div>
-      <div className="cloud-login-3"></div>
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <a className="login-title">Login</a>

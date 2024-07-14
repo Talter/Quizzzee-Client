@@ -29,12 +29,11 @@
 
 .signUp-form {
     font-size: 3vh;
-    margin-top: 2vh;
     margin-bottom: 4vh;
     display: flex;
     flex-direction: column;
     background-color: white;
-    padding: 0 4rem 4rem 4rem;
+    padding: 4rem 4rem 4rem 4rem;
     border-radius: 3rem;
     text-align: center;
 }
@@ -105,42 +104,6 @@
 .had-acc-btn:hover {
     background-color: #b6dfe3;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5);
-}
-
-.cloud-signUp-1,
-.cloud-signUp-2,
-.cloud-signUp-3 {
-    content: "";
-    position: absolute;
-    display: inline-block;
-    background: inherit;
-    border-radius: inherit;
-    background-color: white;
-    z-index: -1;
-}
-
-.cloud-signUp-1 {
-    width: 15rem;
-    height: 15rem;
-    bottom: 21rem;
-    right: 35.5vw;
-    border-radius: 50%;
-}
-
-.cloud-signUp-2 {
-    width: 13rem;
-    height: 13rem;
-    bottom: 23rem;
-    right: 41rem;
-    border-radius: 50%;
-}
-
-.cloud-signUp-3 {
-    width: 17rem;
-    height: 17rem;
-    bottom: 20rem;
-    right: 45rem;
-    border-radius: 50%;
 }
 
 .popup {

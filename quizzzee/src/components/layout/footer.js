@@ -36,11 +36,11 @@ function Footer() {
               <PhoneOutlined className="pr-2" /> 0941351430
             </div>
           </div>
-          <div className="">
+          <div className="text-xl font-semibold">
             <div className="italic">{quote.text}</div>
           </div>
 
-          <div className="absolute right-20 bottom-3">
+          <div className="absolute right-20 bottom-3 text-2xl font-bold">
             Wish you a happy learning!!
           </div>
         </div>
