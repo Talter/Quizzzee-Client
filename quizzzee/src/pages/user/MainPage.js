@@ -118,7 +118,7 @@ function MainPage() {
                   <img src={learnzee} alt="Banner 1" style={imageStyle} />
                   <div style={textStyle}>
                     <h3 style={titleStyle}>Master your learning with quizzzes and study modes</h3>
-                    <p style={detailStyle}>Join our community of leaners using Quizzzess's quizzzes, practice tests, and AI tools to improve scores.</p>
+                    <p style={detailStyle}>Join our community of leaners using Quizzzee's quizzzes and practice tests to improve scores.</p>
                   </div>
                 </div>
               </a>
@@ -138,7 +138,7 @@ function MainPage() {
                   <img src={addzee} alt="Banner 3" style={imageStyle} />
                   <div style={textStyle}>
                     <h3 style={titleStyle}>Find or create quizzzes</h3>
-                    <p style={detailStyle}>Get the right content you need to learn. For a fun way to learn quizzzes, play popular learning games like Match.</p>
+                    <p style={detailStyle}>Get the right content you need to learn.</p>
                   </div>
                 </div>
               </a>

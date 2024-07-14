@@ -93,9 +93,6 @@ function SignUp() {
                 Signing up...
                 <div className="loading-bar"></div>
             </div>
-            <div className="cloud-signUp-1"></div>
-            <div className="cloud-signUp-2"></div>
-            <div className="cloud-signUp-3"></div>
             <div className="signUp-container">
                 <form className="signUp-form" onSubmit={handleSignUp}>
                     <a className="signUp-title">Sign Up</a>
