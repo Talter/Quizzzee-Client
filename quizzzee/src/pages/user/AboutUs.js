@@ -23,6 +23,7 @@ function Content({ image, name, audioRef }) {
         className="size-48 rounded-full row-span-5"
         onMouseEnter={() => {
           if (image === Habibi) {
+            audioRef.current.volume = 0.25;
             audioRef.current.currentTime = 25;
             audioRef.current.play();
           }
@@ -36,7 +37,7 @@ function Content({ image, name, audioRef }) {
         whileHover={{
           rotate: 360,
           transition: {
-            duration: image === Habibi? 0.01 : 2,
+            duration: image === Habibi ? 0.01 : 2,
             repeat: Infinity,
             ease: "linear",
             type: "tween",
@@ -89,7 +90,12 @@ function AboutUs() {
         </span>
       </div>
       {creators.map((creator) => (
-        <Content key={creator.name} image={creator.image} name={creator.name} audioRef={audioRef} />
+        <Content
+          key={creator.name}
+          image={creator.image}
+          name={creator.name}
+          audioRef={audioRef}
+        />
       ))}
       <div>
         <div className="mt-12 text-center text-2xl font-bold">

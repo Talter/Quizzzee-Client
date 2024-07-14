@@ -20,6 +20,7 @@ import AdminList from "../pages/admin/AdminList";
 import AdminDetail from "../pages/admin/AdminDetail";
 import CreateAdmin from "../pages/admin/CreateAdmin";
 import { UserContext, UserProvider } from "../context/UserContext";
+import { useEffect } from "react";
 
 const { Header, Content, Footer } = Layout;
 
@@ -32,6 +33,10 @@ const AdminRouter = () => {
   function NotFound() {
     return <h2>404 Not Found</h2>;
   }
+
+  useEffect(() => {
+    document.title = "Quizzzee - Admin";
+  }, []);
 
   return (
     <UserProvider>

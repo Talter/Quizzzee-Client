@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "../pages/user/MainPage";
 import LoginPage from "../pages/user/LoginPage";
@@ -19,6 +19,10 @@ import SearchResult from "../pages/user/SearchResult";
 
 function BasicRouter() {
   const location = useLocation();
+
+  useEffect(() => {
+    document.title = "Quizzzee";
+  }, []);
 
   return (
     <UserProvider>
@@ -48,7 +52,6 @@ function BasicRouter() {
               <Route path="/search" element={<SearchResult />} />
               <Route path="/search/:searchvalue" element={<SearchResult />} />
               <Route path="/addquizz" element={<AddQuizz />} />
-              <Route path="/myquizzzy" element={<MyQuizzzy />} />
               <Route path="/exam/:id" element={<ExamQuizz />} />
               <Route path="/me/quizzzies" element={<MyQuizzzy />} />
             </Routes>
