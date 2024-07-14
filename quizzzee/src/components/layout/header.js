@@ -67,7 +67,7 @@ function Header() {
       label: (
         <div
           rel="noopener noreferrer"
-          onClick={() => (window.location.href = "/me/quizzzies")}
+          onClick={() => (navi("/me/quizzzies"))}
         >
           My Quizzzy
         </div>
@@ -182,7 +182,7 @@ function Header() {
           >
           Quizzzy
         </a>
-        <Link to="/aboutus" className="font-semibold">
+        <Link to="/aboutus" className="font-semibold" onClick={() => {window.scrollTo(0, 0)}}>
           About us
         </Link>
         <div className="col-span-3 mx-6 relative">

@@ -1,14 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../../css/AddQuizz.css";
 import { UserContext } from "../../context/UserContext";
-// import defaultImage from "../../images/default/picture-default.png";
 
 const AddQuizz = () => {
-  // const [questions, setQuestions] = useState([
-  //     { text1: '', text2: '', image: null, imageUploaded: false },
-  //     { text1: '', text2: '', image: null, imageUploaded: false },
-  //     { text1: '', text2: '', image: null, imageUploaded: false },
-  // ]);
   const { isLoggedIn, userId, token } = useContext(UserContext);
 
   useEffect(() => {
@@ -202,7 +196,7 @@ const AddQuizz = () => {
                   setSelectedSubjects(update);
                 }}
               >
-                {subject}
+                {subject.charAt(0).toUpperCase() + subject.slice(1)}
               </div>
             ))}
           </div>
@@ -210,7 +204,7 @@ const AddQuizz = () => {
             className="rounded-lg border border-black py-4 px-5"
             onChange={(e) => {
               if (!selectedSubjects.includes(e.target.value))
-                setSelectedSubjects((prevs) => [...prevs, e.target.value.toLowerCase]);
+                setSelectedSubjects((prevs) => [...prevs, e.target.value.toLocaleLowerCase()]);
             }}
             defaultValue={""}
           >
@@ -259,21 +253,6 @@ const AddQuizz = () => {
                   }
                 />
               </div>
-              {/* <div className="img-quizz-container">
-                                <img
-                                    src={question.image ? URL.createObjectURL(question.image) : defaultImage}
-                                    alt=""
-                                    className="img-quizz-placeholder"
-                                />
-                                <label className={`custom-file-upload ${question.imageUploaded ? 'hide' : ''}`}>
-                                    <span>Upload</span>
-                                    <input
-                                        type="file"
-                                        className="img-quizz"
-                                        onChange={(e) => handleFileChange(index, e)}
-                                    />
-                                </label>
-                            </div> */}
               <button
                 type="button"
                 className="delete-question-btn"

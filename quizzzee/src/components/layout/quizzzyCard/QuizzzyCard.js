@@ -7,6 +7,7 @@ const QuizzzyCard = ({ quizzzy, disabled }) => {
     <Link
       className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105 active:scale-90"
       to={ disabled ? `` : `/quizzzy/${quizzzy._id}`}
+      onClick={() => {window.scrollTo(0, 0)}}
     >
       <div className="min-h-36 text-2xl text-white text-center flex items-center justify-center font-bold">
         {quizzzy.title}

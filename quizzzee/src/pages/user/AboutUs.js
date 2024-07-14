@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DDD from "../../images/squad/DDD.png";
 import DoAn from "../../images/squad/DoAn.png";
 import Ni from "../../images/squad/Ni.png";
@@ -7,52 +7,45 @@ import Habibi from "../../images/squad/Habibi.png.jpg.gif";
 import { motion } from "framer-motion";
 import sound from "../../sound/habibi.mp3";
 
-function Content(a) {
-  const audioRef = useRef(null);
+const creators = [
+  { image: DDD, name: "Do Duc Dat" },
+  { image: Ni, name: "Huynh Nguyen Gia Bao" },
+  { image: DoAn, name: "Mai Nhat Dang" },
+  { image: VVV, name: "Mai Quang Vinh" },
+  { image: Habibi, name: "Tran Le Hoang Long" },
+];
 
-  useEffect(() => {
-    audioRef.current = new Audio(sound);
-  }, []);
-
-  function play() {
-    audioRef.current.play();
-  }
-
-  function stop() {
-    audioRef.current.pause();
-  }
-
+function Content({ image, name, audioRef }) {
   return (
     <div className="py-6 grid grid-rows-6 justify-center">
-
       <motion.img
-        src={a.image}
+        src={image}
         className="size-48 rounded-full row-span-5"
         onMouseEnter={() => {
-          if (a.image === Habibi) {
-            play();
+          if (image === Habibi) {
+            audioRef.current.currentTime = 25;
+            audioRef.current.play();
           }
         }}
         onMouseLeave={() => {
-          if (a.image === Habibi) {
-            stop();
+          if (image === Habibi) {
+            audioRef.current.pause();
           }
         }}
         alt="lov u"
         whileHover={{
           rotate: 360,
           transition: {
-            duration: a.image === Habibi? 0.01 : 2,
+            duration: image === Habibi? 0.01 : 2,
             repeat: Infinity,
             ease: "linear",
             type: "tween",
           },
         }}
-       
       />
       <div className="text-xl font-semibold text-center mt-2">
         <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text">
-          {a.name}
+          {name}
         </div>
       </div>
     </div>
@@ -60,8 +53,8 @@ function Content(a) {
 }
 
 function AboutUs() {
-  const audioRef = useRef(null);
   const [canPlay, setCanPlay] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     audioRef.current = new Audio(sound);
@@ -71,10 +64,6 @@ function AboutUs() {
     if (canPlay) {
       audioRef.current.play();
     }
-  };
-
-  const stop = () => {
-    audioRef.current.stop();
   };
 
   const handleUserInteraction = () => {
@@ -89,7 +78,6 @@ function AboutUs() {
       document.removeEventListener("keydown", handleUserInteraction);
     };
   }, []);
-
   return (
     <div className="min-h-screen py-12 px-48 bg-mainColor text-white">
       <div className="text-center mb-12 text-4xl font-bold">
@@ -100,11 +88,9 @@ function AboutUs() {
           Creators
         </span>
       </div>
-      <Content image={DDD} name="Do Duc Dat" />
-      <Content image={Ni} name="Huynh Nguyen Gia Bao" />
-      <Content image={DoAn} name="Mai Nhat Dang" />
-      <Content image={VVV} name="Mai Quang Vinh"/>
-      <Content image={Habibi} name="Tran Le Hoang Long" />
+      {creators.map((creator) => (
+        <Content key={creator.name} image={creator.image} name={creator.name} audioRef={audioRef} />
+      ))}
       <div>
         <div className="mt-12 text-center text-2xl font-bold">
           I don't know why you are here but
