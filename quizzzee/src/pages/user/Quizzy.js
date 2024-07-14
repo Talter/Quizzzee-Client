@@ -384,10 +384,10 @@ function Quizzy() {
           <div className="grid grid-cols-4 grid-flow-rows gap-10 px-10 pt-12">
             {related
               ? related.map((r, index) => (
-                  <QuizzzyCard key={`Related ${index}`} quizzzy={r} />
+                  <QuizzzyCard key={index} quizzzy={r} />
                 ))
               : [...Array(4)].map((e, i) => {
-                  return <QuizzzySkeleton />;
+                  return <QuizzzySkeleton key={i}/>;
                 })}
           </div>
         </div>

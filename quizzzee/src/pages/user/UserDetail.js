@@ -8,7 +8,7 @@ import { isValid, parseISO } from 'date-fns';
 function UserDetail() {
   const [loading, setLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-  const { isLoggedIn, userId, token } = useContext(UserContext);
+  const { isLoggedIn, userId, token, logout } = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: "",
     firstName: "",
@@ -57,8 +57,6 @@ function UserDetail() {
           email: data.email,
           birthDate: data.birthDate,
         });
-
-        console.log(data);
         setAvatar(data.image);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -87,7 +85,6 @@ function UserDetail() {
   };
 
   const submitData = async () => {
-    console.log(JSON.stringify(formData));
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
@@ -104,9 +101,6 @@ function UserDetail() {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-
-      const result = await response.json();
-      console.log("Data posted successfully:", result);
       openNotificationWithIcon("success", "Success", "Data updated successfully");
       setIsEditing(false);
     } catch (error) {
@@ -192,6 +186,28 @@ function UserDetail() {
 
     handleUploadAvatar(file);
   };
+
+  const handleDeleteUser = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      logout();
+    } catch(err){
+      console.error("Failed:", err);
+      openNotificationWithIcon("error", "Error", "Delete Failed");
+    }
+  }
 
   const handleUploadAvatar = async (file) => {
     const formData = new FormData();
@@ -375,6 +391,7 @@ function UserDetail() {
               <button
                 className="dataform-delete-acc"
                 type="button"
+                onClick={() => handleDeleteUser()}
               >
                 Delete Account
               </button>

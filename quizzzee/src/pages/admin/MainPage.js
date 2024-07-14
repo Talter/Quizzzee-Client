@@ -31,7 +31,6 @@ const MainPage = () => {
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/users`, setLength1);
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/quizzzy`, setLength2);
     fetchData(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "/sadmin" : ""}`, setLength3);
-    console.log(`${process.env.REACT_APP_API_BASE_URL}/report${window.location.pathname.split("/")[1] == "sadmin" ? "sadmin" : ""}`);
   }, []);
   return (
     <div className="p-6">

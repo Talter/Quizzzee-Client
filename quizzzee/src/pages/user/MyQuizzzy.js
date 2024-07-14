@@ -156,7 +156,6 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
       setIsDeleteModalOpen(false);
       setDeleteTarget({});
       fetchData();
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

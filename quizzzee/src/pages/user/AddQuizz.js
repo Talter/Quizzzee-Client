@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../../css/AddQuizz.css";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const AddQuizz = () => {
   const { isLoggedIn, userId, token } = useContext(UserContext);
-
+  const navi = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
   useEffect(() => {
     if (!isLoggedIn) {
       window.location.href = "/";
@@ -80,7 +83,12 @@ const AddQuizz = () => {
       alert("You must have at least 2 questions.");
     }
   };
-
+  const openMessage = (type, content) => {
+    messageApi.open({
+      type,
+      content,
+    });
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -145,6 +153,10 @@ const AddQuizz = () => {
 
       if (response.ok) {
         console.log("Quiz saved successfully!");
+      openMessage("success", "Quiz saved successfully!, redirect in 3...");
+        setTimeout(() => {
+          navi("/me/quizzzies");
+        }, 3000)
       } else {
         console.error("Failed to save quiz");
       }
@@ -155,6 +167,7 @@ const AddQuizz = () => {
 
   return (
     <div className="quiz-page">
+      {contextHolder}
       <form className="quiz-container" onSubmit={handleSubmit}>
         <h2 className="quiz-title">Quizzzeefy your Knowledge</h2>
         <div className="form-group title-form">

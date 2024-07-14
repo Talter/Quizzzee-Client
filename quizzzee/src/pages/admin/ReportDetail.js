@@ -133,7 +133,6 @@ function QuizzzyDetail() {
   }, [report]);
 
   useEffect(() => {
-    console.log(quizzzies);
     if (quizzzies) {
       fetchUser(quizzzies.createdBy._id, setReported);
     } else {

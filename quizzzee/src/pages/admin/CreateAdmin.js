@@ -13,7 +13,6 @@ function CreateAdmin() {
       password,
       role: "admin",
     };
-    console.log(JSON.stringify(user));
     e.preventDefault();
     try {
       const response = await fetch(

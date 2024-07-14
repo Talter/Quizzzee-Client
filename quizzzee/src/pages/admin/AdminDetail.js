@@ -35,7 +35,6 @@ function UserDetail() {
       }
       const data = await response.json();
       setAdmin(data);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

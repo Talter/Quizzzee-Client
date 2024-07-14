@@ -7,8 +7,6 @@ import Background1 from "../../images/system/mainPageBg1.png";
 import Background2 from "../../images/system/mainPageBg2.png";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import { Carousel } from "antd";
-import { UserContext } from "../../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import QuizzzySkeleton from "../../components/quizzy/loadingSkeleton";
 
 const contentStyle = {
@@ -54,11 +52,6 @@ const detailStyle = {
 };
 
 function MainPage() {
-  const navigate = useNavigate();
-
-  const onChange = (currentSlide) => {
-    console.log(currentSlide);
-  };
 
   const handleSmoothScroll = (event, targetId) => {
     event.preventDefault();
@@ -99,7 +92,7 @@ function MainPage() {
           </div>
         </div>
         <img
-          alt="Main Page image"
+          alt="Main Page"
           className="h-64 w-64 ms-12 rounded-full justify-self-center shadow-[5px_5px_0px_2px_rgba(144,172,244,0.5)]"
           src={mainPageImage}
         ></img>

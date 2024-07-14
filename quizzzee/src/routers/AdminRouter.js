@@ -4,10 +4,8 @@ import {
   Routes,
   Route,
   useNavigate,
-  Link,
 } from "react-router-dom";
 import { Layout, Menu, theme } from "antd";
-import { useState } from "react";
 
 import MainPage from "../pages/admin/MainPage";
 import UserList from "../pages/admin/UserList";
