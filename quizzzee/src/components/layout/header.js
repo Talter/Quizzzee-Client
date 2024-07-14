@@ -16,17 +16,19 @@ function Header() {
 
   const tagSearch = (subject) => {
     const location = window.location.pathname.split("/");
-  
+
     if (location[1] !== "search") {
       return `/search/tag=${subject}`;
     }
-  
+
     const searchParams = new URLSearchParams(location[2]);
     const name = searchParams.get("name");
-  
-    return name ? `/search/name=${name}&tag=${subject}` : `/search/tag=${subject}`;
+
+    return name
+      ? `/search/name=${name}&tag=${subject}`
+      : `/search/tag=${subject}`;
   };
-  
+
   const subjects = [
     "math",
     "literature",
@@ -37,24 +39,25 @@ function Header() {
     "music",
     "physics",
   ];
-  
+
   const items = subjects.map((subject, index) => ({
     label: (
-      <div rel="noopener noreferrer" onClick={() => {navi(tagSearch(subject));}}>
+      <div
+        rel="noopener noreferrer"
+        onClick={() => {
+          navi(tagSearch(subject));
+        }}
+      >
         {subject.charAt(0).toUpperCase() + subject.slice(1)}
       </div>
     ),
     key: index.toString(),
   }));
-  
 
   const users = [
     {
       label: (
-        <div
-          rel="noopener noreferrer"
-          onClick={() => (navi("/me/detail"))}
-        >
+        <div rel="noopener noreferrer" onClick={() => navi("/me/detail")}>
           Account Detail
         </div>
       ),
@@ -76,7 +79,11 @@ function Header() {
     },
     {
       label: (
-        <div rel="noopener noreferrer" onClick={() => logout()}>
+        <div
+          rel="noopener noreferrer"
+          className="text-red-500 font-semibold"
+          onClick={() => logout()}
+        >
           Logout
         </div>
       ),
@@ -123,25 +130,29 @@ function Header() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const location = window.location.pathname.split("/");
-  
+
     if (location[1] !== "search") {
       navi(`/search/name=${search}`);
       return;
     }
-  
+
     const searchParams = new URLSearchParams(location[2]);
     const subject = searchParams.get("tag");
-  
-    navi(subject ? `/search/name=${search}&tag=${subject}` : `/search/name=${search}`);
+
+    navi(
+      subject
+        ? `/search/name=${search}&tag=${subject}`
+        : `/search/name=${search}`
+    );
     return;
-  }
+  };
   return (
     <div className="w-full min-h-[69px] grid grid-cols-12 shadow-lg bg-white">
       <div className="col-span-3 flex items-center justify-evenly">
         <Link
           to="/"
           className="font-bold text-3xl relative select-none"
-          onClick={window.scrollTo(0, 0)}
+          onClick={() => {window.scrollTo(0, 0)}}
         >
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
@@ -166,27 +177,28 @@ function Header() {
         </div>
       </div>
       <div className="col-span-6 grid grid-cols-5 justify-center items-center text-center ">
-        <div className="font-semibold">Quizzzy</div>
+        <a className="font-semibold" 
+          href="/#quizzz"
+          >
+          Quizzzy
+        </a>
         <Link to="/aboutus" className="font-semibold">
           About us
         </Link>
         <div className="col-span-3 mx-6 relative">
           <form onSubmit={handleSubmit}>
-          <input
-            className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-          />
-          <button
-            className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full"
-          >
-            Search
-          </button>
+            <input
+              className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+            <button className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full">
+              Search
+            </button>
           </form>
-          
         </div>
       </div>
       {isLoggedIn ? (

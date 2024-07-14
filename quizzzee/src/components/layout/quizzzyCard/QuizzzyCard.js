@@ -8,7 +8,7 @@ const QuizzzyCard = ({ quizzzy, disabled }) => {
       className=" rounded-xl  bg-subColor shadow-inner grid grid-rows-2 transition transform hover:scale-105 active:scale-90"
       to={ disabled ? `` : `/quizzzy/${quizzzy._id}`}
     >
-      <div className="min-h-36 text-xl text-white text-center flex items-center justify-center">
+      <div className="min-h-36 text-2xl text-white text-center flex items-center justify-center font-bold">
         {quizzzy.title}
       </div>
       <div className="min-h-36 bg-white border-extraColor border rounded-xl text-black px-4 py-2">
