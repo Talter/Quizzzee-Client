@@ -1,42 +1,16 @@
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Pagination, Space } from "antd";
+import { Pagination } from "antd";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
-
-const items = [
-  {
-    label: "1st menu item",
-    key: "1",
-    icon: <UserOutlined />,
-  },
-  {
-    label: "2nd menu item",
-    key: "2",
-    icon: <UserOutlined />,
-  },
-  {
-    label: "3rd menu item",
-    key: "3",
-    icon: <UserOutlined />,
-    danger: true,
-  },
-  {
-    label: "4th menu item",
-    key: "4",
-    icon: <UserOutlined />,
-    danger: true,
-    disabled: true,
-  },
-];
+import QuizzzySkeleton from "../../components/quizzy/loadingSkeleton";
 
 function SearchResult() {
-  const navi = useNavigate();
   const { searchvalue } = useParams();
   const [name, setName] = useState("");
   const [tag, setTag] = useState("");
   const [quizzzy, setQuizzzy] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     setQuizzzy([]);
@@ -58,6 +32,7 @@ function SearchResult() {
 
   const fetchData = async (name, tag) => {
     try {
+      setIsSearching(true);
       const response1 = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/commons/search?quizzzy=${name}`
       );
@@ -88,6 +63,8 @@ function SearchResult() {
       }
     } catch (error) {
       setQuizzzy([]);
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -106,16 +83,20 @@ function SearchResult() {
         <div className="flex justify-center gap-3 items-center">
           <span>
             Searching for "{name}" {name !== "" && tag !== "" && "with "}
-            {tag}
+            {tag}...
           </span>
         </div>
       )}
       <section className="px-36 grid grid-cols-4 grid-flow-rows justify-center items-center gap-12 mt-12">
-        {currentQuizzzy.map((data) => (
-          <QuizzzyCard quizzzy={data} key={data._id} />
-        ))}
+        {!isSearching && currentQuizzzy
+          ? currentQuizzzy.map((data) => (
+              <QuizzzyCard quizzzy={data} key={data._id} />
+            ))
+          : [...Array(4)].map((e, i) => {
+              return <QuizzzySkeleton />;
+            })}
       </section>
-      {currentQuizzzy.length === 0 ? (
+      {!isSearching && currentQuizzzy.length === 0 ? (
         <div className="text-center text-xl">
           Sorry, we can't find what you are looking for ...
         </div>

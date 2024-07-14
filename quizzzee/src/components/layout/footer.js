@@ -9,7 +9,27 @@ function Footer() {
     fetch("https://type.fit/api/quotes")
       .then((response) => response.json())
       .then((data) => {
-        const quotes = data;
+        let quotes = data;
+
+        quotes.push(
+          {
+            text: "Shika noko noko noko koshi tantan",
+            author: "NokoTan",
+          },
+          {
+            text: "Shika noko noko noko koshi tantan",
+            author: "NokoTan",
+          },
+          {
+            text: "Shika noko noko noko koshi tantan",
+            author: "NokoTan",
+          },
+          {
+            text: "Shika noko noko noko koshi tantan",
+            author: "NokoTan",
+          }
+        );
+
         const select = quotes[Math.floor(Math.random() * quotes.length)];
         setQuote(select);
       })
