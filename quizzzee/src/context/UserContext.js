@@ -31,7 +31,8 @@ const getItem = (key) => {
 };
 
 export const UserProvider = ({ children }) => {
-  const ttlShort = 1 * 60 * 60 * 1000;
+  // const ttlShort = 1 * 60 * 60 * 1000;
+  const ttlShort = 0;
   const ttlLong = 3 * 24 * 60 * 60 * 1000;
 
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
