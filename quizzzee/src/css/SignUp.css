@@ -16,14 +16,13 @@
     flex-direction: column;
     display: flex;
     padding: 10vh 10vw 05vh 10vw;
-    margin: 23vh 0 10vh 42vw;
+    margin: 23vh 0 10vh 40vw;
     width: 20vw;
     height: 50vh;
 }
 
 .signUp-title {
     width: 20vw;
-    text-align: center;
     font-size: 4vh;
     font-weight: bold;
 }
@@ -34,6 +33,10 @@
     margin-bottom: 4vh;
     display: flex;
     flex-direction: column;
+    background-color: white;
+    padding: 0 4rem 4rem 4rem;
+    border-radius: 3rem;
+    text-align: center;
 }
 
 .signUp-form input {
@@ -104,18 +107,6 @@
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5);
 }
 
-.cloud-signUp {
-    position: absolute;
-    z-index: -1;
-    margin-top: 15vh;
-    width: 30vw;
-    height: 70vh;
-    margin-left: 36.5vw;
-    background: white;
-    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 100px;
-}
-
 .cloud-signUp-1,
 .cloud-signUp-2,
 .cloud-signUp-3 {
@@ -129,26 +120,26 @@
 }
 
 .cloud-signUp-1 {
-    width: 15vw;
-    height: 35vh;
-    bottom: 46vh;
-    right: 33.5vw;
+    width: 15rem;
+    height: 15rem;
+    bottom: 21rem;
+    right: 35.5vw;
     border-radius: 50%;
 }
 
 .cloud-signUp-2 {
-    width: 13vw;
-    height: 32vh;
-    bottom: 50vh;
-    right: 41vw;
+    width: 13rem;
+    height: 13rem;
+    bottom: 23rem;
+    right: 41rem;
     border-radius: 50%;
 }
 
 .cloud-signUp-3 {
-    width: 17vw;
-    height: 37vh;
-    bottom: 45vh;
-    right: 46.5vw;
+    width: 17rem;
+    height: 17rem;
+    bottom: 20rem;
+    right: 45rem;
     border-radius: 50%;
 }
 

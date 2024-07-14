@@ -220,7 +220,7 @@ function LoginPage() {
       >
         <form className="modal-form mx-3">
           <div className="font-bold text-xl">Forget Password</div>
-          <div className="">
+          <div className="items-center justify-center flex flex-col">
             <input
               className="mt-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2 text-lg"
               type="text"
@@ -267,13 +267,12 @@ function LoginPage() {
         </form>
       </Modal>
 
-      <div className="cloud-login"></div>
       <div className="cloud-login-1"></div>
       <div className="cloud-login-2"></div>
       <div className="cloud-login-3"></div>
       <div className="login-container">
-        <a className="login-title">Login</a>
         <form className="login-form" onSubmit={handleSubmit}>
+        <a className="login-title">Login</a>
           <div className="first-part">
             <div className="input-field">
               <input
@@ -321,13 +320,17 @@ function LoginPage() {
               </div>
             </div>
           </div>
-          <button
-            className="login-confirm-btn"
-            type="submit"
-            disabled={loading}
-          >
-            Login
-          </button>
+          <div className="login-btn-container">
+            <button
+              className="login-confirm-btn"
+              type="submit"
+              disabled={loading}>
+              Login
+            </button>
+            <div className="login-gg-container">
+              G
+            </div>
+          </div>
           <br />
           <Link className="create-acc-btn" to="/signup">
             <button type="submit">Need an account?</button>

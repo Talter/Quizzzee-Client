@@ -93,15 +93,12 @@ function SignUp() {
                 Signing up...
                 <div className="loading-bar"></div>
             </div>
-            <div className="cloud-signUp"></div>
             <div className="cloud-signUp-1"></div>
             <div className="cloud-signUp-2"></div>
             <div className="cloud-signUp-3"></div>
             <div className="signUp-container">
-                <div className="signUp-title">
-                    <a>Sign Up</a>
-                </div>
                 <form className="signUp-form" onSubmit={handleSignUp}>
+                    <a className="signUp-title">Sign Up</a>
                     <div className="first-part">
                         <div className="input-field">
                             <input

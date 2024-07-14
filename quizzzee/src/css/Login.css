@@ -16,7 +16,7 @@
   flex-direction: column;
   display: flex;
   padding: 10vh 10vw 05vh 10vw;
-  margin: 23vh 0 10vh 42vw;
+  margin: 23vh 0 10vh 40vw;
   width: 20vw;
   height: 50vh;
 }
@@ -32,6 +32,10 @@
   margin-bottom: 4vh;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  padding: 0 4rem 4rem 4rem;
+  border-radius: 3rem;
+  text-align: center;
 }
 
 .login-form input {
@@ -59,6 +63,11 @@
   visibility: hidden;
 }
 
+.login-btn-container {
+  display: flex;
+  max-width: 100%;
+}
+
 .login-confirm-btn {
   font-size: 1rem;
   padding: 1.5vh;
@@ -71,9 +80,31 @@
   margin-bottom: 0.5vh;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 84%;
+}
+
+.login-gg-container {
+  font-size: 2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(168, 220, 148, 1);
+  color: white;
+  cursor: pointer;
+  margin-bottom: 0.5vh;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 16%;
+  height: 100%;
+  text-align: center;
 }
 
 .login-confirm-btn:hover {
+  background-color: #b6dfe3;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+.login-gg-container:hover {
   background-color: #b6dfe3;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
 }
@@ -109,18 +140,6 @@
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
 }
 
-.cloud-login {
-  position: absolute;
-  z-index: -1;
-  margin-top: 15vh;
-  width: 30vw;
-  height: 65vh;
-  margin-left: 36.5vw;
-  background: white;
-  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 100px;
-}
-
 .cloud-login-1,
 .cloud-login-2,
 .cloud-login-3 {
@@ -136,7 +155,7 @@
   width: 15vw;
   height: 35vh;
   bottom: 46vh;
-  right: 33.5vw;
+  right: 35.5vw;
   border-radius: 50%;
 }
 
@@ -144,15 +163,15 @@
   width: 13vw;
   height: 32vh;
   bottom: 50vh;
-  right: 41vw;
+  right: 43vw;
   border-radius: 50%;
 }
 
 .cloud-login-3 {
   width: 17vw;
   height: 37vh;
-  bottom: 45vh;
-  right: 46.5vw;
+  bottom: 44.5vh;
+  right: 47.6vw;
   border-radius: 50%;
 }
 
