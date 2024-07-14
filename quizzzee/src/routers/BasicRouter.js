@@ -16,6 +16,7 @@ import Google from "../pages/user/Google";
 
 import { UserProvider } from "../context/UserContext";
 import SearchResult from "../pages/user/SearchResult";
+import NotFound from "../pages/user/404";
 
 function BasicRouter() {
   const location = useLocation();
@@ -54,6 +55,7 @@ function BasicRouter() {
               <Route path="/addquizz" element={<AddQuizz />} />
               <Route path="/exam/:id" element={<ExamQuizz />} />
               <Route path="/me/quizzzies" element={<MyQuizzzy />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
           {!["/login", "/signup", "/login/admin", "/aboutus", "/exam"].includes(
