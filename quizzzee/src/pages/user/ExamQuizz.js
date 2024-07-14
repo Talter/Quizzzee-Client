@@ -126,10 +126,10 @@ function ExamQuizz() {
 
   const handleSubmit = async () => {
     const exam = questions.map((question) => ({
-      _id : question.id,
-      answer_qt : question.answer_qt,
+      _id: question.id,
+      answer_qt: question.answer_qt,
       text: question.question,
-      answer_us : answers[question.id] === "true" ? true : answers[question.id]  === "false" ? false : answers[question.id] 
+      answer_us: answers[question.id] === "true" ? true : answers[question.id] === "false" ? false : answers[question.id]
     }))
     // console.log(JSON.stringify({ answers: exam, mode, amount: 1 }));
     try {
@@ -205,25 +205,25 @@ function ExamQuizz() {
 
   return (
     <div className="bg-gray-100 min-h-screen py-12 px-6 flex">
-      <style>
-        {`
-          body {
-            overflow: hidden;
-          }
-          .modal-overlay {
-            z-index: 50;
-          }
-          .modal-content {
-            background-color: white;
-            max-width: 50%;
-          }
-          .error-text {
-            color: red;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-          }
-        `}
-      </style>
+      {/* <style> */}
+      {/*   {` */}
+      {/*     body { */}
+      {/*       overflow: hidden; */}
+      {/*     } */}
+      {/*     .modal-overlay { */}
+      {/*       z-index: 50; */}
+      {/*     } */}
+      {/*     .modal-content { */}
+      {/*       background-color: white; */}
+      {/*       max-width: 50%; */}
+      {/*     } */}
+      {/*     .error-text { */}
+      {/*       color: red; */}
+      {/*       font-size: 0.75rem; */}
+      {/*       margin-top: 0.25rem; */}
+      {/*     } */}
+      {/*   `} */}
+      {/* </style> */}
       <div className="w-3/4 mr-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">
@@ -240,7 +240,7 @@ function ExamQuizz() {
           <p className="text-lg">
             Question: {questions[currentQuestionIndex]?.question || ""}
           </p>
-          <p className={ "text-lg " + (modeRender != 2 && "hidden " )}>
+          <p className={"text-lg " + (modeRender != 2 && "hidden ")}>
             Answer: {questions[currentQuestionIndex]?.answer_qt || ""}
           </p>
         </div>
@@ -267,9 +267,8 @@ function ExamQuizz() {
                 {questions.map((question, index) => (
                   <li
                     key={index}
-                    className={`cursor-pointer ${
-                      index === currentQuestionIndex ? "font-semibold" : ""
-                    } ${isQuestionAnswered(index) ? "text-green-500" : ""}`}
+                    className={`cursor-pointer ${index === currentQuestionIndex ? "font-semibold" : ""
+                      } ${isQuestionAnswered(index) ? "text-green-500" : ""}`}
                     onClick={() => handleJumpToQuestion(index)}
                   >
                     Question {index + 1}
