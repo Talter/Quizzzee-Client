@@ -370,6 +370,7 @@ function Quizzy() {
         <Link
           className="select-none bg-subColor w-48 h-16 rounded-lg flex justify-center items-center text-lg text-white font-semibold transform transition hover:scale-105 active:scale-90 active:bg-subColorBold hover:cursor-pointer"
           to={`/exam/${id}`}
+          onClick={() => {window.scrollTo(0, 0)}}
         >
           Exam
         </Link>
