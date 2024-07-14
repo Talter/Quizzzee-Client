@@ -14,7 +14,6 @@ import MyQuizzzy from "../pages/user/MyQuizzzy";
 import ExamQuizz from "../pages/user/ExamQuizz";
 import Google from "../pages/user/Google";
 
-
 import { UserProvider } from "../context/UserContext";
 import SearchResult from "../pages/user/SearchResult";
 
@@ -32,7 +31,9 @@ function BasicRouter() {
             className={
               !["/login", "/signup", "/login/admin", "detail"].includes(
                 location.pathname
-              ) && "min-h-screen"
+              )
+                ? "min-h-screen"
+                : ""
             }
           >
             <Routes>
@@ -55,16 +56,16 @@ function BasicRouter() {
           {!["/login", "/signup", "/login/admin", "/aboutus", "/exam"].includes(
             location.pathname
           ) && (
-              <div
-                className={
-                  location.pathname.startsWith("/quizzzy")
-                    ? " bg-[#F6F6F6]"
-                    : " bg-transparent"
-                }
-              >
-                <Footer />
-              </div>
-            )}
+            <div
+              className={
+                location.pathname.startsWith("/quizzzy")
+                  ? " bg-[#F6F6F6]"
+                  : " bg-transparent"
+              }
+            >
+              <Footer />
+            </div>
+          )}
         </div>
       </div>
     </UserProvider>
@@ -75,7 +76,7 @@ function App() {
   return (
     <BrowserRouter>
       <BasicRouter />
-    </BrowserRouter >
+    </BrowserRouter>
   );
 }
 

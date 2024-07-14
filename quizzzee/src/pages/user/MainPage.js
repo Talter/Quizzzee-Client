@@ -155,7 +155,7 @@ function MainPage() {
         {quizzzy ?
           quizzzy.map((data) => <QuizzzyCard quizzzy={data} key={data._id} />)
           :
-          [...Array(8)].map((e, i) => <QuizzzySkeleton />)
+          [...Array(8)].map((e, i) => <QuizzzySkeleton key={i}/>)
         }
       </section>
     </div>

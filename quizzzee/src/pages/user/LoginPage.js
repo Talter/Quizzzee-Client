@@ -44,7 +44,6 @@ function LoginPage() {
   }, [resetData.email]);
 
   useEffect(() => {
-    // validate password
     if (resetData.password) {
       if (!validatePassword(resetData.password)) {
         setResetError((prev) => ({
@@ -198,29 +197,6 @@ function LoginPage() {
       duration: 2,
     });
   };
-  useEffect(() => {
-    const test = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/auth/google', {
-          method: 'GET', // Adjust the method as per your backend setup
-          credentials: 'include', // Ensure credentials are included for cookie handling
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to log in');
-        }
-  
-        const data = await response.json();
-        const { accessToken } = data;
-  
-        console.log('Access Token:', accessToken);
-        // Handle the token (e.g., store it in local storage or context)
-        localStorage.setItem('token', accessToken);
-      } catch (error) {
-        console.error('Login Error:', error);
-      }
-    }
-  })
 
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.REACT_APP_API_BASE_URL}/commons/auth/google`;
@@ -309,7 +285,6 @@ function LoginPage() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  console.log(password);
                 }}
               />
               <div className="options">
