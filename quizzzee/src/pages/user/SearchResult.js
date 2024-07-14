@@ -31,7 +31,6 @@ const items = [
 ];
 
 function SearchResult() {
-  
   const navi = useNavigate();
   const { searchvalue } = useParams();
   const [name, setName] = useState("");
@@ -106,7 +105,7 @@ function SearchResult() {
       {(name !== "" || tag !== "") && (
         <div className="flex justify-center gap-3 items-center">
           <span>
-            Searching for {name} {name !== "" && tag !== "" && "with "}
+            Searching for "{name}" {name !== "" && tag !== "" && "with "}
             {tag}
           </span>
         </div>
@@ -117,7 +116,9 @@ function SearchResult() {
         ))}
       </section>
       {currentQuizzzy.length === 0 ? (
-        <div className="text-center text-xl">Sorry, we can't find what you are looking for ...</div>
+        <div className="text-center text-xl">
+          Sorry, we can't find what you are looking for ...
+        </div>
       ) : (
         <div className="flex justify-center mt-12">
           <Pagination

@@ -1,6 +1,6 @@
-import { Button, Input } from "antd";
+import { Button, Divider, Input, Skeleton } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { UserContext } from "../../context/UserContext";
 import DefaultProFileImage from "../../images/default/default-avatar.png";
@@ -55,40 +55,20 @@ function Header() {
   }));
 
   const users = [
-    {
-      label: (
-        <div rel="noopener noreferrer" onClick={() => navi("/me/detail")}>
-          Account Detail
-        </div>
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <div
-          rel="noopener noreferrer"
-          onClick={() => (navi("/me/quizzzies"))}
-        >
-          My Quizzzy
-        </div>
-      ),
-      key: "2",
-    },
-    {
-      type: "divider",
-    },
-    {
-      label: (
-        <div
-          rel="noopener noreferrer"
-          className="text-red-500 font-semibold"
-          onClick={() => logout()}
-        >
-          Logout
-        </div>
-      ),
-      key: "0",
-    },
+    <div rel="noopener noreferrer" onClick={() => navi("/me/detail")}>
+      Account Detail
+    </div>,
+    <div rel="noopener noreferrer" onClick={() => navi("/me/quizzzies")}>
+      My Quizzzy
+    </div>,
+    <div className="border-b-2 border-roseWater my-2"></div>,
+    <div
+      rel="noopener noreferrer"
+      className="text-red-500 font-semibold"
+      onClick={() => logout()}
+    >
+      Logout
+    </div>,
   ];
 
   useEffect(() => {
@@ -152,22 +132,64 @@ function Header() {
         <Link
           to="/"
           className="font-bold text-3xl relative select-none"
-          onClick={() => {window.scrollTo(0, 0)}}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
         >
           <span className="text-mainColorBold">Quizz</span>
           <span className="text-extraColor">zee</span>
         </Link>
         <div>
           <Dropdown
-            menu={{
-              items,
-            }}
+            dropdownRender={(menu) => (
+              <div
+                className="bg-white border-2 border-roseWater rounded-lg p-4"
+                style={{ fontFamily: "Quicksand" }}
+              >
+                <div className="flex flex-col flex-wrap h-52 border-b-2 border-roseWater">
+                  {subjects.map((subject) => (
+                    <div
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        navi(tagSearch(subject));
+                      }}
+                      className="hover:bg-gray-100 rounded-md p-2 text-lg font-semibold mr-24 cursor-pointer"
+                    >
+                      {subject.charAt(0).toUpperCase() + subject.slice(1)}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center justify-between">
+                  <span
+                    className="text-lg font-semibold mt-3 ml-2 cursor-pointer"
+                    onClick={() => {
+                      navi(tagSearch(subjects[Math.floor(Math.random() * 8)]));
+                    }}
+                  >
+                    Random
+                  </span>
+                  <form className="relative" onSubmit={handleSubmit}>
+                    <input
+                      className="w-full py-1.5 px-6 mt-3 rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-extraColor focus:border-extraColor  active:border-gray-500 font-semibold"
+                      placeholder="Search..."
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                      }}
+                    />
+                    <button className="absolute right-0 bottom-0 bg-subColor text-white rounded-full py-1.5 px-6">
+                      <SearchOutlined className="text-lg" />
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
           >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 <Button
                   type="primary"
-                  className="bg-mainColor hover:bg-mainColorBold flex justify-center items-center p-2.5"
+                  className="bg-subColorLight hover:bg-subColor flex justify-center items-center p-2.5"
                 >
                   <CaretDownOutlined />
                 </Button>
@@ -177,26 +199,30 @@ function Header() {
         </div>
       </div>
       <div className="col-span-6 grid grid-cols-5 justify-center items-center text-center ">
-        <a className="font-semibold" 
-          href="/#quizzz"
-          >
+        <a className="font-semibold" href="/#quizzz">
           Quizzzy
         </a>
-        <Link to="/aboutus" className="font-semibold" onClick={() => {window.scrollTo(0, 0)}}>
+        <Link
+          to="/aboutus"
+          className="font-semibold"
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
           About us
         </Link>
         <div className="col-span-3 mx-6 relative">
           <form onSubmit={handleSubmit}>
             <input
-              className="w-full py-1.5 px-6 rounded-full border active:border-gray-500 font-semibold"
+              className="w-full py-1.5 px-6 rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-extraColor focus:border-extraColor active:border-gray-500 font-semibold"
               placeholder="Search..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
             />
-            <button className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-3 rounded-full">
-              Search
+            <button className="absolute top-1/2 transform -translate-y-1/2 right-[0.1rem] bg-subColor text-white font-semibold py-[0.33rem] mt-[0.018745rem] px-8 rounded-full">
+              <SearchOutlined className="text-lg" />
             </button>
           </form>
         </div>
@@ -204,17 +230,32 @@ function Header() {
       {isLoggedIn ? (
         <div className="col-span-3 ps-12 pe-16 flex justify-center items-center pt-1">
           <div className="text-lg mr-6 font-bold">
-            {userData.username
-              ? "Welcome, " + capitalizeFirstLetter(userData.username) + "!"
-              : "I'm loading god darn it"}
+            {userData.username ? (
+              "Welcome, " + capitalizeFirstLetter(userData.username) + "!"
+            ) : (
+              <Skeleton.Input active />
+            )}
           </div>
           <Dropdown
-            menu={{
-              items: users,
-            }}
+            // menu={{
+            //   items: users,
+            // }}]
+            placement="bottomCenter"
+            dropdownRender={(menu) => (
+              <div
+                className="bg-white border-2 border-roseWater rounded-lg p-4"
+                style={{ fontFamily: "Quicksand" }}
+              >
+                {users.map((item) => (
+                  <div className="text-lg font-semibold text-right cursor-pointer hover:bg-gray-100 p-1 rounded-md">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
           >
             <div>
-              <div className="size-12 bg-mainColor rounded-full overflow-hidden">
+              <div className="size-12 bg-subColor border-2 border-subColorBold rounded-full overflow-hidden">
                 <img
                   className="object-cover h-full w-full"
                   src={userData.image || DefaultProFileImage}
