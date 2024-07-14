@@ -378,7 +378,7 @@ function Quizzy() {
         <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
           <div className="text-2xl font-semibold pl-4">Related quizzy</div>
           <div className="grid grid-cols-4 grid-flow-rows gap-10 px-10 pt-12">
-            {related && related.map((r) => (<QuizzzyCard quizzzy={r} />))}
+            {related && related.map((r,index) => (<QuizzzyCard key={`Related ${index}`} quizzzy={r} />))}
           </div>
         </div>
       </section>

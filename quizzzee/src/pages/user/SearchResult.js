@@ -1,7 +1,7 @@
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Pagination, Space } from "antd";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 
 const items = [
@@ -29,14 +29,13 @@ const items = [
     disabled: true,
   },
 ];
-const menuProps = {
-  items,
-};
 
 function SearchResult() {
+  
+  const navi = useNavigate();
   const { searchvalue } = useParams();
   const [name, setName] = useState("");
-  const [tag, setTag] = useState("None");
+  const [tag, setTag] = useState("");
   const [quizzzy, setQuizzzy] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -48,18 +47,17 @@ function SearchResult() {
       if (key === "name") {
         setName(value);
       } else if (key === "tag") {
-        if (value === "") setTag("None");
-        else setTag(value);
+        setTag(value);
       }
     });
     setCurrentPage(1);
   }, [searchvalue]);
 
   useEffect(() => {
-      fetchData(name, tag);
-    return;
-  },[name,tag])
-  const fetchData = async (name,tag) => {
+    fetchData(name, tag);
+  }, [name, tag]);
+
+  const fetchData = async (name, tag) => {
     try {
       const response1 = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/commons/search?quizzzy=${name}`
@@ -68,7 +66,7 @@ function SearchResult() {
         throw new Error("Network response was not ok");
       }
       const data1 = await response1.json();
-  
+
       const response2 = await fetch(
         `${process.env.REACT_APP_API_BASE_URL}/quizzzy/`
       );
@@ -76,20 +74,20 @@ function SearchResult() {
         throw new Error("Network response was not ok");
       }
       const data2 = await response2.json();
-      const data2Filtered = data2.filter(d => d.tags.includes(tag));
-      const finalData = data1.filter(data => {
-        return data2Filtered.some(filteredData => filteredData._id === data._id);
+      const data2Filtered = data2.filter((d) => d.tags.includes(tag));
+      const finalData = data1.filter((data) => {
+        return data2Filtered.some(
+          (filteredData) => filteredData._id === data._id
+        );
       });
-      console.log(tag);
-      if(name !== "" && tag !== "None"){
+      if (name !== "" && tag !== "") {
         setQuizzzy(finalData);
-      } else if(name !== ""){
-        setQuizzzy(data1)
-      } else if (tag !== ""){
-        setQuizzzy(data2Filtered)
+      } else if (name !== "") {
+        setQuizzzy(data1);
+      } else if (tag !== "") {
+        setQuizzzy(data2Filtered);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
       setQuizzzy([]);
     }
   };
@@ -105,34 +103,31 @@ function SearchResult() {
 
   return (
     <div className="py-24">
-      {/* <div className="flex justify-center gap-3 items-center">
-        <span>Searching for</span>
-        <span>{name}</span>
-        <span>with</span>{" "}
-        <Dropdown menu={menuProps}>
-          <Button>
-            <Space>
-              {tag}
-              <DownOutlined />
-            </Space>
-          </Button>
-        </Dropdown>{" "}
-        tags
-      </div> */}
+      {(name !== "" || tag !== "") && (
+        <div className="flex justify-center gap-3 items-center">
+          <span>
+            Searching for {name} {name !== "" && tag !== "" && "with "}
+            {tag}
+          </span>
+        </div>
+      )}
       <section className="px-36 grid grid-cols-4 grid-flow-rows justify-center items-center gap-12 mt-12">
-        {currentQuizzzy &&
-          currentQuizzzy.map((data) => (
-            <QuizzzyCard quizzzy={data} key={data._id} />
-          ))}
+        {currentQuizzzy.map((data) => (
+          <QuizzzyCard quizzzy={data} key={data._id} />
+        ))}
       </section>
-      <div className="flex justify-center mt-12">
-        <Pagination
-          current={currentPage}
-          total={quizzzy.length}
-          pageSize={pageSize}
-          onChange={handlePageChange}
-        />
-      </div>
+      {currentQuizzzy.length === 0 ? (
+        <div className="text-center text-xl">Sorry, we can't find what you are looking for ...</div>
+      ) : (
+        <div className="flex justify-center mt-12">
+          <Pagination
+            current={currentPage}
+            total={quizzzy.length}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }

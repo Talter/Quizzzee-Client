@@ -12,6 +12,8 @@ import AboutUs from "../pages/user/AboutUs";
 import AddQuizz from "../pages/user/AddQuizz";
 import MyQuizzzy from "../pages/user/MyQuizzzy";
 import ExamQuizz from "../pages/user/ExamQuizz";
+import Google from "../pages/user/Google";
+
 
 import { UserProvider } from "../context/UserContext";
 import SearchResult from "../pages/user/SearchResult";
@@ -34,6 +36,7 @@ function BasicRouter() {
             }
           >
             <Routes>
+              <Route path="/google" element={<Google />} />
               <Route path="/login/admin" element={<AdminLogin />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUp />} />
