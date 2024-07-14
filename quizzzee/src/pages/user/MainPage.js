@@ -9,6 +9,7 @@ import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import { Carousel } from "antd";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import QuizzzySkeleton from "../../components/quizzy/loadingSkeleton";
 
 const contentStyle = {
   display: 'flex',
@@ -151,8 +152,11 @@ function MainPage() {
         className="bg-cover pt-36 bg-mainColor min-h-96 grid grid-cols-4 grid-flow-rows px-36 gap-12 mb-12"
         style={{ backgroundImage: `url(${Background2})` }}
       >
-        {quizzzy &&
-          quizzzy.map((data) => <QuizzzyCard quizzzy={data} key={data._id} />)}
+        {quizzzy ?
+          quizzzy.map((data) => <QuizzzyCard quizzzy={data} key={data._id} />)
+          :
+          [...Array(8)].map((e, i) => <QuizzzySkeleton />)
+        }
       </section>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Background from "../../images/system/footer1.png";
-import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { MailOutlined, PhoneOutlined, StarOutlined } from "@ant-design/icons";
 
 function Footer() {
   const [quote, setQuote] = useState("");
@@ -32,12 +32,16 @@ function Footer() {
             <div className="mb-3">
               <MailOutlined className="pr-2" /> ToryNothing@gmail.com
             </div>
-            <div>
+            <div className="mb-3">
               <PhoneOutlined className="pr-2" /> 0941351430
+            </div>
+            <div>
+              <StarOutlined className="pr-2" /> <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSej85chH-gObIs9L8r66_hAAdAs0K2kHxx1Me_IfCI75PnXCQ/viewform?usp=sharing">Feel free to leave feedback here!</a>
             </div>
           </div>
           <div className="text-xl font-semibold">
-            <div className="italic">{quote.text}</div>
+            <div className="italic">"{quote.text}"</div>
+            <div className="italic text-right">- {quote.author.split(",")[0]}</div>
           </div>
 
           <div className="absolute right-20 bottom-3 text-2xl font-bold">

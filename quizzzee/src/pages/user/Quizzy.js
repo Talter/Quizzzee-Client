@@ -19,6 +19,7 @@ import QuestionSetOverview from "../../components/quizzy/questionSetOverview";
 import Sharing from "../../components/quizzy/sharing";
 import Report from "../../components/quizzy/report";
 import { UserContext } from "../../context/UserContext";
+import QuizzzySkeleton from "../../components/quizzy/loadingSkeleton";
 
 function Quizzy() {
   const { id } = useParams();
@@ -82,7 +83,7 @@ function Quizzy() {
             }
           }
         });
-          setRelated(array);
+        setRelated(array);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -296,9 +297,8 @@ function Quizzy() {
         </div>
         <div className="relative inline-block">
           <div
-            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${
-              isFavorite ? " text-red-500" : " text-white "
-            }`}
+            className={`w-36 h-12 bg-subColor flex justify-center items-center text-2xl rounded-lg transform transition hover:scale-105 active:scale-90 active:bg-subColorBold ${isFavorite ? " text-red-500" : " text-white "
+              }`}
             onClick={(event) => {
               if (isLoggedIn) handleAddFavorite(userId, id, event);
             }}
@@ -362,7 +362,7 @@ function Quizzy() {
             Tags:
           </div>
           <div className="px-16 py-2 grid grid-cols-6 grid-flow-row gap-10">
-            {data && data.tags.map((tag) => <Tag key={tag} name={tag}/>)}
+            {data && data.tags.map((tag) => <Tag key={tag} name={tag} />)}
           </div>
         </div>
       </section>
@@ -378,7 +378,11 @@ function Quizzy() {
         <div className="bg-white max-w-full min-h-96 mx-24 mt-12 rounded-lg shadow-lg py-12 px-6">
           <div className="text-2xl font-semibold pl-4">Related quizzy</div>
           <div className="grid grid-cols-4 grid-flow-rows gap-10 px-10 pt-12">
-            {related && related.map((r,index) => (<QuizzzyCard key={`Related ${index}`} quizzzy={r} />))}
+            {related ? related.map((r, index) => (<QuizzzyCard key={`Related ${index}`} quizzzy={r} />))
+
+              : [...Array(4)].map((e, i) => {
+                return <QuizzzySkeleton />
+              })}
           </div>
         </div>
       </section>

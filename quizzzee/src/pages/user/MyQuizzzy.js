@@ -10,6 +10,7 @@ import "../../css/MyQuizzzy.css";
 import QuizzzyCard from "../../components/layout/quizzzyCard/QuizzzyCard";
 import { UserContext } from "../../context/UserContext";
 import { Link } from "react-router-dom";
+import QuizzzySkeleton from "../../components/quizzy/loadingSkeleton";
 
 function MyQuizzzy() {
   const getWindowDimensions = () => {
@@ -44,7 +45,7 @@ function MyQuizzzy() {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  });
+  }, []);
 
   return (
     <>
@@ -111,8 +112,8 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
   const [isFetching, setIsFetching] = useState(true);
   const [myQuizzzies, setMyQuizzzies] = useState([]);
   const { isLoggedIn, userId, token } = useContext(UserContext);
-  const [ isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [ deleteTarget, setDeleteTarget ] = useState({});
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState({});
 
   const fetchData = async () => {
     try {
@@ -135,7 +136,7 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
     }
   };
 
-  
+
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -167,7 +168,7 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
         fetchData();
         setIsFetching(false);
       }, 100);
-    else window.location.href = "/myquizzzy";
+    else window.location.href = "/login";
   }, []);
 
   const DeleteModal = () => {
@@ -179,7 +180,7 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
             <div className="absolute z-50 bg-white p-6 rounded-lg shadow-lg max-w-lg transform transition-all duration-500 -translate-y-1/2  w-full md:w-1/2">
               <button
                 className="absolute top-0 right-0 p-2 text-gray-500 hover:text-gray-800"
-                onClick={() => {setIsDeleteModalOpen(false); setDeleteTarget({});}}
+                onClick={() => { setIsDeleteModalOpen(false); setDeleteTarget({}); }}
               >
                 <svg
                   className="w-6 h-6"
@@ -199,8 +200,8 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
               <div className="content">
                 <div className="text-xl text-center pb-3">Delete "{deleteTarget.title}" ?</div>
                 <div className="flex justify-evenly">
-                <button className="text-lg bg-red-500 text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => {handleDelete()}}>Yes</button>
-                <button className="text-lg bg-subColorBold text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => {setIsDeleteModalOpen(false); setDeleteTarget({});}}>No</button>
+                  <button className="text-lg bg-red-500 text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => { handleDelete() }}>Yes</button>
+                  <button className="text-lg bg-subColorBold text-white px-6 py-1 rounded-md font-semibold transition-all transform hover:scale-105" onClick={() => { setIsDeleteModalOpen(false); setDeleteTarget({}); }}>No</button>
                 </div>
               </div>
             </div>
@@ -238,15 +239,17 @@ function MyCreatedQuizzzy({ isDeleting, setIsDeleting }) {
 
       <div>
         {isFetching ? (
-          <div className="flex justify-center items-center h-64">
-            <LoadingOutlined style={{ fontSize: 24 }} spin />
-          </div>
+          <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
+            {[...Array(4)].map((e, i) => {
+              return <QuizzzySkeleton />
+            })}
+          </section>
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
             {myQuizzzies.map((mq) => (
               <>
-              <div onClick={() => { if(isDeleting){ setIsDeleteModalOpen(true); setDeleteTarget(mq) }}} >
-                <QuizzzyCard key={mq.id} quizzzy={mq} disabled={isDeleting} />
+                <div onClick={() => { if (isDeleting) { setIsDeleteModalOpen(true); setDeleteTarget(mq) } }} >
+                  <QuizzzyCard key={mq.id} quizzzy={mq} disabled={isDeleting} />
                 </div>
               </>
             ))}
@@ -291,7 +294,7 @@ function MyFavoriteQuizzzy() {
         fetchData();
         setIsFetching(false);
       }, 100);
-    else window.location.href = "/myquizzzy";
+    else window.location.href = "/login";
   }, []);
 
   return (
@@ -302,9 +305,11 @@ function MyFavoriteQuizzzy() {
 
       <div>
         {isFetching ? (
-          <div className="flex justify-center items-center h-64">
-            <LoadingOutlined style={{ fontSize: 24 }} spin />
-          </div>
+          <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
+            {[...Array(4)].map((e, i) => {
+              return <QuizzzySkeleton />
+            })}
+          </section>
         ) : (
           <section className="mx-5 mt-10 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-16">
             {myFavoriteQuizzzies[0] &&
