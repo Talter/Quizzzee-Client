@@ -36,7 +36,6 @@ function LoginPage() {
           ...prev,
           email: "Invalid email format",
         }));
-
         return;
       } else {
         setResetError((prev) => ({ ...prev, email: "" }));
@@ -53,7 +52,6 @@ function LoginPage() {
           password:
             "Password must be at least 6 characters long and should not contain special symbols",
         }));
-
         return;
       } else {
         setResetError((prev) => ({ ...prev, password: "" }));
@@ -63,11 +61,9 @@ function LoginPage() {
 
   const handleToggleModal = (e) => {
     e.preventDefault();
-
     // Clear the form fields
     setEmail("");
     setPassword("");
-
     setToggleModal(true);
   };
 
@@ -203,6 +199,10 @@ function LoginPage() {
     });
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.REACT_APP_API_BASE_URL}/commons/auth/google`;
+  };
+
   return (
     <div className="login-page">
       <div
@@ -272,7 +272,7 @@ function LoginPage() {
       <div className="cloud-login-3"></div>
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
-        <a className="login-title">Login</a>
+          <a className="login-title">Login</a>
           <div className="first-part">
             <div className="input-field">
               <input
@@ -324,10 +324,11 @@ function LoginPage() {
             <button
               className="login-confirm-btn"
               type="submit"
-              disabled={loading}>
+              disabled={loading}
+            >
               Login
             </button>
-            <div className="login-gg-container">
+            <div className="login-gg-container" onClick={handleGoogleLogin}>
               G
             </div>
           </div>
